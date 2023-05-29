@@ -1,7 +1,8 @@
 
 public enum Effect
 {
-    FIRE,
+    FEU,
     FOUDRE,
-    POISON
+    POISON,
+    NONE
 }

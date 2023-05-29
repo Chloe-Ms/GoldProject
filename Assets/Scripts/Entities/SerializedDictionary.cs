@@ -32,4 +32,21 @@ public class SerializedDictionary<TKey, TValue>
         }
         return found;
     }
+
+    public TValue Get(TKey key)
+    {
+        int i = 0;
+        bool found = false;
+        TValue value = default(TValue);
+        while (i < dictionary.Count && !found)
+        {
+            if (dictionary[i].Key.ToString() == key.ToString())
+            {
+                found = true;
+                value = dictionary[i].Value;
+            }
+            i++;
+        }
+        return value;
+    }
 }

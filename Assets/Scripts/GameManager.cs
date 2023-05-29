@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -11,8 +12,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         private set => _instance = value;
     }
 
-    private int _golds;
-    private int _level;
+    private int _golds = 0;
+    private int _level = 1;
     public int Golds { 
         get => _golds; 
         set => _golds = value; 
@@ -23,7 +24,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         private set => _level = value;
     }
 
-    public event Action<int> OnLevelChanges;
+    public event Action<int> OnEnterEditorMode;
+    public event Action<int> OnEnterPlayMode;
 
     void Awake()
     {
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void IncrementGold()
     {
         Golds++;
-        Debug.Log(Golds);
     }
 
     public void LoadData(GameData data)
@@ -53,17 +54,18 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         data.golds = Golds;
     }
-
+    [Button]
     public void ChangeLevel()
     {
         _level++;
         Debug.Log("Level " + _level);
-        OnLevelChanges?.Invoke(Level);
         //Enter Editor Mode
+        OnEnterEditorMode?.Invoke(Level);
     }
 
     public void StartLevel()
     {
         //Enter Play Mode
+        OnEnterPlayMode?.Invoke(Level);
     }
 }
