@@ -1,4 +1,4 @@
-
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataPersistence
@@ -12,10 +12,18 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
 
     private int _golds;
+    private int _level;
     public int Golds { 
         get => _golds; 
         set => _golds = value; 
     }
+    
+    public int Level {
+        get => _level;
+        private set => _level = value;
+    }
+
+    public event Action<int> OnLevelChanges;
 
     void Awake()
     {
@@ -44,5 +52,18 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void SaveData(ref GameData data)
     {
         data.golds = Golds;
+    }
+
+    public void ChangeLevel()
+    {
+        _level++;
+        Debug.Log("Level " + _level);
+        OnLevelChanges?.Invoke(Level);
+        //Enter Editor Mode
+    }
+
+    public void StartLevel()
+    {
+        //Enter Play Mode
     }
 }
