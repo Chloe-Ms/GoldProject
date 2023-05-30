@@ -7,9 +7,11 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] Sound[] _sounds;
 
-    public static AudioManager Instance {
-        get; 
-        private set; 
+    private static AudioManager instance;
+
+    public static AudioManager Instance { 
+        get => instance; 
+        set => instance = value; 
     }
 
     void Awake()
