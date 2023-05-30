@@ -15,7 +15,7 @@ public class HeroesManager : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.OnEnterEditorMode += OnEnterEditorMode;
-        GameManager.Instance.OnEnterEditorMode += OnEnterPlayMode;
+        GameManager.Instance.OnEnterPlayMode += OnEnterPlayMode;
     }
 
     private void OnEnterPlayMode(int level)
