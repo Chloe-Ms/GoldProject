@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
@@ -7,7 +6,7 @@ public class Entity : MonoBehaviour
     [SerializeField] protected int maxHealth;
     protected bool _isDead = false;
     protected int _health;
-
+    public event Action<int> OnTakeDamage;
     public int MaxHealth { get => maxHealth; set => maxHealth = value; }
 
     public void Attack(Entity entityAttacked)
@@ -18,6 +17,7 @@ public class Entity : MonoBehaviour
         }
     }
 
+    //If negative, heals the player
     public virtual void TakeDamage(int amount,Effect effect = Effect.NONE)
     {
         _health = Mathf.Max(_health - amount, 0);
@@ -25,5 +25,6 @@ public class Entity : MonoBehaviour
         {
             _isDead = true;
         }
+        OnTakeDamage?.Invoke(amount);
     }
 }
