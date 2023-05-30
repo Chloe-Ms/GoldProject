@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
+[System.Serializable]
 public class Room : MonoBehaviour
 {
     [SerializeField] private RoomData _roomData;
@@ -20,7 +22,7 @@ public class Room : MonoBehaviour
     }
 
     private bool _isSelected;
-    private RoomColor _roomColor;
+    [ShowNonSerializedField] private RoomColor _roomColor = RoomColor.NotBuyable;
 
     public bool IsSelected
     {
@@ -51,15 +53,25 @@ public class Room : MonoBehaviour
         }
     }
 
+    [ShowNonSerializedField] private RoomColor _oldState;
+
     public void Init()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        RoomColor = RoomColor.Buyable;
+        RoomColor = RoomColor.NotBuyable;
+        _oldState = _roomColor;
     }
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _oldState = _roomColor;
+    }
+
+    public void SetData(RoomData roomData)
+    {
+        _roomData = roomData;
+        SetSprite(_roomData.Sprite);
     }
 
     public void SetSprite(Sprite sprite)
@@ -71,6 +83,7 @@ public class Room : MonoBehaviour
     {
         if (_spriteRenderer == null)
             _spriteRenderer = GetComponent<SpriteRenderer>();
+        _oldState = _roomColor != _oldState ? _roomColor : _oldState;
         RoomColor = color;
     }
 
@@ -85,6 +98,11 @@ public class Room : MonoBehaviour
         float bottom = position.y - size.y / 2;
 
         return mousePosition.x > left && mousePosition.x < right && mousePosition.y > bottom && mousePosition.y < top;
+    }
+
+    public void UnSelect()
+    {
+        RoomColor = _oldState;
     }
 }
 

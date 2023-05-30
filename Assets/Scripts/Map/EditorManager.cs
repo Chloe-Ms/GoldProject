@@ -25,12 +25,14 @@ public class EditorManager : MonoBehaviour
 
     public void OpenEditorMenu()
     {
+        MapManager.Instance.EditorState = EditorState.Edit;
         _editorMenu.SetActive(true);
         _editorOpener.SetActive(false);
     }
 
     public void CloseEditorMenu()
     {
+        MapManager.Instance.EditorState = EditorState.Select;
         _editorMenu.SetActive(false);
         _editorOpener.SetActive(true);
     }
