@@ -38,6 +38,11 @@ public class MapManager : MonoBehaviour
 
     private Room _selectedSlot = null;
 
+    public Room SelectedSlot
+    {
+        get { return _selectedSlot; }
+    }
+
     [Button("Clear Map")]
     private void Clear()
     {
@@ -171,8 +176,9 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot != null)
                 _selectedSlot.UnSelect();
             room = FindRoom(CursorPos);
-            _selectedSlot = room != null ? room : _selectedSlot;
-            if (_selectedSlot != null) {
+            if (room != null && room.RoomColor != RoomColor.NotBuyable)
+                _selectedSlot = room != _selectedSlot ? room : null;
+            if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                 if (_selectedSlot.RoomColor == RoomColor.Buyable && _selectedSlot.RoomData != null) {
                     SetBuyableAdjacent();
                     _currentRoomCount++;

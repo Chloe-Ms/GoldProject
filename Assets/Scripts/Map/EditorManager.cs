@@ -36,4 +36,10 @@ public class EditorManager : MonoBehaviour
         _editorMenu.SetActive(false);
         _editorOpener.SetActive(true);
     }
+
+    public void SetDataOnSelectedRoom(RoomData data)
+    {
+        if (MapManager.Instance.SelectedSlot != null)
+            MapManager.Instance.SelectedSlot.SetData(data);
+    }
 }
