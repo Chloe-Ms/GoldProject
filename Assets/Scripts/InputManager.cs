@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
     [SerializeField] InputActionReference _touchPut;
     [SerializeField] InputActionReference _touchPosition;
     [SerializeField] InputActionReference _touchPress;
-    //[SerializeField] GameObject _gameObject; //Pour le test, à enlever plus tard
     
     Coroutine _holdRoutine;
     bool _hasHoldInputStarted = false;
@@ -33,9 +32,7 @@ public class InputManager : MonoBehaviour
     {
         Vector2 value = _touchPosition.action.ReadValue<Vector2>();
         Vector3 position = Camera.main.ScreenToWorldPoint(value);
-        //Debug.LogWarning("Tap position " + position + " value " + value);
         position.z = 0;
-        //_gameObject.transform.position = position;
 
         OnTapEvent?.Invoke();
     }
@@ -43,7 +40,6 @@ public class InputManager : MonoBehaviour
     {
         Vector2 value = _touchPosition.action.ReadValue<Vector2>();
         Vector3 position = Camera.main.ScreenToWorldPoint(value);
-        //Debug.LogWarning("Press start position " + position + " value " + value);
         _holdRoutine = StartCoroutine(StartDrag());
         OnHoldStartedEvent?.Invoke();
     }
@@ -65,7 +61,6 @@ public class InputManager : MonoBehaviour
             Vector2 value = _touchPosition.action.ReadValue<Vector2>();
             Vector3 position = Camera.main.ScreenToWorldPoint(value);
             position.z = 0;
-            //_gameObject.transform.position = position;
             yield return new WaitForFixedUpdate();
         }
     }

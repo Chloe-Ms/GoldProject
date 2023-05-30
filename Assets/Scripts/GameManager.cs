@@ -48,17 +48,20 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         Golds = data.golds;
+        Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
         data.golds = Golds;
+        data.level = Level;
     }
     [Button]
     public void ChangeLevel()
     {
         _level++;
         Debug.Log("Level " + _level);
+
         //Enter Editor Mode
         OnEnterEditorMode?.Invoke(Level);
     }

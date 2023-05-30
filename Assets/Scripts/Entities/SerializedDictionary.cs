@@ -4,7 +4,6 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SerializedDictionary<TKey, TValue>
 {
-    [System.Serializable]
     public class OBJ
     {
         public TKey Key;
@@ -12,7 +11,6 @@ public class SerializedDictionary<TKey, TValue>
     }
 
     public List<OBJ> dictionary = new List<OBJ>();
-
     public void Add(TKey key, TValue value)
     {
         OBJ obj = new OBJ();
