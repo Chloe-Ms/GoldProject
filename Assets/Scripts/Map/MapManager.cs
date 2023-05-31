@@ -163,19 +163,22 @@ public class MapManager : MonoBehaviour
 
     private void Update()
     {
-        if (_editorState == EditorState.Select)
-            SelectTiles();
+        SelectTiles();
     }
 
     private void SelectTiles()
     {
-        Vector2 CursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 cameraPos = CameraManager.Instance.Camera.transform.position;
         Room room = null;
+        float camOffset = 1.8f;
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
             if (_selectedSlot != null)
                 _selectedSlot.UnSelect();
-            room = FindRoom(CursorPos);
+            Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
+            if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y < camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
+                room = FindRoom(cursorPos);
             if (room != null && room.RoomColor != RoomColor.NotBuyable)
                 _selectedSlot = room != _selectedSlot ? room : null;
             if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
@@ -192,6 +195,14 @@ public class MapManager : MonoBehaviour
     private void UpdateText()
     {
         _roomText.text = $"You have {BuyableRoomCount} rooms buyable";
+    }
+
+    public void SetDataOnSelectedRoom(RoomData data)
+    {
+        if (_selectedSlot != null) {
+            _selectedSlot.SetData(data);
+            SetBuyableAdjacent(_selectedSlot);
+        }
     }
 }
 

@@ -44,6 +44,6 @@ public class EditorManager : MonoBehaviour
     public void SetDataOnSelectedRoom(RoomData data)
     {
         if (MapManager.Instance.SelectedSlot != null)
-            MapManager.Instance.SelectedSlot.SetData(data);
+            MapManager.Instance.SetDataOnSelectedRoom(data);
     }
 }
