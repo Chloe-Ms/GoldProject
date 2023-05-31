@@ -37,7 +37,6 @@ public class ElementList : MonoBehaviour
         GameObject instanciateBackground = null;
 
         ClearElements();
-        int i = 0;
         foreach (RoomData room in list.RoomData)
         {
             instanciateBackground = Instantiate(_background);
@@ -56,9 +55,37 @@ public class ElementList : MonoBehaviour
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
             instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
-            i++;
         }
-        //GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
+        GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
+        GetComponent<ScrollRect>().horizontalScrollbar = _scrollBar.GetComponent<Scrollbar>();
+    }
+
+    private void GenerateElement(RoomList listofRoom)
+    {
+        GameObject instanciateElement = null;
+        GameObject instanciateBackground = null;
+
+        ClearElements();
+        foreach (RoomData room in listofRoom.RoomData)
+        {
+            instanciateBackground = Instantiate(_background);
+            instanciateBackground.name = "Room_" + _elements.Count;
+            instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
+            instanciateBackground.AddComponent<Button>();
+            instanciateBackground.transform.SetParent(_parent.transform);
+            instanciateElement = new GameObject();
+            instanciateElement.name = "Element_" + _elements.Count;
+            instanciateElement.AddComponent<RectTransform>();
+            instanciateElement.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
+            instanciateElement.AddComponent<CanvasRenderer>();
+            instanciateElement.AddComponent<Image>();
+            instanciateElement.GetComponent<Image>().sprite = room.Sprite;
+            instanciateElement.transform.SetParent(instanciateBackground.transform);
+            _elements.Add(instanciateBackground);
+            instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
+        }
+        GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
         GetComponent<ScrollRect>().horizontalScrollbar = _scrollBar.GetComponent<Scrollbar>();
     }
 
@@ -77,9 +104,4 @@ public class ElementList : MonoBehaviour
     {
         ClearElements();
     }
-
-    // private void OnDisable()
-    // {
-    //     ClearElements();
-    // }
 }
