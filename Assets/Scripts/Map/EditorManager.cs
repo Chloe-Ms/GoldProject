@@ -20,6 +20,10 @@ public class EditorManager : MonoBehaviour
             Destroy(gameObject);
         else
             _instance = this;
+    }
+
+    private void Start()
+    {
         CloseEditorMenu();
     }
 
