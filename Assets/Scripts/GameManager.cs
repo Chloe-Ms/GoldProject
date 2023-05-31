@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NaughtyAttributes;
 using System;
 using UnityEngine;
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
 
+    [SerializeField] Level[] _levels;
+
     void Awake()
     {
         if (Instance == null)
@@ -40,32 +43,53 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void IncrementGold()
+    private void Start()
     {
-        Golds++;
+        DOTween.Init();
+    }
+
+    private void OnValidate()
+    {
+        for (int i = 0; i < _levels.Length; i++)
+        {
+            _levels[i].name = "Level " + (i + 1);
+        }
     }
 
     public void LoadData(GameData data)
     {
         Golds = data.golds;
+        //Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
         data.golds = Golds;
+        //data.level = Level;
     }
-    [Button]
+    [Button("Next level")]
     public void ChangeLevel()
     {
         _level++;
         Debug.Log("Level " + _level);
-        //Enter Editor Mode
+    }
+
+    [Button("Enter edit mode")]
+    public void StartEditMode()
+    {
+        //Enter Play Mode
         OnEnterEditorMode?.Invoke(Level);
     }
 
-    public void StartLevel()
+    [Button("Enter play mode")]
+    public void StartPlayMode()
     {
         //Enter Play Mode
         OnEnterPlayMode?.Invoke(Level);
+    }
+
+    public GameObject[] GetHeroesCurrentLevel()
+    {
+        return _levels[_level-1].ListHeroesInGroup;
     }
 }

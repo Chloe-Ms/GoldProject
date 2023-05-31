@@ -1,4 +1,6 @@
+using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Hero : Entity
@@ -23,7 +25,11 @@ public class Hero : Entity
             }
         }
     }
-
+    [Button]
+    public void TestDamage()
+    {
+        TakeDamage(0);
+    }
     public override void TakeDamage(int pv, Effect effect = Effect.NONE)
     {
         int amount = pv;

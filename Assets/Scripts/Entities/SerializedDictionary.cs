@@ -12,7 +12,6 @@ public class SerializedDictionary<TKey, TValue>
     }
 
     public List<OBJ> dictionary = new List<OBJ>();
-
     public void Add(TKey key, TValue value)
     {
         OBJ obj = new OBJ();

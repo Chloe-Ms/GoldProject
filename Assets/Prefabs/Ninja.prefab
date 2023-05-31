@@ -120,8 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 0
-  _isDead: 0
-  heroName: "Sol\xE8ne"
+  heroName: Solenne
   role: 3
   _sensibilityPerEffectType:
     dictionary:
@@ -131,3 +130,5 @@ MonoBehaviour:
       Value: -2
     - Key: 1
       Value: 1
+    - Key: 3
+      Value: 0
