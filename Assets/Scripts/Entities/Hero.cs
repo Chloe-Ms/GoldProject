@@ -28,7 +28,7 @@ public class Hero : Entity
     [Button]
     public void TestDamage()
     {
-        TakeDamage(1);
+        TakeDamage(0);
     }
     public override void TakeDamage(int pv, Effect effect = Effect.NONE)
     {
