@@ -4,16 +4,32 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    private static CameraManager _instance;
+
+    public static CameraManager Instance
+    {
+        get { return _instance; }
+    }
+
     private float _zoomSize = 2.5f;
-    private Camera _camera;
     private float _initZoomSize;
     private Vector3 _initPosition;
+    private Camera _camera;
+
+    public Camera Camera
+    {
+        get { return _camera; }
+    }
 
     private void Awake()
     {
-        _camera = GetComponent<Camera>();
-        _initZoomSize = _camera.orthographicSize;
-        _initPosition = transform.position;
+        if (_instance != null && _instance != this)
+            Destroy(gameObject);
+        else
+            _instance = this;
+        this._camera = GetComponent<Camera>();
+        this._initZoomSize = _camera.orthographicSize;
+        this._initPosition = transform.position;
     }
 
     private void ResetCamera()

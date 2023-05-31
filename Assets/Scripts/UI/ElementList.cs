@@ -9,13 +9,16 @@ public class ElementList : MonoBehaviour
     [SerializeField] private RoomList list;
     [SerializeField] private RectTransform _startPosition;
     [SerializeField] private GameObject _background;
+    [SerializeField] private GameObject _parent;
+    [SerializeField] private GameObject _scrollBar;
     [SerializeField, Range(0.1f, 2f)] private float _margin = 2f;
     [SerializeField] private Vector3 _scale = new Vector3(0.2f, 0.2f, 1f);
-    private List<GameObject> _elements = new List<GameObject>();
+    [ShowNonSerializedField] private List<GameObject> _elements = new List<GameObject>();
 
     [Button("Clear Elements")]
     private void ClearElements()
     {
+        Debug.Log(_elements.Count);
         if (_elements.Count > 0)
         {
             foreach (var element in _elements)
@@ -23,6 +26,7 @@ public class ElementList : MonoBehaviour
                 DestroyImmediate(element);
             }
             _elements.Clear();
+            Debug.Log("ClearElements");
         }
     }
 
@@ -32,21 +36,15 @@ public class ElementList : MonoBehaviour
         GameObject instanciateElement = null;
         GameObject instanciateBackground = null;
 
-        if (_elements.Count > 0)
-        {
-            foreach (var element in _elements)
-            {
-                DestroyImmediate(element);
-            }
-            _elements.Clear();
-        }
-        foreach (var room in list.RoomData)
+        ClearElements();
+        int i = 0;
+        foreach (RoomData room in list.RoomData)
         {
             instanciateBackground = Instantiate(_background);
             instanciateBackground.name = "Room_" + _elements.Count;
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateBackground.AddComponent<Button>();
-            instanciateBackground.transform.SetParent(transform);
+            instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
             instanciateElement.name = "Element_" + _elements.Count;
             instanciateElement.AddComponent<RectTransform>();
@@ -57,13 +55,31 @@ public class ElementList : MonoBehaviour
             instanciateElement.transform.SetParent(instanciateBackground.transform);
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
-            instanciateBackground.GetComponent<Button>().onClick.AddListener(delegate {SetDataOnSelectedRoom(room);});
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
+            i++;
         }
+        //GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
+        GetComponent<ScrollRect>().horizontalScrollbar = _scrollBar.GetComponent<Scrollbar>();
     }
 
-    private void SetDataOnSelectedRoom(RoomData data)
+    private void Awake()
+    {
+        GenerateRoom();
+    }
+
+    public void SetDataOnSelectedRoom(RoomData data)
     {
         if (MapManager.Instance.SelectedSlot != null)
             EditorManager.Instance.SetDataOnSelectedRoom(data);
     }
+
+    private void OnApplicationQuit()
+    {
+        ClearElements();
+    }
+
+    // private void OnDisable()
+    // {
+    //     ClearElements();
+    // }
 }

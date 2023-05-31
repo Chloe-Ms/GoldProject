@@ -70,7 +70,9 @@ public class Room : MonoBehaviour
 
     public void SetData(RoomData roomData)
     {
-        RoomColor = RoomColor.Usable;
+        if (_roomColor != RoomColor.Selected)
+            RoomColor = RoomColor.Usable;
+        _oldState = RoomColor.Usable;
         _roomData = roomData;
         SetSprite(_roomData.Sprite);
     }
