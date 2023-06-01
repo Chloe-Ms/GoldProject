@@ -13,11 +13,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
         private set => _instance = value;
     }
 
-    private int _golds = 0;
+    private int _nbMoves = 0;
     private int _level = 1;
-    public int Golds { 
-        get => _golds; 
-        set => _golds = value; 
+    public int NbMoves { 
+        get => _nbMoves; 
+        set => _nbMoves = value; 
     }
     
     public int Level {
@@ -58,13 +58,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        Golds = data.golds;
+        NbMoves = data.golds;
         //Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.golds = Golds;
+        data.golds = NbMoves;
         //data.level = Level;
     }
     [Button("Next level")]
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OnEnterPlayMode?.Invoke(Level);
     }
 
-    public GameObject[] GetHeroesCurrentLevel()
+    public HeroData[] GetHeroesCurrentLevel()
     {
         return _levels[_level-1].ListHeroesInGroup;
     }

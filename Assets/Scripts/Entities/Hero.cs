@@ -1,39 +1,58 @@
 using NaughtyAttributes;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Hero : Entity
+public class Hero : MonoBehaviour 
 {
-    [SerializeField] private string heroName;
-    [SerializeField] private Role role;
-    [SerializeField] SerializedDictionary<Effect, int> _sensibilityPerEffectType;
+    [SerializeField] SpriteRenderer _renderer;
+    private HeroData _heroData;
+    private int _health;
+    private bool _isDead = false;
 
-    public string HeroName { get => heroName; set => heroName = value; }
-    public Role Role { get => role; set => role = value; }
-
-    private void OnValidate()
-    { //Check if the list is complete (editor file not complete yet)
-        if (_sensibilityPerEffectType.dictionary.Count < Enum.GetValues(typeof(Effect)).Length)
-        {
-            foreach (Effect effectType in Enum.GetValues(typeof(Effect)))
-            {
-                if (!_sensibilityPerEffectType.Contains(effectType))
-                {
-                    _sensibilityPerEffectType.Add(effectType, 0);
-                }
-            }
-        }
+    public event Action OnHeroDeath;
+    public event Action<int> OnDamageTaken;
+    public string HeroName
+    {
+        get => _heroData.heroName;
+        set => _heroData.heroName = value;
     }
-    [Button]
+    public int MaxHealth
+    {
+        get => _heroData.maxHealth;
+        set => _heroData.maxHealth = value;
+    }
+
+    public Role role 
+    {
+        get => _heroData.role;
+        set => _heroData.role = role;
+    }
+    public bool IsDead { 
+        get => _isDead; 
+        set => _isDead = value; 
+    }
+
     public void TestDamage()
     {
-        TakeDamage(0);
+        TakeDamage(1);
     }
-    public override void TakeDamage(int pv, Effect effect = Effect.NONE)
+    public void TakeDamage(int pv, Effect effect = Effect.NONE)
     {
-        int amount = pv;
-        amount += _sensibilityPerEffectType.Get(effect);
-        base.TakeDamage(amount);
+        int reakDamage = Mathf.Min(_health,pv);
+        _health = Mathf.Clamp(_health - reakDamage, 0,MaxHealth);
+        if (_health <= 0)
+        {
+            _isDead = true;
+            OnHeroDeath?.Invoke();
+        } else
+        {
+            OnDamageTaken?.Invoke(reakDamage);
+        }
+    }
+
+    public void LoadHeroData(HeroData data)
+    {
+        _heroData = data;
+        _renderer.color = _heroData.color;
     }
 }

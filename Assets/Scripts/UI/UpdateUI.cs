@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UpdateUI : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class UpdateUI : MonoBehaviour
 
     private void Start()
     {
-        _hero.OnTakeDamage += MoveUIDamage;
+        _hero.OnDamageTaken += MoveUIDamage;
         _startPosition = _text.transform.position;
     }
 
