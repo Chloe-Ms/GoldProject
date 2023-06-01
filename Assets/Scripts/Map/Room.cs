@@ -17,6 +17,12 @@ public class Room : MonoBehaviour
         set { _roomData = value; }
     }
 
+    public TrapData TrapData
+    {
+        get { return _trapData; }
+        set { _trapData = value; }
+    }
+
     public SpriteRenderer SpriteRenderer
     {
         get { return _spriteRenderer; }
@@ -127,7 +133,8 @@ public class Room : MonoBehaviour
     {
         if (_spriteRenderer == null)
             _spriteRenderer = GetComponent<SpriteRenderer>();
-        _oldState = color != _oldState ? _roomColor : _oldState;
+        if (_roomColor != RoomColor.Selected)
+            _oldState = color != _oldState ? _roomColor : _oldState;
         RoomColor = color;
     }
 
@@ -147,6 +154,12 @@ public class Room : MonoBehaviour
     public void UnSelect()
     {
         RoomColor = _oldState;
+        Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {_roomData}");
+        if (_roomData == null) {
+            if (MapManager.Instance.SelectedSlot == null)
+                RoomColor = RoomColor.NotBuyable;
+            _oldState = RoomColor.NotBuyable;
+        }
     }
 }
 
