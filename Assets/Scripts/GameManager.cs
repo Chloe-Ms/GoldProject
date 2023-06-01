@@ -131,11 +131,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
             if (trap.IsActive)
             {
+                trap.IsActive = false;
                 for (int  j = 0; j < trap.Effects.Count; j++)
                 {
                     Debug.Log("Effect " +trap.Effects[j]);
                     _heroesManager.ApplyDamageToEachHero(trap.Effects[j]);
-                    trap.IsActive = false;
 
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                     if (trap.NbOfUpgrades > 0 && j == 0)

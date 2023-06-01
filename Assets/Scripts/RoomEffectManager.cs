@@ -55,11 +55,18 @@ public class RoomEffectManager
             (Trap trap,Group group,HeroesManager manager) => {
                 if (trap.IsActive)
                 {
-                    for (int  j = 0; j < trap.Effects.Count; j++)
+                    int j = 0;
+                    while (j < trap.Effects.Count)
                     {
-                        manager.ApplyDamageToEachHero(trap.Effects[j]);
+                        if (trap.Effects[j] != Effect.FEU)
+                        {
+                            manager.ApplyDamageToEachHero(trap.Effects[j]);
+                            j++;
+                        } else
+                        {
+                            trap.Effects.RemoveAt(j);
+                        }
                     }
-                    
                 }
             }
         },
