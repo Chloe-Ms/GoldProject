@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "General Data", menuName = "GoldProject/General Data", order = 1)]
+[CreateAssetMenu(fileName = "General Data", menuName = "GoldProject/General Data", order = 0)]
 public class GeneralData : ScriptableObject
 {
-    private RoomList _roomList;
+    [SerializeField] private RoomList _roomList;
+    [SerializeField] private TrapList _trapList;
 
     public RoomList RoomList
     {
         get { return _roomList; }
+    }
+
+    public TrapList TrapList
+    {
+        get { return _trapList; }
     }
 }

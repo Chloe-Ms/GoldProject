@@ -7,7 +7,9 @@ using NaughtyAttributes;
 public class Room : MonoBehaviour
 {
     [SerializeField] private RoomData _roomData;
+    [SerializeField] private TrapData _trapData;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    private GameObject _icon;
 
     public RoomData RoomData
     {
@@ -65,7 +67,20 @@ public class Room : MonoBehaviour
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        CreateIconObject();
         _oldState = _roomColor;
+    }
+    
+    private void CreateIconObject()
+    {
+        float offsetZ = 0.10f;
+
+        _icon = new GameObject();
+        _icon.name = transform.name + "_Icon";
+        _icon.transform.parent = transform;
+        _icon.transform.localPosition = new Vector3(0, 0, -offsetZ);
+        _icon.AddComponent<SpriteRenderer>();
+        _icon.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
     }
 
     public void SetData(RoomData roomData)
@@ -77,16 +92,42 @@ public class Room : MonoBehaviour
         SetSprite(_roomData.Sprite);
     }
 
+    public void SetData(TrapData trapData)
+    {
+        if (_roomColor != RoomColor.Selected)
+            RoomColor = RoomColor.Usable;
+        _oldState = RoomColor.Usable;
+        _trapData = trapData;
+        SetIcon(trapData.Sprite);
+    }
+
+    public void SetData(RoomData roomData, TrapData trapData)
+    {
+        if (_roomColor != RoomColor.Selected)
+            RoomColor = RoomColor.Usable;
+        _oldState = RoomColor.Usable;
+        _roomData = roomData;
+        _trapData = trapData;
+        SetSprite(_roomData.Sprite);
+        SetIcon(_trapData.Sprite);
+    }
+
     public void SetSprite(Sprite sprite)
     {
         _spriteRenderer.sprite = sprite;
+    }
+
+    public void SetIcon(Sprite sprite)
+    {
+        _icon.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+        _icon.GetComponent<SpriteRenderer>().sprite = sprite;
     }
 
     public void SetColor(RoomColor color)
     {
         if (_spriteRenderer == null)
             _spriteRenderer = GetComponent<SpriteRenderer>();
-        _oldState = _roomColor != _oldState ? _roomColor : _oldState;
+        _oldState = color != _oldState ? _roomColor : _oldState;
         RoomColor = color;
     }
 

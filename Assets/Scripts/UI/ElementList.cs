@@ -10,7 +10,6 @@ public class ElementList : MonoBehaviour
     [SerializeField] private RectTransform _startPosition;
     [SerializeField] private GameObject _background;
     [SerializeField] private GameObject _parent;
-    [SerializeField] private GameObject _scrollBar;
     [SerializeField, Range(0.1f, 2f)] private float _margin = 2f;
     [SerializeField] private Vector3 _scale = new Vector3(0.2f, 0.2f, 1f);
     [ShowNonSerializedField] private List<GameObject> _elements = new List<GameObject>();
@@ -57,7 +56,6 @@ public class ElementList : MonoBehaviour
             instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
-        GetComponent<ScrollRect>().horizontalScrollbar = _scrollBar.GetComponent<Scrollbar>();
     }
 
     private void GenerateElement(RoomList listofRoom)
@@ -86,18 +84,59 @@ public class ElementList : MonoBehaviour
             instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
-        GetComponent<ScrollRect>().horizontalScrollbar = _scrollBar.GetComponent<Scrollbar>();
+    }
+
+    private void GenerateElement(TrapList listOfTrap)
+    {
+        GameObject instanciateElement = null;
+        GameObject instanciateBackground = null;
+
+        ClearElements();
+        foreach (TrapData trap in listOfTrap.TrapData)
+        {
+            instanciateBackground = Instantiate(_background);
+            instanciateBackground.name = "Room_" + _elements.Count;
+            instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
+            instanciateBackground.AddComponent<Button>();
+            instanciateBackground.transform.SetParent(_parent.transform);
+            instanciateElement = new GameObject();
+            instanciateElement.name = "Element_" + _elements.Count;
+            instanciateElement.AddComponent<RectTransform>();
+            instanciateElement.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
+            instanciateElement.AddComponent<CanvasRenderer>();
+            instanciateElement.AddComponent<Image>();
+            instanciateElement.GetComponent<Image>().sprite = trap.Sprite;
+            instanciateElement.transform.SetParent(instanciateBackground.transform);
+            _elements.Add(instanciateBackground);
+            instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedTrap(trap); });
+        }
+        GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
     }
 
     private void Awake()
     {
-        GenerateRoom();
+        GenerateElement(GameManager.Instance.GeneralData.TrapList);
+    }
+
+    private void PrintAllDirection()
+    {
+        foreach (RoomData room in list.RoomData)
+        {
+            Debug.Log($"{room.name} is in {(int)room.Directions}");
+        }
     }
 
     public void SetDataOnSelectedRoom(RoomData data)
     {
         if (MapManager.Instance.SelectedSlot != null)
             EditorManager.Instance.SetDataOnSelectedRoom(data);
+    }
+
+    public void SetDataOnSelectedTrap(TrapData data)
+    {
+        if (MapManager.Instance.SelectedSlot != null)
+            EditorManager.Instance.SetDataOnSelectedTrap(data);
     }
 
     private void OnApplicationQuit()

@@ -13,6 +13,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
         private set => _instance = value;
     }
 
+    [SerializeField] private GeneralData _generalData;
+
+    public GeneralData GeneralData
+    {
+        get { return _generalData; }
+    }
+
     private int _golds = 0;
     private int _level = 1;
     public int Golds { 
