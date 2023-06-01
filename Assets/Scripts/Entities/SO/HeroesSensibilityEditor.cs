@@ -7,8 +7,6 @@ public class HeroesSensibilityEditor : Editor
 {
     private HeroesSensibility _heroesSensibilitiesSO;
     private SerializedProperty _propSensibilities;
-    private int rows;
-    private int columns;
     bool modified = false;
 
     private void OnEnable()

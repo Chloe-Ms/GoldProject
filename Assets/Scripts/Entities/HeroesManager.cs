@@ -10,7 +10,12 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] float _spaceBetweenHeroes = 1f;
     [SerializeField] GameObject _heroPrefab;
     [SerializeField] HeroesSensibility _heroesSensibilities;
-    [SerializeField] float _poisonDamageMultiplier = 3f;
+    [SerializeField] int _poisonDamageMultiplier = 2;
+
+    public Group HeroesInCurrentLevel { 
+        get => _heroesInCurrentLevel; 
+        set => _heroesInCurrentLevel = value; 
+    }
 
     public event Action OnAnyHeroDeath;
 
@@ -34,7 +39,7 @@ public class HeroesManager : MonoBehaviour
     private void StartEditMode(int level)
     {
         RemoveHeroesGameObjects();
-
+        _heroesInCurrentLevel.Init();
         for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
             HeroData hero = _heroesDataInCurrentLevel[i];
@@ -69,16 +74,19 @@ public class HeroesManager : MonoBehaviour
         _heroesInCurrentLevel.Heroes.Clear();
     }
 
-    public void ApplyDamageToEachHero(int damage)
+    public void ApplyDamageToEachHero(Effect effect)
     {
-        if (_heroesInCurrentLevel.IsPoisoned)
-        {
-            damage *= 3;
-        }
         foreach (Hero hero in _heroesInCurrentLevel.Heroes)
         {
             if (!hero.IsDead)
             {
+                int damage = _heroesSensibilities.GetSensibility(effect, hero.Role);
+                
+                if (_heroesInCurrentLevel.IsPoisoned)
+                {
+                    damage *= _poisonDamageMultiplier;
+                }
+                
                 hero.TakeDamage(damage);
             }
         }

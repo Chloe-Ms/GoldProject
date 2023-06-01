@@ -5,10 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HeroesSensibilities", menuName = "GoldProject/Heroes Sensibilities", order = 1)]
 public class HeroesSensibility : ScriptableObject
 {
-    public int[] heroesSensibilities;
+    [HideInInspector] public int[] heroesSensibilities;
     private bool modified = false;
 
-    int GetSensibility (Effect effect,Role role)
+    public int GetSensibility (Effect effect,Role role)
     {
         return heroesSensibilities[(int)effect + ((int)role * Enum.GetNames(typeof(Effect)).Length)];
     }

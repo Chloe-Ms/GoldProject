@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelData
 {
     [HideInInspector] public string name; //public for the editor
-    [SerializeField] int _golds;
+    [SerializeField] int _nbMovesMax;
     [SerializeField] HeroData[] _listHeroesInLevel;
     [SerializeField] int _mapWidth;
     [SerializeField] int _mapHeight;

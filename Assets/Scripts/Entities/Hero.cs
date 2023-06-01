@@ -22,10 +22,10 @@ public class Hero : MonoBehaviour
         set => _heroData.maxHealth = value;
     }
 
-    public Role role 
+    public Role Role 
     {
         get => _heroData.role;
-        set => _heroData.role = role;
+        set => _heroData.role = Role;
     }
     public bool IsDead { 
         get => _isDead; 
@@ -36,17 +36,17 @@ public class Hero : MonoBehaviour
     {
         TakeDamage(1);
     }
-    public void TakeDamage(int pv, Effect effect = Effect.NONE)
+    public void TakeDamage(int pv)
     {
-        int reakDamage = Mathf.Min(_health,pv);
-        _health = Mathf.Clamp(_health - reakDamage, 0,MaxHealth);
+        int reaDamage = Mathf.Min(_health,pv);
+        _health = Mathf.Clamp(_health - reaDamage, 0,MaxHealth);
         if (_health <= 0)
         {
             _isDead = true;
             OnHeroDeath?.Invoke();
         } else
         {
-            OnDamageTaken?.Invoke(reakDamage);
+            OnDamageTaken?.Invoke(reaDamage);
         }
     }
 

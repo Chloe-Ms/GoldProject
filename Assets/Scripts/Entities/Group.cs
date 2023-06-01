@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Group : MonoBehaviour
+public class Group
 {
     private List<Hero> _heroes;
     private int _nbLeversLeft;
