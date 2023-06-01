@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
     private static GameManager _instance;
+
     public static GameManager Instance
     {
         get => _instance;
@@ -21,11 +22,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public int NbMoves { 
         get => _nbMoves; 
         set => _nbMoves = value; 
+    [SerializeField] private GeneralData _generalData;
+
+    public GeneralData GeneralData
+    {
+        get { return _generalData; }
     }
     
     public int Level {
-        get => _level + 1;
-        private set => _level = value - 1;
+        get => _level;
+        private set => _level = value;
     }
     public Effect CurrentRoomEffect { 
         get => _currentRoomEffect; 
@@ -34,6 +40,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
+
+    [SerializeField] Level[] _levels;
 
     void Awake()
     {
@@ -63,13 +71,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        NbMoves = data.golds;
+        Golds = data.golds;
         //Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.golds = NbMoves;
+        data.golds = Golds;
         //data.level = Level;
     }
     [Button("Next level")]
@@ -93,7 +101,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OnEnterPlayMode?.Invoke(Level);
     }
 
-    public HeroData[] GetHeroesCurrentLevel()
+    public GameObject[] GetHeroesCurrentLevel()
     {
         return _levels[_level].ListHeroesInGroup;
     }

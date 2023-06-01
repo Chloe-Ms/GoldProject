@@ -37,6 +37,7 @@ public class MapManager : MonoBehaviour
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
 
     private Room _selectedSlot = null;
+    private Room _lastestSelectedSlot = null;
 
     public Room SelectedSlot
     {
@@ -112,6 +113,11 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
+    private int GetIndexOfRoom(Room room)
+    {
+        return _slots.IndexOf(room.gameObject);
+    }
+
     private void SetBuyableAdjacent()
     {
         int index = _slots.IndexOf(_selectedSlot.gameObject);
@@ -130,14 +136,30 @@ public class MapManager : MonoBehaviour
     {
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
-        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
+        Debug.Log("SetBuyableAdjacent");
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor != RoomColor.Usable)
             _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
-        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor != RoomColor.Usable)
             _slots[index + 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
-        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor != RoomColor.Usable)
             _slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
-        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor != RoomColor.Usable)
             _slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
+    }
+
+    private void SetUnBuyableAdjacent(Room indexedRoom)
+    {
+        int index = _slots.IndexOf(indexedRoom.gameObject);
+
+        Debug.Log("SetUnBuyableAdjacent");
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+            _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+            _slots[index + 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+            _slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+            _slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
     }
 
     private void Awake()
@@ -146,8 +168,12 @@ public class MapManager : MonoBehaviour
             Destroy(gameObject);
         else
             _instance = this;
-        InitStart();
     }
+
+    private void Start()
+    {
+        InitStart();
+    } 
 
     private void InitStart()
     {
@@ -155,10 +181,9 @@ public class MapManager : MonoBehaviour
 
         start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
         start.SetColor(RoomColor.Buyable);
-        start.SetData(_roomData.RoomData[8]);
-        SetBuyableAdjacent(start);
-        _currentRoomCount++;
+        start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[0]);
         UpdateText();
+        Debug.Log($"Start in {start.RoomColor}");
     }
 
     private void Update()
@@ -170,24 +195,33 @@ public class MapManager : MonoBehaviour
     {
         Vector2 cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 cameraPos = CameraManager.Instance.Camera.transform.position;
+        Room oldSelectedSlot = _selectedSlot;
         Room room = null;
         float camOffset = 1.8f;
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
-            if (_selectedSlot != null)
-                _selectedSlot.UnSelect();
-            Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
+            //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y < camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
-            if (room != null && room.RoomColor != RoomColor.NotBuyable)
+            if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 _selectedSlot = room != _selectedSlot ? room : null;
-            if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
-                if (_selectedSlot.RoomColor == RoomColor.Buyable && _selectedSlot.RoomData != null) {
-                    SetBuyableAdjacent();
-                    _currentRoomCount++;
-                    UpdateText();
+            }
+            if (room != null && room.RoomColor != RoomColor.NotBuyable) {
+                if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
+                    _selectedSlot.SetColor(RoomColor.Selected);
+                    EditorManager.Instance.OpenEditorMenu();
                 }
-                _selectedSlot.SetColor(RoomColor.Selected);
+                if (oldSelectedSlot != null) {
+                    _lastestSelectedSlot = oldSelectedSlot;
+                    SetUnBuyableAdjacent(oldSelectedSlot);
+                    oldSelectedSlot.UnSelect();
+                }
+            }
+            Debug.Log($"SelectedSlot = {_selectedSlot == null} Color = {_selectedSlot?.RoomColor} Data = {_selectedSlot?.RoomData}");
+            if (_selectedSlot == null)
+                EditorManager.Instance.CloseEditorMenu();
+            else if (_selectedSlot.RoomData != null) {
+                SetBuyableAdjacent();
             }
         }
     }
@@ -203,6 +237,76 @@ public class MapManager : MonoBehaviour
             _selectedSlot.SetData(data);
             SetBuyableAdjacent(_selectedSlot);
         }
+    }
+
+    public void SetDataOnSelectedTrap(TrapData data)
+    {
+        if (_selectedSlot != null) {
+            if (_selectedSlot.TrapData == null)
+                FindRoomPatern();
+            _selectedSlot.SetData(data);
+            SetBuyableAdjacent(_selectedSlot);
+        }
+    }
+
+    private void FindRoomPatern()
+    {
+        Direction direction = _lastestSelectedSlot.RoomData.Directions;
+        Direction newDirection = Direction.None;
+
+        if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == 1) {
+            newDirection = Direction.Down;
+            direction += (int)Direction.Up;
+        } else if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == -1) {
+            newDirection = Direction.Up;
+            direction += (int)Direction.Down;
+        } else if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == _heightSize) {
+            newDirection = Direction.Left;
+            direction += (int)Direction.Right;
+        } else if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == -_heightSize) {
+            newDirection = Direction.Right;
+            direction += (int)Direction.Left;
+        } else
+            direction = Direction.None;
+        Debug.Log($"oldPatern {PrintDirection(direction)} {PrintDirection(newDirection)}");
+        _lastestSelectedSlot.SetData(FindRoomDataByDirections(direction));
+        _selectedSlot.SetData(FindRoomDataByDirections(newDirection));
+    }
+
+    private RoomData FindRoomDataByDirections(Direction direction)
+    {
+        foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
+            if ((int)room.Directions == -1 && (int)direction == 15)
+                return room;
+            if (room.Directions == direction)
+                return room;
+        }
+        return null;
+    }
+
+    public string PrintDirection(Direction direction)
+    {
+        string str = "{";
+
+        for (int i = (int) direction; i > 0; ) {
+            if (i >= 8) {
+                str += "Up";
+                i -= 8;
+            } else if (i >= 4) {
+                str += "Down";
+                i -= 4;
+            } else if (i >= 2) {
+                str += "Left";
+                i -= 2;
+            } else if (i >= 1) {
+                str += "Right";
+                i -= 1;
+            }
+            if (i > 0)
+                str += ", ";
+        }
+        str += "}";
+        return str;
     }
 }
 
