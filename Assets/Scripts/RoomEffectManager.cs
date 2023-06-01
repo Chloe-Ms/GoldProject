@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class RoomEffectManager
 {
@@ -17,7 +18,7 @@ public class RoomEffectManager
             Effect.MONSTRE,
             new UpdatedRoomEffect(
                 (Trap trap,Group group) => {
-                    //Display
+                    //Nothing
                 }
             )
         },
@@ -48,17 +49,24 @@ public class RoomEffectManager
 
     };
 
-    private static Dictionary<Effect, Action<Trap, Group>> _effectsAppliedAfterRoom = new Dictionary<Effect, Action<Trap, Group>>() {
+    private static Dictionary<Effect, Action<Trap, Group,HeroesManager>> _effectsAppliedAfterRoom = new Dictionary<Effect, Action<Trap, Group, HeroesManager>>() {
         {
             Effect.GLACE,
-            (Trap trap,Group group) => {
-                //HIHIHIHIHi
+            (Trap trap,Group group,HeroesManager manager) => {
+                if (trap.IsActive)
+                {
+                    for (int  j = 0; j < trap.Effects.Count; j++)
+                    {
+                        manager.ApplyDamageToEachHero(trap.Effects[j]);
+                    }
+                    
+                }
             }
         },
 
     };
 
-    public static Dictionary<Effect, Action<Trap, Group>> EffectsAppliedAfterRoom {
+    public static Dictionary<Effect, Action<Trap, Group, HeroesManager>> EffectsAppliedAfterRoom {
         get => _effectsAppliedAfterRoom; 
         set => _effectsAppliedAfterRoom = value; 
     }
@@ -75,6 +83,7 @@ public class RoomEffectManager
 public class UpdatedRoomEffect
 {
     private Action<Trap,Group> _onRoomEnter;
+    private int _turns;
 
     public UpdatedRoomEffect(Action<Trap,Group> onRoomEnter)
     {
@@ -104,10 +113,10 @@ public class EffectEvent
         set => _effect = value; 
     }
 
-    private Action<Trap, Group> _onRoomEffectApplied;
+    private Action<Trap, Group, HeroesManager> _onRoomEffectApplied;
     private Effect _effect;
 
-    public EffectEvent(int nbRoomBeforeApplied, Effect effect, Action<Trap, Group> onRoomEffectApplied)
+    public EffectEvent(int nbRoomBeforeApplied, Effect effect, Action<Trap, Group,HeroesManager> onRoomEffectApplied)
     {
         _nbRoomBeforeApplied = nbRoomBeforeApplied;
         _effect = effect;

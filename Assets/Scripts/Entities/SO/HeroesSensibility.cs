@@ -15,7 +15,7 @@ public class HeroesSensibility : ScriptableObject
 
     private void OnEnable()
     {
-        if (!modified)
+        if (!modified && heroesSensibilities.Length <= 0)
         {
             int columns = Enum.GetNames(typeof(Effect)).Length;
             int rows = Enum.GetNames(typeof(Role)).Length;

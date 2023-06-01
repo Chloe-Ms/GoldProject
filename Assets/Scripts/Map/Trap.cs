@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Trap : Room
 {
-    Effect[] _listEffects;
+    List<Effect> _listEffects = new List<Effect>();
     bool _isActive = true;
     int _nbOfUpgrades = 0;
     
@@ -11,7 +12,7 @@ public class Trap : Room
         set => _isActive = value; 
     }
 
-    public Effect[] Effects
+    public List<Effect> Effects
     {
         get => _listEffects;
         private set => _listEffects = value;

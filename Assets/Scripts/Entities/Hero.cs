@@ -31,6 +31,10 @@ public class Hero : MonoBehaviour
         get => _isDead; 
         set => _isDead = value; 
     }
+    public int Health {
+        get => _health; 
+        set => _health = value; 
+    }
 
     public void TestDamage()
     {
@@ -38,15 +42,15 @@ public class Hero : MonoBehaviour
     }
     public void TakeDamage(int pv)
     {
-        int reaDamage = Mathf.Min(_health,pv);
-        _health = Mathf.Clamp(_health - reaDamage, 0,MaxHealth);
+        int realDamage = Mathf.Min(_health,pv);
+        _health = Mathf.Clamp(_health + realDamage, 0,MaxHealth);
         if (_health <= 0)
         {
             _isDead = true;
             OnHeroDeath?.Invoke();
         } else
         {
-            OnDamageTaken?.Invoke(reaDamage);
+            OnDamageTaken?.Invoke(realDamage);
         }
     }
 
@@ -54,5 +58,6 @@ public class Hero : MonoBehaviour
     {
         _heroData = data;
         _renderer.color = _heroData.color;
+        _health = _heroData.maxHealth;
     }
 }

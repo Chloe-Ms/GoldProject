@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Group
 {
-    private List<Hero> _heroes;
+    private List<Hero> _heroes = new List<Hero>();
+    private static List<EffectEvent> _effectsEvent = new List<EffectEvent>();
     private int _nbLeversLeft;
     private bool _isPoisoned;
 
@@ -15,10 +16,9 @@ public class Group
         get => _isPoisoned;
         set => _isPoisoned = value; 
     }
-
-    private void Awake()
-    {
-        _heroes = new List<Hero>();
+    public static List<EffectEvent> EffectsEvent { 
+        get => _effectsEvent; 
+        set => _effectsEvent = value; 
     }
 
     public void Init()

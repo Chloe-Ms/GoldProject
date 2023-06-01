@@ -105,50 +105,67 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         return _levels[_level].ListHeroesInGroup;
     }
-
-    [SerializeField]private Effect _effectRoomTest;
+    #region test
+    [SerializeField]private Trap _trap;
+    [SerializeField] private Effect _effect;
     [Button]
     private void RoomTest()
     {
-        Trap trap = new Trap();
+        GameObject trap = Instantiate(_trap.gameObject);
+        Trap t = trap.GetComponent<Trap>();
+        t.NbOfUpgrades = 1;
+        t.Effects.Add(_effect);
+        MoveHeroesToRoom(t);
     }
+    #endregion
     public void MoveHeroesToRoom(Room room)
     {
         //Move HeroesObjects
-
         Trap trap = room as Trap;
         if (trap != null)
         {
+            Debug.Log("EFFECTS 1 : " + RoomEffectManager.EffectsEvent.Count);
             _currentRoomEffect = trap.Effects[0]; //On garde l'effet principal
             //Activer RoomEffectManagerQueue 
             DecreaseRoomForEffectsList(trap, _heroesManager.HeroesInCurrentLevel);
 
-            for (int  j = 0; j < trap.Effects.Length; j++)
-            {   
-                _heroesManager.ApplyDamageToEachHero(trap.Effects[j]);
-                trap.IsActive = false;
-
-                //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
-                if (trap.NbOfUpgrades > 0 && j == 0)
+            if (trap.IsActive)
+            {
+                for (int  j = 0; j < trap.Effects.Count; j++)
                 {
-                    RoomEffectManager.EffectsOnRoom[trap.Effects[j]].OnRoomEnter.Invoke(trap, _heroesManager.HeroesInCurrentLevel);
-                    //UpdatedRoomEffect roomEffect = new UpdatedRoomEffect();
+                    Debug.Log("Effect " +trap.Effects[j]);
+                    _heroesManager.ApplyDamageToEachHero(trap.Effects[j]);
+                    trap.IsActive = false;
+
+                    //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
+                    if (trap.NbOfUpgrades > 0 && j == 0)
+                    {
+                        Debug.Log("UPGRADE POWER");
+                        if (RoomEffectManager.EffectsOnRoom.ContainsKey(trap.Effects[j]))
+                        {
+                            Debug.Log("UPGRADE POWER EFFECT IN GROUP");
+                            RoomEffectManager.EffectsOnRoom[trap.Effects[j]].OnRoomEnter.Invoke(trap, _heroesManager.HeroesInCurrentLevel);
+                        }
+                    }
                 }
             }
+            Debug.Log("EFFECTS 2 : "+RoomEffectManager.EffectsEvent.Count);
         } else
         {
             _currentRoomEffect = Effect.NONE;
         }
     }
 
-    public static void DecreaseRoomForEffectsList(Trap trap, Group group)
+    public void DecreaseRoomForEffectsList(Trap trap, Group group)
     {
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
+            Debug.Log("Decrease number for room effects list");
             RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied--;
             if (RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied == 0)
             {
-                RoomEffectManager.EffectsAppliedAfterRoom[RoomEffectManager.EffectsEvent[i].Effect]?.Invoke(trap, group);
+                Debug.Log("Effect applied "+ RoomEffectManager.EffectsEvent[i].Effect);
+                RoomEffectManager.EffectsAppliedAfterRoom[RoomEffectManager.EffectsEvent[i].Effect]?.Invoke(trap, group, _heroesManager);
                 RoomEffectManager.EffectsEvent.RemoveAt(i);
             }
         }

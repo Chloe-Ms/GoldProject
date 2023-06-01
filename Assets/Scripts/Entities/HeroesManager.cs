@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HeroesManager : MonoBehaviour
 {
     HeroData[] _heroesDataInCurrentLevel;
-    Group _heroesInCurrentLevel;
+    Group _heroesInCurrentLevel = new Group();
 
     [SerializeField] float _spaceBetweenHeroes = 1f;
     [SerializeField] GameObject _heroPrefab;
@@ -67,11 +66,14 @@ public class HeroesManager : MonoBehaviour
     }
     public void RemoveHeroesGameObjects()
     {
-        for (int i = _heroesInCurrentLevel.Heroes.Count - 1; i >= 0; i--)
+        if (_heroesInCurrentLevel != null)
         {
-            Destroy(_heroesInCurrentLevel.Heroes[i].gameObject);
+            for (int i = _heroesInCurrentLevel.Heroes.Count - 1; i >= 0; i--)
+            {
+                Destroy(_heroesInCurrentLevel.Heroes[i].gameObject);
+            }
+            _heroesInCurrentLevel.Heroes.Clear();
         }
-        _heroesInCurrentLevel.Heroes.Clear();
     }
 
     public void ApplyDamageToEachHero(Effect effect)
@@ -81,14 +83,14 @@ public class HeroesManager : MonoBehaviour
             if (!hero.IsDead)
             {
                 int damage = _heroesSensibilities.GetSensibility(effect, hero.Role);
-                
+
                 if (_heroesInCurrentLevel.IsPoisoned)
                 {
                     damage *= _poisonDamageMultiplier;
                 }
-                
                 hero.TakeDamage(damage);
             }
+            Debug.Log("Hero " + hero.Role + " " + hero.Health);
         }
     }
 }
