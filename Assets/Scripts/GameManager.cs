@@ -5,28 +5,37 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
-    [SerializeField] LevelData[] _levels;
     private static GameManager _instance;
+
     public static GameManager Instance
     {
         get => _instance;
         private set => _instance = value;
     }
 
-    private int _nbMoves = 0;
-    private int _level = 0;
-    public int NbMoves { 
-        get => _nbMoves; 
-        set => _nbMoves = value; 
+    [SerializeField] private GeneralData _generalData;
+
+    public GeneralData GeneralData
+    {
+        get { return _generalData; }
+    }
+
+    private int _golds = 0;
+    private int _level = 1;
+    public int Golds { 
+        get => _golds; 
+        set => _golds = value; 
     }
     
     public int Level {
-        get => _level + 1;
-        private set => _level = value - 1;
+        get => _level;
+        private set => _level = value;
     }
 
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
+
+    [SerializeField] Level[] _levels;
 
     void Awake()
     {
@@ -56,13 +65,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        NbMoves = data.golds;
+        Golds = data.golds;
         //Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.golds = NbMoves;
+        data.golds = Golds;
         //data.level = Level;
     }
     [Button("Next level")]
@@ -86,13 +95,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OnEnterPlayMode?.Invoke(Level);
     }
 
-    public HeroData[] GetHeroesCurrentLevel()
+    public GameObject[] GetHeroesCurrentLevel()
     {
-        return _levels[_level].ListHeroesInGroup;
-    }
-
-    public void MoveHeroesToRoom(Room room)
-    {
-
+        return _levels[_level-1].ListHeroesInGroup;
     }
 }

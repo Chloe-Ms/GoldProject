@@ -15,6 +15,7 @@ public class RoomData : ScriptableObject
 
     public Direction Directions {
         get { return _directions; }
+        private set { _directions = value; }
     }
 }
 
