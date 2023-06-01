@@ -1,7 +1,6 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataPersistence
@@ -19,9 +18,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private int _nbMoves = 0;
     private int _level = 0;
     private Effect _currentRoomEffect = Effect.NONE;
-    public int NbMoves { 
-        get => _nbMoves; 
-        set => _nbMoves = value; 
+    public int NbMoves
+    {
+        get => _nbMoves;
+        set => _nbMoves = value;
+    }
     [SerializeField] private GeneralData _generalData;
 
     public GeneralData GeneralData
@@ -41,7 +42,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
 
-    [SerializeField] Level[] _levels;
 
     void Awake()
     {
@@ -71,13 +71,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData data)
     {
-        Golds = data.golds;
+        NbMoves = data.golds;
         //Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.golds = Golds;
+        data.golds = NbMoves;
         //data.level = Level;
     }
     [Button("Next level")]
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OnEnterPlayMode?.Invoke(Level);
     }
 
-    public GameObject[] GetHeroesCurrentLevel()
+    public HeroData[] GetHeroesCurrentLevel()
     {
         return _levels[_level].ListHeroesInGroup;
     }
