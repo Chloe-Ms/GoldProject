@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class Level
+public class LevelData
 {
     [HideInInspector] public string name; //public for the editor
     [SerializeField] int _golds;

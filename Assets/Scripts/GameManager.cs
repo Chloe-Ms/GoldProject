@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
+    [SerializeField] LevelData[] _levels;
     private static GameManager _instance;
-
     public static GameManager Instance
     {
         get => _instance;
@@ -14,21 +14,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
 
     private int _nbMoves = 0;
-    private int _level = 1;
+    private int _level = 0;
     public int NbMoves { 
         get => _nbMoves; 
         set => _nbMoves = value; 
     }
     
     public int Level {
-        get => _level;
-        private set => _level = value;
+        get => _level + 1;
+        private set => _level = value - 1;
     }
 
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
-
-    [SerializeField] Level[] _levels;
 
     void Awake()
     {
@@ -90,6 +88,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public HeroData[] GetHeroesCurrentLevel()
     {
-        return _levels[_level-1].ListHeroesInGroup;
+        return _levels[_level].ListHeroesInGroup;
+    }
+
+    public void MoveHeroesToRoom(Room room)
+    {
+
     }
 }
