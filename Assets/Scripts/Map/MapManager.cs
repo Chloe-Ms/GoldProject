@@ -168,8 +168,12 @@ public class MapManager : MonoBehaviour
             Destroy(gameObject);
         else
             _instance = this;
-        InitStart();
     }
+
+    private void Start()
+    {
+        InitStart();
+    } 
 
     private void InitStart()
     {

@@ -114,7 +114,7 @@ public class ElementList : MonoBehaviour
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
     }
 
-    private void Awake()
+    private void Start()
     {
         GenerateElement(GameManager.Instance.GeneralData.TrapList);
     }
