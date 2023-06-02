@@ -36,6 +36,8 @@ public class MapManager : MonoBehaviour
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
 
+    private Room _start = null;
+    private Room _boss = null;
     private Room _selectedSlot = null;
     private Room _lastestSelectedSlot = null;
 
@@ -177,13 +179,11 @@ public class MapManager : MonoBehaviour
 
     private void InitStart()
     {
-        Room start = null;
-
-        start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
-        start.SetColor(RoomColor.Buyable);
-        start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[0]);
+        _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
+        _start.SetColor(RoomColor.Buyable);
+        _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[0], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
         UpdateText();
-        Debug.Log($"Start in {start.RoomColor}");
+        Debug.Log($"Start in {_start.RoomColor}");
     }
 
     private void Update()
@@ -241,10 +241,15 @@ public class MapManager : MonoBehaviour
 
     public void SetDataOnSelectedTrap(TrapData data)
     {
-        if (_selectedSlot != null) {
+        if (_selectedSlot != null && _boss == null) {
             if (_selectedSlot.TrapData == null)
                 FindRoomPatern();
-            _selectedSlot.SetData(data);
+            if (_selectedSlot != _start)
+                _selectedSlot.SetData(data);
+            if (data.Name == "Boss Room") {
+                _boss = _selectedSlot;
+                ElementList.Instance.RemoveBossRoom();
+            }
             SetBuyableAdjacent(_selectedSlot);
         }
     }
@@ -268,7 +273,6 @@ public class MapManager : MonoBehaviour
             direction += (int)Direction.Left;
         } else
             direction = Direction.None;
-        Debug.Log($"oldPatern {PrintDirection(direction)} {PrintDirection(newDirection)}");
         _lastestSelectedSlot.SetData(FindRoomDataByDirections(direction));
         _selectedSlot.SetData(FindRoomDataByDirections(newDirection));
     }
@@ -282,6 +286,22 @@ public class MapManager : MonoBehaviour
                 return room;
         }
         return null;
+    }
+
+    [Button("Pathfinding")]
+    private void Pathfinding()
+    {
+        List<Room> travelList = new List<Room>();
+
+        if (_start == null || _boss == null)
+            return;
+        travelList.Add(_start);
+    }
+
+    private bool HaveDirection(Direction direction , Direction directionToCheck)
+    {
+        Debug.Log($"direction = {direction} directionToCheck = {directionToCheck} condition {(direction & directionToCheck)} result = {(direction & directionToCheck) == directionToCheck}");
+        return (direction & directionToCheck) == directionToCheck;
     }
 
     public string PrintDirection(Direction direction)

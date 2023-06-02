@@ -6,6 +6,7 @@ using NaughtyAttributes;
 
 public class ElementList : MonoBehaviour
 {
+    private static ElementList _instance;
     [SerializeField] private RoomList list;
     [SerializeField] private RectTransform _startPosition;
     [SerializeField] private GameObject _background;
@@ -13,6 +14,11 @@ public class ElementList : MonoBehaviour
     [SerializeField, Range(0.1f, 2f)] private float _margin = 2f;
     [SerializeField] private Vector3 _scale = new Vector3(0.2f, 0.2f, 1f);
     [ShowNonSerializedField] private List<GameObject> _elements = new List<GameObject>();
+
+    public static ElementList Instance
+    {
+        get { return _instance; }
+    }
 
     [Button("Clear Elements")]
     private void ClearElements()
@@ -94,6 +100,8 @@ public class ElementList : MonoBehaviour
         ClearElements();
         foreach (TrapData trap in listOfTrap.TrapData)
         {
+            if (trap.Name == "Entrance")
+                continue;
             instanciateBackground = Instantiate(_background);
             instanciateBackground.name = "Room_" + _elements.Count;
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
@@ -112,6 +120,14 @@ public class ElementList : MonoBehaviour
             instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedTrap(trap); });
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
+    }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+            Destroy(gameObject);
+        else
+            _instance = this;
     }
 
     private void Start()
@@ -137,6 +153,14 @@ public class ElementList : MonoBehaviour
     {
         if (MapManager.Instance.SelectedSlot != null)
             EditorManager.Instance.SetDataOnSelectedTrap(data);
+    }
+
+    public void RemoveBossRoom()
+    {
+        GameObject haveToRemove = _elements[_elements.Count - 1];
+
+        _elements.RemoveAt(_elements.Count - 1);
+        DestroyImmediate(haveToRemove);
     }
 
     private void OnApplicationQuit()
