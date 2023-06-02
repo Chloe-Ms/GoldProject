@@ -1,67 +1,96 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class HeroesManager : MonoBehaviour
 {
-    [SerializeField] Group[] _groupPerLevel;
-    [SerializeField] float _spaceBetweenHeroes = 1f;
-    List<Hero> _heroes;
+    HeroData[] _heroesDataInCurrentLevel;
+    Group _heroesInCurrentLevel = new Group();
 
-    private void Awake()
-    {
-        _heroes = new List<Hero>();
+    [SerializeField] float _spaceBetweenHeroes = 1f;
+    [SerializeField] GameObject _heroPrefab;
+    [SerializeField] HeroesSensibility _heroesSensibilities;
+    [SerializeField] int _poisonDamageMultiplier = 2;
+
+    public Group HeroesInCurrentLevel { 
+        get => _heroesInCurrentLevel; 
+        set => _heroesInCurrentLevel = value; 
     }
+
+    public event Action OnAnyHeroDeath;
 
     private void Start()
     {
-        InstantiateHeroesInLevel(GameManager.Instance.Level);
-        GameManager.Instance.OnEnterEditorMode += OnEnterEditorMode;
-        GameManager.Instance.OnEnterEditorMode += OnEnterPlayMode;
+        GameManager.Instance.OnEnterEditorMode += OnChangeLevel;
+        GameManager.Instance.OnEnterPlayMode += StartPlayMode;
     }
 
-    private void OnEnterPlayMode(int level)
+    private void StartPlayMode(int level)
     {
         InstantiateHeroesInLevel(level);
     }
 
-    private void OnEnterEditorMode(int level)
+    private void OnChangeLevel(int level)
     {
-        if (_groupPerLevel.Length >= level)
+        _heroesDataInCurrentLevel = GameManager.Instance.GetHeroesCurrentLevel();
+        StartEditMode(level);
+    }
+
+    private void StartEditMode(int level)
+    {
+        RemoveHeroesGameObjects();
+        _heroesInCurrentLevel.Init();
+        for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
-            for (int i = 0; i < _groupPerLevel[level - 1].ListHeroesInGroup.Length; i++)
-            {
-                Hero hero = _groupPerLevel[level - 1].ListHeroesInGroup[i]?.GetComponent<Hero>();
-                Debug.Log("Nom : "+hero.HeroName+"\n"+ "MaxHealth : " + hero.MaxHealth);
-            }
+            HeroData hero = _heroesDataInCurrentLevel[i];
+            Debug.Log("Nom : " + hero.heroName + "\n" + "MaxHealth : " + hero.maxHealth);
         }
     }
 
-    private void OnValidate()
-    {
-        for (int i = 0; i < _groupPerLevel.Length; i++)
-        {
-            _groupPerLevel[i].name = "Level " + (i + 1);
-        }
-    }
+    
     void InstantiateHeroesInLevel(int level)
     {
-        for (int i = _heroes.Count - 1; i >= 0; i--)
+        if (_heroesDataInCurrentLevel.Length >= level)
         {
-            Destroy(_heroes[i].gameObject);
-        }
-        _heroes.Clear();
-        if (_groupPerLevel.Length >= level)
-        {
-            for(int i = 0;i < _groupPerLevel[level - 1].ListHeroesInGroup.Length; i++)
+            for(int i = 0;i < _heroesDataInCurrentLevel.Length; i++)
             {
-                GameObject go = Instantiate(_groupPerLevel[level - 1].ListHeroesInGroup[i]);
+                GameObject go = Instantiate(_heroPrefab);
                 go.transform.position = go.transform.position + new Vector3(i * _spaceBetweenHeroes, 0,0);
                 Hero hero = go?.GetComponent<Hero>();
+                hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
                 if (hero != null)
                 {
-                    _heroes.Add(hero);
+                    _heroesInCurrentLevel.Heroes.Add(hero);
                 }
             }
+        }
+    }
+    public void RemoveHeroesGameObjects()
+    {
+        if (_heroesInCurrentLevel != null)
+        {
+            for (int i = _heroesInCurrentLevel.Heroes.Count - 1; i >= 0; i--)
+            {
+                Destroy(_heroesInCurrentLevel.Heroes[i].gameObject);
+            }
+            _heroesInCurrentLevel.Heroes.Clear();
+        }
+    }
+
+    public void ApplyDamageToEachHero(Effect effect)
+    {
+        foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                int damage = _heroesSensibilities.GetSensibility(effect, hero.Role);
+
+                if (_heroesInCurrentLevel.IsPoisoned)
+                {
+                    damage *= _poisonDamageMultiplier;
+                }
+                hero.TakeDamage(damage);
+            }
+            Debug.Log("Hero " + hero.Role + " " + hero.Health);
         }
     }
 }
