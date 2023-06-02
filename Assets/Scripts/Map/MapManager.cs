@@ -101,6 +101,11 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
+    private Room FindRoom(int index)
+    {
+        return _slots[index].GetComponent<Room>();
+    }
+
     private Room FindRoom(int x, int y)
     {
         return _slots[(x * (_heightSize)) + y ].GetComponent<Room>();
@@ -295,13 +300,33 @@ public class MapManager : MonoBehaviour
 
         if (_start == null || _boss == null)
             return;
-        travelList.Add(_start);
+        GetRoom(_start, travelList);
     }
 
-    private bool HaveDirection(Direction direction , Direction directionToCheck)
+    private void GetRoom(Room room, List<Room> travelList = null)
+    {
+        Direction actualDirection = Direction.None;
+
+        travelList.Add(room);
+        actualDirection = room.RoomData.Directions;
+        Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
+        //pathfinding with recursion with using actualdirection
+        if (HaveDirection(ref actualDirection, Direction.Up) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) + 1), travelList);
+        // if (HaveDirection(actualDirection, Direction.Down) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + _heightSize)))
+        //     GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
+        // if (HaveDirection(actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - 1)))
+        //     GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
+        // if (HaveDirection(actualDirection, Direction.Right) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + 1)))
+        //     GetRoom(FindRoom(GetIndexOfRoom(room) + _heightSize), travelList);
+
+    }
+
+    private bool HaveDirection(ref Direction direction , Direction directionToCheck)
     {
         Debug.Log($"direction = {direction} directionToCheck = {directionToCheck} condition {(direction & directionToCheck)} result = {(direction & directionToCheck) == directionToCheck}");
-        return (direction & directionToCheck) == directionToCheck;
+        Debug.Log($"direction = {(direction &= directionToCheck) == directionToCheck} direction = {direction} directionToCheck = {directionToCheck}");
+        return false;
     }
 
     public string PrintDirection(Direction direction)
