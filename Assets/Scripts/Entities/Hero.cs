@@ -42,7 +42,14 @@ public class Hero : MonoBehaviour
     }
     public void TakeDamage(int pv)
     {
-        int realDamage = Mathf.Min(_health,pv);
+        int realDamage = pv;
+        if (pv < 0)
+        {
+            realDamage = Mathf.Min(_health, pv);
+        } else {
+            realDamage = Mathf.Min(_heroData.maxHealth - _health, pv);
+        }
+
         _health = Mathf.Clamp(_health + realDamage, 0,MaxHealth);
         if (_health <= 0)
         {

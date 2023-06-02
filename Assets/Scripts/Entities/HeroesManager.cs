@@ -93,4 +93,9 @@ public class HeroesManager : MonoBehaviour
             Debug.Log("Hero " + hero.Role + " " + hero.Health);
         }
     }
+
+    public int GetSensibility(Effect effect, Role role)
+    {
+        return _heroesSensibilities.GetSensibility(effect, role);
+    }
 }

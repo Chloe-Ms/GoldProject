@@ -7,6 +7,8 @@ public class TrapData : ScriptableObject
 {
     [SerializeField] private string _name;
     [SerializeField] private Sprite _sprite;
+    [SerializeField] private Sprite _miniSprite;
+    [SerializeField] private Effect _effect;
 
     public string Name
     {
@@ -16,5 +18,12 @@ public class TrapData : ScriptableObject
     public Sprite Sprite
     {
         get { return _sprite; }
+    }
+
+    public Effect Effect { 
+        get => _effect; 
+    }
+    public Sprite MiniSprite { 
+        get => _miniSprite; 
     }
 }

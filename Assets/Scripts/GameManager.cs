@@ -1,6 +1,7 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
+using System.Data;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataPersistence
@@ -72,13 +73,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData data)
     {
         NbMoves = data.golds;
-        //Level = data.level;
     }
 
     public void SaveData(ref GameData data)
     {
         data.golds = NbMoves;
-        //data.level = Level;
     }
     [Button("Next level")]
     public void ChangeLevel()
@@ -90,7 +89,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
-        //Enter Play Mode
         OnEnterEditorMode?.Invoke(Level);
     }
 
@@ -105,6 +103,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         return _levels[_level].ListHeroesInGroup;
     }
+    public int GetHeroesSensibility(Effect effect, Role role)
+    {
+        return _heroesManager.GetSensibility(effect, role);
+    }
+
     #region test
     [SerializeField]private Trap _trap;
     [SerializeField] private Effect _effect;
@@ -124,7 +127,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         Trap trap = room as Trap;
         if (trap != null)
         {
-            Debug.Log("EFFECTS 1 : " + RoomEffectManager.EffectsEvent.Count);
+            //Debug.Log("EFFECTS 1 : " + RoomEffectManager.EffectsEvent.Count);
             _currentRoomEffect = trap.Effects[0]; //On garde l'effet principal
             //Activer RoomEffectManagerQueue 
             DecreaseRoomForEffectsList(trap, _heroesManager.HeroesInCurrentLevel);
@@ -140,16 +143,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                     if (trap.NbOfUpgrades > 0 && j == 0)
                     {
-                        Debug.Log("UPGRADE POWER");
                         if (RoomEffectManager.EffectsOnRoom.ContainsKey(trap.Effects[j]))
                         {
-                            Debug.Log("UPGRADE POWER EFFECT IN GROUP");
                             RoomEffectManager.EffectsOnRoom[trap.Effects[j]].OnRoomEnter.Invoke(trap, _heroesManager.HeroesInCurrentLevel);
                         }
                     }
                 }
             }
-            Debug.Log("EFFECTS 2 : "+RoomEffectManager.EffectsEvent.Count);
         } else
         {
             _currentRoomEffect = Effect.NONE;
