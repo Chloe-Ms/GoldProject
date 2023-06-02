@@ -43,6 +43,27 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
 
+    #region test
+    [SerializeField] private bool _updated;
+    [SerializeField] private Trap _trap;
+    [SerializeField] private Effect _effect;
+    [Button]
+    private void RoomTest()
+    {
+        GameObject trap = Instantiate(_trap.gameObject);
+        Trap t = trap.GetComponent<Trap>();
+        if (_updated)
+        {
+            t.NbOfUpgrades = 1;
+        }
+        else
+        {
+            t.NbOfUpgrades = 0;
+        }
+        t.Effects.Add(_effect);
+        MoveHeroesToRoom(t);
+    }
+    #endregion
 
     void Awake()
     {
@@ -79,6 +100,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         data.golds = NbMoves;
     }
+
     [Button("Next level")]
     public void ChangeLevel()
     {
@@ -108,28 +130,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
         return _heroesManager.GetSensibility(effect, role);
     }
 
-    #region test
-    [SerializeField]private Trap _trap;
-    [SerializeField] private Effect _effect;
-    [Button]
-    private void RoomTest()
-    {
-        GameObject trap = Instantiate(_trap.gameObject);
-        Trap t = trap.GetComponent<Trap>();
-        t.NbOfUpgrades = 1;
-        t.Effects.Add(_effect);
-        MoveHeroesToRoom(t);
-    }
-    #endregion
     public void MoveHeroesToRoom(Room room)
     {
         //Move HeroesObjects
         Trap trap = room as Trap;
         if (trap != null)
         {
-            //Debug.Log("EFFECTS 1 : " + RoomEffectManager.EffectsEvent.Count);
             _currentRoomEffect = trap.Effects[0]; //On garde l'effet principal
-            //Activer RoomEffectManagerQueue 
             DecreaseRoomForEffectsList(trap, _heroesManager.HeroesInCurrentLevel);
 
             if (trap.IsActive)
