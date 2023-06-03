@@ -186,7 +186,7 @@ public class MapManager : MonoBehaviour
     {
         _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
         _start.SetColor(RoomColor.Buyable);
-        _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[0], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
+        _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
         UpdateText();
         Debug.Log($"Start in {_start.RoomColor}");
     }
@@ -246,6 +246,7 @@ public class MapManager : MonoBehaviour
 
     public void SetDataOnSelectedTrap(TrapData data)
     {
+        Debug.Log($"SetDataOnSelectedTrap = {data}");
         if (_selectedSlot != null && _boss == null) {
             if (_selectedSlot.TrapData == null)
                 FindRoomPatern();
@@ -264,6 +265,7 @@ public class MapManager : MonoBehaviour
         Direction direction = _lastestSelectedSlot.RoomData.Directions;
         Direction newDirection = Direction.None;
 
+        Debug.Log($"Direction to find = {direction} newDirection = {newDirection}");
         if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == 1) {
             newDirection = Direction.Down;
             direction += (int)Direction.Up;
@@ -276,15 +278,17 @@ public class MapManager : MonoBehaviour
         } else if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == -_heightSize) {
             newDirection = Direction.Right;
             direction += (int)Direction.Left;
-        } else
-            direction = Direction.None;
+        }
+        Debug.Log($"Direction find = {direction} newDirection = {newDirection}");
         _lastestSelectedSlot.SetData(FindRoomDataByDirections(direction));
+        
         _selectedSlot.SetData(FindRoomDataByDirections(newDirection));
     }
 
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
+            Debug.Log($"Room Data Directions = {room.Directions} direction = {direction}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -311,21 +315,49 @@ public class MapManager : MonoBehaviour
         actualDirection = room.RoomData.Directions;
         Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
         //pathfinding with recursion with using actualdirection
+        if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - 1)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
+        if (HaveDirection(ref actualDirection, Direction.Right) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + 1)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) + _heightSize), travelList);
         if (HaveDirection(ref actualDirection, Direction.Up) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize)))
             GetRoom(FindRoom(GetIndexOfRoom(room) + 1), travelList);
-        // if (HaveDirection(actualDirection, Direction.Down) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + _heightSize)))
-        //     GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
-        // if (HaveDirection(actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - 1)))
-        //     GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
-        // if (HaveDirection(actualDirection, Direction.Right) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + 1)))
-        //     GetRoom(FindRoom(GetIndexOfRoom(room) + _heightSize), travelList);
+        if (HaveDirection(ref actualDirection, Direction.Down) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + _heightSize)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
 
     }
 
     private bool HaveDirection(ref Direction direction , Direction directionToCheck)
     {
-        Debug.Log($"direction = {direction} directionToCheck = {directionToCheck} condition {(direction & directionToCheck)} result = {(direction & directionToCheck) == directionToCheck}");
-        Debug.Log($"direction = {(direction &= directionToCheck) == directionToCheck} direction = {direction} directionToCheck = {directionToCheck}");
+        Direction tmp = direction;
+
+        if (tmp >= Direction.Down) {
+            tmp -= Direction.Down;
+            if (directionToCheck == Direction.Down) {
+                direction -= Direction.Down;
+                return true;
+            }
+        }
+        if (tmp >= Direction.Up) {
+            tmp -= Direction.Up;
+            if (directionToCheck == Direction.Up) {
+                direction -= Direction.Up;
+                return true;
+            }
+        }
+        if (tmp >= Direction.Left) {
+            tmp -= Direction.Left;
+            if (directionToCheck == Direction.Left) {
+                direction -= Direction.Left;
+                return true;
+            }
+        }
+        if (tmp >= Direction.Right) {
+            tmp -= Direction.Right;
+            if (directionToCheck == Direction.Right) {
+                direction -= Direction.Right;
+                return true;
+            }
+        }
         return false;
     }
 
