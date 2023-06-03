@@ -38,26 +38,28 @@ public class Hero : MonoBehaviour
 
     public void TestDamage()
     {
-        TakeDamage(1);
+        UpdateHealth(1);
     }
-    public void TakeDamage(int pv)
+    public void UpdateHealth(int pv)
     {
-        int realDamage = pv;
+        if (IsDead) return;
+
+        int realPV; ;
         if (pv < 0)
         {
-            realDamage = Mathf.Min(_health, pv);
+            realPV = Mathf.Min(_health, pv);
         } else {
-            realDamage = Mathf.Min(_heroData.maxHealth - _health, pv);
+            realPV = Mathf.Min(MaxHealth - _health, pv);
         }
 
-        _health = Mathf.Clamp(_health + realDamage, 0,MaxHealth);
+        _health = Mathf.Clamp(_health + realPV, 0,MaxHealth);
         if (_health <= 0)
         {
             _isDead = true;
             OnHeroDeath?.Invoke();
         } else
         {
-            OnDamageTaken?.Invoke(realDamage);
+            OnDamageTaken?.Invoke(realPV);
         }
     }
 

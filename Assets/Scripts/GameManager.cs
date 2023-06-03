@@ -130,8 +130,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
         return _heroesManager.GetSensibility(effect, role);
     }
 
+    //A déplacer dans room
     public void MoveHeroesToRoom(Room room)
     {
+        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlève l'effet de la room des plantes
         //Move HeroesObjects
         Trap trap = room as Trap;
         if (trap != null)
@@ -142,6 +144,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             if (trap.IsActive)
             {
                 trap.IsActive = false;
+                Debug.Log($"Room number of effects : {trap.Effects.Count }");
                 for (int  j = 0; j < trap.Effects.Count; j++)
                 {
                     Debug.Log("Effect " +trap.Effects[j]);

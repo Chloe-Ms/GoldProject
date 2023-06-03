@@ -16,8 +16,6 @@ public class HeroesManager : MonoBehaviour
         set => _heroesInCurrentLevel = value; 
     }
 
-    public event Action OnAnyHeroDeath;
-
     private void Start()
     {
         GameManager.Instance.OnEnterEditorMode += OnChangeLevel;
@@ -59,17 +57,28 @@ public class HeroesManager : MonoBehaviour
                 hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
                 if (hero != null)
                 {
+                    _heroesInCurrentLevel.Heroes[i].OnHeroDeath += OnAnyHeroDeath;
                     _heroesInCurrentLevel.Heroes.Add(hero);
                 }
             }
         }
     }
+
+    private void OnAnyHeroDeath()
+    {
+        if (_heroesInCurrentLevel.AffectedByPlants)
+        {
+            ApplyDamageToEachHero(Effect.PLANTE);
+        }
+    }
+
     public void RemoveHeroesGameObjects()
     {
         if (_heroesInCurrentLevel != null)
         {
             for (int i = _heroesInCurrentLevel.Heroes.Count - 1; i >= 0; i--)
             {
+                _heroesInCurrentLevel.Heroes[i].OnHeroDeath -= OnAnyHeroDeath;
                 Destroy(_heroesInCurrentLevel.Heroes[i].gameObject);
             }
             _heroesInCurrentLevel.Heroes.Clear();
@@ -88,7 +97,7 @@ public class HeroesManager : MonoBehaviour
                 {
                     damage *= _poisonDamageMultiplier;
                 }
-                hero.TakeDamage(damage);
+                hero.UpdateHealth(damage);
             }
             Debug.Log("Hero " + hero.Role + " " + hero.Health);
         }

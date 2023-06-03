@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 public class RoomEffectManager
 {
@@ -34,7 +33,7 @@ public class RoomEffectManager
             Effect.PLANTE,
             new UpdatedRoomEffect(
                 (Trap trap,Group group) => {
-                    //Ajouter un event pour la mort 
+                    group.AffectedByPlants = true;
                 }
             )
         },
@@ -42,7 +41,15 @@ public class RoomEffectManager
             Effect.GLACE,
             new UpdatedRoomEffect(
                 (Trap trap,Group group) => {
-                    _effectsEvent.Add(new EffectEvent(1,Effect.GLACE,_effectsAppliedAfterRoom[Effect.GLACE]));
+                    _effectsEvent.Add(new EffectEvent(trap.TrapData.NbRoomsBeforeEffect,Effect.GLACE,_effectsAppliedAfterRoom[Effect.GLACE]));
+                }
+            )
+        },
+        {
+            Effect.FEU,
+            new UpdatedRoomEffect(
+                (Trap trap,Group group) => {
+                    _effectsEvent.Add(new EffectEvent(trap.TrapData.NbRoomsBeforeEffect,Effect.FEU,_effectsAppliedAfterRoom[Effect.FEU]));
                 }
             )
         },
@@ -70,6 +77,35 @@ public class RoomEffectManager
                 }
             }
         },
+        {
+            Effect.FEU,
+            (Trap trap,Group group,HeroesManager manager) => {
+                if (trap.IsActive)
+                {
+                    //Enleve l'effet de glace
+                    bool hasFireEffect = false;
+                    for (int j = 0  ; j < trap.Effects.Count ; j++) 
+                    {
+                        if (trap.Effects[j] != Effect.GLACE)
+                        {
+                            if (trap.Effects[j] == Effect.FEU)
+                            {
+                                hasFireEffect = true;
+                            }
+                            j++;
+                        } else
+                        {
+                            trap.Effects.RemoveAt(j);
+                        }
+                    }
+                    if (!hasFireEffect)
+                    {
+                        trap.Effects.Add(Effect.FEU);
+                    }
+                }
+            }
+        }
+
 
     };
 
