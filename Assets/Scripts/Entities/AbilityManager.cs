@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class AbilityManager : MonoBehaviour
+public class AbilityManager
 {
-    private Dictionary<Role,Action<Group,Trap>> _abilities = new Dictionary<Role, Action<Group, Trap>>()
+    private static Dictionary<Role,Action<Group,Trap>> _activateAbilities = new Dictionary<Role, Action<Group, Trap>>()
     {
         {
             Role.HEALER,
@@ -23,9 +24,77 @@ public class AbilityManager : MonoBehaviour
             Role.PALADIN,
             (Group group, Trap trap) =>
             {
-                //group.Heroes
+                //Search hero with only one pv
+                int i = 0;
+                bool foundHero = false;
+                while (i < group.Heroes.Count && !foundHero)
+                {
+                    if (group.Heroes[i].Health == 1 && group.Heroes[i].Role != Role.PALADIN)
+                    {
+                        group.Heroes[i].Isinvulnerable = true;
+                        foundHero = true;
+                    }
+                    i++;
+                }
+            }
+        },
+        {
+            Role.MAGE,
+            (Group group, Trap trap) =>
+            {
+                Hero hero = group.GetHeroWithRole(Role.MAGE);
+                if (hero.NbDamageOnElementaryRoom == 3 && trap.IsElementary)
+                {
+                    hero.NbDamageOnElementaryRoom = 0;
+                    group.IsInvulnerable = true;
+                }
             }
         }
 
     };
+
+    private static Dictionary<Role, Action<Group>> _deactivateAbilities = new Dictionary<Role, Action<Group>>()
+    {
+        {
+            Role.HEALER,
+            (Group group) =>
+            {
+                
+            }
+        },
+        {
+            Role.PALADIN,
+            (Group group) =>
+            {
+                //Remove invulnerability
+                int i = 0;
+                bool foundHero = false;
+                while (i < group.Heroes.Count && !foundHero)
+                {
+                    if (group.Heroes[i].Isinvulnerable)
+                    {
+                        group.Heroes[i].Isinvulnerable = false;
+                        foundHero = true;
+                    }
+                    i++;
+                }
+            }
+        },
+        {
+            Role.MAGE,
+            (Group group) =>
+            {
+
+                group.IsInvulnerable = false;
+            }
+        }
+
+    };
+
+    public static Dictionary<Role, Action<Group, Trap>> ActivateAbilities { 
+        get => _activateAbilities; 
+    }
+    public static Dictionary<Role, Action<Group>> DeactivateAbilities { 
+        get => _deactivateAbilities; 
+    }
 }

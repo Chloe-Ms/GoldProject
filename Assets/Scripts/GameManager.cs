@@ -1,7 +1,6 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
-using System.Data;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour, IDataPersistence
@@ -40,6 +39,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
         private set => _currentRoomEffect = value; 
     }
 
+    public bool IsCurrentRoomElementary
+    {
+        get => _currentRoomEffect == Effect.FOUDRE || 
+            _currentRoomEffect == Effect.FEU || 
+            _currentRoomEffect == Effect.GLACE;
+    }
+
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
 
@@ -62,6 +68,26 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         t.Effects.Add(_effect);
         MoveHeroesToRoom(t);
+    }
+
+    [Button("Next level")]
+    public void ChangeLevel()
+    {
+        _level++;
+        Debug.Log("Level " + _level);
+    }
+
+    [Button("Enter edit mode")]
+    public void StartEditMode()
+    {
+        OnEnterEditorMode?.Invoke(Level);
+    }
+
+    [Button("Enter play mode")]
+    public void StartPlayMode()
+    {
+        //Enter Play Mode
+        OnEnterPlayMode?.Invoke(Level);
     }
     #endregion
 
@@ -101,26 +127,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         data.golds = NbMoves;
     }
 
-    [Button("Next level")]
-    public void ChangeLevel()
-    {
-        _level++;
-        Debug.Log("Level " + _level);
-    }
-
-    [Button("Enter edit mode")]
-    public void StartEditMode()
-    {
-        OnEnterEditorMode?.Invoke(Level);
-    }
-
-    [Button("Enter play mode")]
-    public void StartPlayMode()
-    {
-        //Enter Play Mode
-        OnEnterPlayMode?.Invoke(Level);
-    }
-
     public HeroData[] GetHeroesCurrentLevel()
     {
         return _levels[_level].ListHeroesInGroup;
@@ -140,7 +146,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             _currentRoomEffect = trap.Effects[0]; //On garde l'effet principal
             DecreaseRoomForEffectsList(trap, _heroesManager.HeroesInCurrentLevel);
-
+            _heroesManager.ApplyAbilities(trap);
             if (trap.IsActive)
             {
                 trap.IsActive = false;
@@ -160,6 +166,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
                     }
                 }
             }
+            _heroesManager.RemoveAbilities(trap);
         } else
         {
             _currentRoomEffect = Effect.NONE;
@@ -179,5 +186,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 RoomEffectManager.EffectsEvent.RemoveAt(i);
             }
         }
+    }
+
+    public void PlayerWin()
+    {
+        Debug.Log("Level cleared");
     }
 }

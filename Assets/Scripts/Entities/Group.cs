@@ -8,6 +8,7 @@ public class Group
     private int _nbKeysTaken = 0;
     private bool _isPoisoned = false;
     private bool _affectedByPlants = false;
+    private bool _isInvulnerable = false;
     public List<Hero> Heroes {
         get => _heroes;
         set => _heroes = value; 
@@ -28,9 +29,30 @@ public class Group
         get => _nbKeysTaken; 
         set => _nbKeysTaken = value; 
     }
+    public bool IsInvulnerable { 
+        get => _isInvulnerable; 
+        set => _isInvulnerable = value; 
+    }
 
     public void Init()
     {
         _isPoisoned = false;
+        _affectedByPlants = false;
+        _isInvulnerable = false;
+    }
+
+    public Hero GetHeroWithRole(Role role)
+    {
+        int i = 0;
+        Hero hero = null;
+        while (i < Heroes.Count && hero == null)
+        {
+            if (Heroes[i].Role == role)
+            {
+                hero = Heroes[i];
+            }
+            i++;
+        }
+        return hero;
     }
 }

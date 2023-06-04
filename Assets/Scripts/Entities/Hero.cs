@@ -8,8 +8,10 @@ public class Hero : MonoBehaviour
     private HeroData _heroData;
     private int _health;
     private bool _isDead = false;
+    private bool _isinvulnerable = false;
+    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit où le mettre :/
 
-    public event Action OnHeroDeath;
+    public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
     public string HeroName
     {
@@ -35,6 +37,14 @@ public class Hero : MonoBehaviour
         get => _health; 
         set => _health = value; 
     }
+    public bool Isinvulnerable {
+        get => _isinvulnerable; 
+        set => _isinvulnerable = value; 
+    }
+    public int NbDamageOnElementaryRoom { 
+        get => _nbDamageOnElementaryRoom; 
+        set => _nbDamageOnElementaryRoom = value; 
+    }
 
     public void TestDamage()
     {
@@ -42,13 +52,19 @@ public class Hero : MonoBehaviour
     }
     public void UpdateHealth(int pv)
     {
-        if (IsDead) return;
+        if (IsDead || Isinvulnerable)
+        {
+            return;
+        }
 
         int realPV; ;
-        if (pv < 0)
+        if (pv < 0) //DAMAGE
         {
             realPV = Mathf.Min(_health, pv);
-        } else {
+            if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
+                _nbDamageOnElementaryRoom++;
+
+        } else { //HEAL
             realPV = Mathf.Min(MaxHealth - _health, pv);
         }
 
@@ -56,7 +72,7 @@ public class Hero : MonoBehaviour
         if (_health <= 0)
         {
             _isDead = true;
-            OnHeroDeath?.Invoke();
+            OnHeroDeath?.Invoke(this);
         } else
         {
             OnDamageTaken?.Invoke(realPV);

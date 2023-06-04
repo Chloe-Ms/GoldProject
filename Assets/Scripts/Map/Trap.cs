@@ -21,4 +21,9 @@ public class Trap : Room
         get => _nbOfUpgrades; 
         set => _nbOfUpgrades = value; 
     }
+
+    public bool IsElementary
+    {
+        get => _listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE;
+    }
 }
