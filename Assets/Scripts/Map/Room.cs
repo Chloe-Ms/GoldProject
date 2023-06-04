@@ -63,6 +63,31 @@ public class Room : MonoBehaviour
 
     [ShowNonSerializedField] private RoomColor _oldState;
 
+    List<Effect> _listEffects = new List<Effect>();
+    bool _isActive = true;
+    int _nbOfUpgrades = 0;
+
+    public bool IsActive
+    {
+        get => _isActive;
+        set => _isActive = value;
+    }
+
+    public List<Effect> Effects
+    {
+        get => _listEffects;
+        private set => _listEffects = value;
+    }
+    public int NbOfUpgrades
+    {
+        get => _nbOfUpgrades;
+        set => _nbOfUpgrades = value;
+    }
+
+    public bool IsElementary
+    {
+        get => _listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE;
+    }
     public void Init()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -105,6 +130,7 @@ public class Room : MonoBehaviour
             RoomColor = RoomColor.Usable;
         _oldState = RoomColor.Usable;
         _trapData = trapData;
+        _listEffects.Add(trapData.Effect);
         SetIcon(trapData.Sprite);
     }
 

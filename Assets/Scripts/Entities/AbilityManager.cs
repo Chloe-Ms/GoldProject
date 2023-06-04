@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class AbilityManager
 {
-    private static Dictionary<Role,Action<Group,Trap>> _activateAbilities = new Dictionary<Role, Action<Group, Trap>>()
+    private static Dictionary<Role,Action<Group,Room>> _activateAbilities = new Dictionary<Role, Action<Group, Room>>()
     {
         {
             Role.HEALER,
-            (Group group, Trap trap) =>
+            (Group group, Room room) =>
             {
-                if (!trap.IsActive)
+                if (!room.IsActive)
                 {
                     group.Heroes.ForEach(hero =>
                     {
@@ -22,7 +22,7 @@ public class AbilityManager
         },
         {
             Role.PALADIN,
-            (Group group, Trap trap) =>
+            (Group group, Room room) =>
             {
                 //Search hero with only one pv
                 int i = 0;
@@ -40,10 +40,10 @@ public class AbilityManager
         },
         {
             Role.MAGE,
-            (Group group, Trap trap) =>
+            (Group group, Room room) =>
             {
                 Hero hero = group.GetHeroWithRole(Role.MAGE);
-                if (hero.NbDamageOnElementaryRoom == 3 && trap.IsElementary)
+                if (hero.NbDamageOnElementaryRoom == 3 && room.IsElementary)
                 {
                     hero.NbDamageOnElementaryRoom = 0;
                     group.IsInvulnerable = true;
@@ -91,7 +91,7 @@ public class AbilityManager
 
     };
 
-    public static Dictionary<Role, Action<Group, Trap>> ActivateAbilities { 
+    public static Dictionary<Role, Action<Group, Room>> ActivateAbilities { 
         get => _activateAbilities; 
     }
     public static Dictionary<Role, Action<Group>> DeactivateAbilities { 

@@ -1,13 +1,17 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
+    [SerializeField] MapManager _mapManager;
     private static GameManager _instance;
+    private bool _hasWon = false;
 
     public static GameManager Instance
     {
@@ -45,19 +49,27 @@ public class GameManager : MonoBehaviour, IDataPersistence
             _currentRoomEffect == Effect.FEU || 
             _currentRoomEffect == Effect.GLACE;
     }
+    public int CurrentLevelWidth
+    {
+        get => _levels[_level].MapWidth;
+    }
+    public int CurrentLevelHeight
+    {
+        get => _levels[_level].MapHeight;
+    }
 
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
 
     #region test
     [SerializeField] private bool _updated;
-    [SerializeField] private Trap _trap;
+    [SerializeField] private Room _room;
     [SerializeField] private Effect _effect;
     [Button]
     private void RoomTest()
     {
-        GameObject trap = Instantiate(_trap.gameObject);
-        Trap t = trap.GetComponent<Trap>();
+        GameObject room = Instantiate(_room.gameObject);
+        Room t = room.GetComponent<Room>();
         if (_updated)
         {
             t.NbOfUpgrades = 1;
@@ -68,26 +80,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         t.Effects.Add(_effect);
         MoveHeroesToRoom(t);
-    }
-
-    [Button("Next level")]
-    public void ChangeLevel()
-    {
-        _level++;
-        Debug.Log("Level " + _level);
-    }
-
-    [Button("Enter edit mode")]
-    public void StartEditMode()
-    {
-        OnEnterEditorMode?.Invoke(Level);
-    }
-
-    [Button("Enter play mode")]
-    public void StartPlayMode()
-    {
-        //Enter Play Mode
-        OnEnterPlayMode?.Invoke(Level);
     }
     #endregion
 
@@ -136,45 +128,50 @@ public class GameManager : MonoBehaviour, IDataPersistence
         return _heroesManager.GetSensibility(effect, role);
     }
 
-    //A déplacer dans room
+    public void MoveHeroesOnScreen(Room room)
+    {
+        _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
+    }
+
     public void MoveHeroesToRoom(Room room)
     {
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlève l'effet de la room des plantes
-        //Move HeroesObjects
-        Trap trap = room as Trap;
-        if (trap != null)
-        {
-            _currentRoomEffect = trap.Effects[0]; //On garde l'effet principal
-            DecreaseRoomForEffectsList(trap, _heroesManager.HeroesInCurrentLevel);
-            _heroesManager.ApplyAbilities(trap);
-            if (trap.IsActive)
-            {
-                trap.IsActive = false;
-                Debug.Log($"Room number of effects : {trap.Effects.Count }");
-                for (int  j = 0; j < trap.Effects.Count; j++)
-                {
-                    Debug.Log("Effect " +trap.Effects[j]);
-                    _heroesManager.ApplyDamageToEachHero(trap.Effects[j]);
 
+        if (room != null)
+        {
+            _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
+            DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
+            _heroesManager.ApplyAbilities(room);
+            if (room.IsActive)
+            {
+                room.IsActive = false;
+                Debug.Log($"Room number of effects : {room.Effects.Count }");
+                if (room.Effects[0] == Effect.PLANTE) { _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true; }
+                for (int  j = 0; j < room.Effects.Count; j++)
+                {
+                    Debug.Log("Effect " +room.Effects[j]);
+                    _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
-                    if (trap.NbOfUpgrades > 0 && j == 0)
+                }
+                if (room.NbOfUpgrades > 0)
+                {
+                    Debug.Log("Apply effect of room" + _currentRoomEffect);
+                    if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
                     {
-                        if (RoomEffectManager.EffectsOnRoom.ContainsKey(trap.Effects[j]))
-                        {
-                            RoomEffectManager.EffectsOnRoom[trap.Effects[j]].OnRoomEnter.Invoke(trap, _heroesManager.HeroesInCurrentLevel);
-                        }
+                        RoomEffectManager.EffectsOnRoom[room.Effects[0]].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                     }
                 }
             }
-            _heroesManager.RemoveAbilities(trap);
+            _heroesManager.RemoveAbilities(room);
         } else
         {
             _currentRoomEffect = Effect.NONE;
         }
     }
 
-    public void DecreaseRoomForEffectsList(Trap trap, Group group)
+    public void DecreaseRoomForEffectsList(Room room, Group group)
     {
+        Debug.Log("Effects count "+RoomEffectManager.EffectsEvent.Count);
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
             Debug.Log("Decrease number for room effects list");
@@ -182,7 +179,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             if (RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied == 0)
             {
                 Debug.Log("Effect applied "+ RoomEffectManager.EffectsEvent[i].Effect);
-                RoomEffectManager.EffectsAppliedAfterRoom[RoomEffectManager.EffectsEvent[i].Effect]?.Invoke(trap, group, _heroesManager);
+                RoomEffectManager.EffectsAppliedAfterRoom[RoomEffectManager.EffectsEvent[i].Effect]?.Invoke(room, group, _heroesManager);
                 RoomEffectManager.EffectsEvent.RemoveAt(i);
             }
         }
@@ -190,6 +187,52 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void PlayerWin()
     {
+        _hasWon = true;
         Debug.Log("Level cleared");
+    }
+
+    [Button("Next level")]
+    public void ChangeLevel()
+    {
+        _level++;
+        Debug.Log("Level " + _level);
+    }
+
+    [Button("Enter edit mode")]
+    public void StartEditMode()
+    {
+        _hasWon = false;
+        OnEnterEditorMode?.Invoke(Level);
+        _heroesManager.OnChangeLevel(Level);
+        _mapManager.InitLevel(_levels[Level]);
+    }
+
+    [Button("Enter play mode")]
+    public void StartPlayMode()
+    {
+        //Enter Play Mode
+        OnEnterPlayMode?.Invoke(Level);
+        List<Room> path = _mapManager.Pathfinding();
+        if (path != null)
+        {
+            int i = 0;
+            while (path.Count > i && !_hasWon)
+            {
+                MoveHeroesOnScreen(path[i]);
+                if (i < path.Count - 1)
+                {
+                    MoveHeroesToRoom(path[i]);
+                } else
+                {
+                    CheckWinLossContitions();
+                }
+                i++;
+            }
+        }
+    }
+
+    void CheckWinLossContitions()
+    {
+        Debug.Log("IN BOSS ROOM");
     }
 }

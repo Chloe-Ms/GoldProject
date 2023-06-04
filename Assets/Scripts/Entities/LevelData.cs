@@ -13,4 +13,13 @@ public class LevelData
         get => _listHeroesInLevel;
         private set => _listHeroesInLevel = value; 
     }
+    public int MapWidth { 
+        get => _mapWidth; 
+    }
+    public int MapHeight { 
+        get => _mapHeight;
+    }
+    public int NbMovesMax { 
+        get => _nbMovesMax;
+    }
 }

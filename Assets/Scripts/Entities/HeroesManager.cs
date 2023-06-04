@@ -9,6 +9,7 @@ public class HeroesManager : MonoBehaviour
 
     [SerializeField] float _spaceBetweenHeroes = 1f;
     [SerializeField] GameObject _heroPrefab;
+    [SerializeField] GameObject _groupGO;
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
     int _nbHeroesLeft;
@@ -20,10 +21,13 @@ public class HeroesManager : MonoBehaviour
         get => _nbHeroesLeft; 
         set => _nbHeroesLeft = value; 
     }
+    public GameObject GroupParent { 
+        get => _groupGO;
+    }
 
     private void Start()
     {
-        GameManager.Instance.OnEnterEditorMode += OnChangeLevel;
+        //GameManager.Instance.OnEnterEditorMode += OnChangeLevel;
         GameManager.Instance.OnEnterPlayMode += StartPlayMode;
     }
 
@@ -32,9 +36,10 @@ public class HeroesManager : MonoBehaviour
         InstantiateHeroesInLevel(level);
     }
 
-    private void OnChangeLevel(int level)
+    public void OnChangeLevel(int level)
     {
         _heroesDataInCurrentLevel = GameManager.Instance.GetHeroesCurrentLevel();
+        Debug.Log("Heroes dans le niveau " + _heroesDataInCurrentLevel.Length);
         StartEditMode(level);
     }
 
@@ -58,11 +63,12 @@ public class HeroesManager : MonoBehaviour
         {
             GameObject go = Instantiate(_heroPrefab);
             go.transform.position = go.transform.position + new Vector3(i * _spaceBetweenHeroes, 0,0);
+            go.transform.parent = _groupGO.transform;
             Hero hero = go?.GetComponent<Hero>();
             hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
             if (hero != null)
             {
-                _heroesInCurrentLevel.Heroes[i].OnHeroDeath += OnAnyHeroDeath;
+                hero.OnHeroDeath += OnAnyHeroDeath;
                 _heroesInCurrentLevel.Heroes.Add(hero);
             }
         }
@@ -70,7 +76,10 @@ public class HeroesManager : MonoBehaviour
 
     private void OnAnyHeroDeath(Hero hero)
     {
-        AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
+        if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+        {
+            AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
+        }
         _nbHeroesLeft--;
         if (_nbHeroesLeft <= 0)
         {
@@ -97,10 +106,13 @@ public class HeroesManager : MonoBehaviour
 
     public void ApplyDamageToEachHero(Effect effect)
     {
+        
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
+            Debug.Log("DAMAGE on group");
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
+                Debug.Log("Before Hero " + hero.Role + " " + hero.Health);
                 if (!hero.IsDead)
                 {
                     Hero heroAttacked = hero;
@@ -116,29 +128,35 @@ public class HeroesManager : MonoBehaviour
                     }
                     heroAttacked.UpdateHealth(damage);
                 }
-                Debug.Log("Hero " + hero.Role + " " + hero.Health);
+                Debug.Log("After Hero " + hero.Role + " " + hero.Health);
             }
         }
     }
 
-    public void ApplyAbilities(Trap trap)
+    public void ApplyAbilities(Room room)
     {
         foreach (Hero hero in _heroesInCurrentLevel.Heroes)
         {
             if (!hero.IsDead)
             {
-                AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel,trap);
+                if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel,room);
+                }
             }
         }
     }
 
-    public void RemoveAbilities(Trap trap)
+    public void RemoveAbilities(Room room)
     {
         foreach (Hero hero in _heroesInCurrentLevel.Heroes)
         {
             if (!hero.IsDead)
             {
-                AbilityManager.DeactivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel);
+                if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.DeactivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel);
+                }
             }
         }
     }

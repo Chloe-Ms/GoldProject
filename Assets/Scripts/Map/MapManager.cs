@@ -295,13 +295,14 @@ public class MapManager : MonoBehaviour
     }
 
     [Button("Pathfinding")]
-    private void Pathfinding()
+    public List<Room> Pathfinding()
     {
-        List<Room> travelList = new List<Room>();
+        List<Room> _travelList = new List<Room>();
 
         if (_start == null || _boss == null)
-            return;
-        GetRoom(_start, travelList);
+            return null;
+        GetRoom(_start, _travelList);
+        return _travelList;
     }
 
     private void GetRoom(Room room, List<Room> travelList = null)
@@ -384,6 +385,16 @@ public class MapManager : MonoBehaviour
         }
         str += "}";
         return str;
+    }
+
+    public void InitLevel(LevelData data)
+    {
+        Clear();
+        _widthSize = data.MapWidth;
+        _heightSize = data.MapHeight;
+        _buyableRoomCount = data.NbMovesMax;
+        Generate();
+        InitStart();
     }
 }
 
