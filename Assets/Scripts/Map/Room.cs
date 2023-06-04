@@ -95,6 +95,7 @@ public class Room : MonoBehaviour
             RoomColor = RoomColor.Usable;
         _oldState = RoomColor.Usable;
         _roomData = roomData;
+        //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {roomData}");
         SetSprite(_roomData.Sprite);
     }
 
@@ -154,7 +155,7 @@ public class Room : MonoBehaviour
     public void UnSelect()
     {
         RoomColor = _oldState;
-        Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {_roomData}");
+        //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {_roomData}");
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
                 RoomColor = RoomColor.NotBuyable;
