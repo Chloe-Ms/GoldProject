@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
+    [SerializeField] GameObject _startButton;
     private static GameManager _instance;
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
@@ -96,6 +97,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             Debug.LogError("Multiple instances of Game Manager in the scene.");
             Destroy(gameObject);
         }
+        GameManager.Instance.SetPlayMode(false);
     }
 
     private void Start()
@@ -220,11 +222,14 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void StartPlayMode()
     {
         //Enter Play Mode
-        OnEnterPlayMode?.Invoke(Level);
-        List<Room> path = _mapManager.Pathfinding();
-        if (path != null)
+        if (_mapManager.IsEditComplete())
         {
-            _routineChangeRoom = StartCoroutine(ChangeRoom(path));
+            OnEnterPlayMode?.Invoke(Level);
+            List<Room> path = _mapManager.Pathfinding();
+            if (path != null)
+            {
+                _routineChangeRoom = StartCoroutine(ChangeRoom(path));
+            }
         }
     }
 
@@ -249,5 +254,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     void CheckWinLossContitions()
     {
         Debug.Log("IN BOSS ROOM");
+    }
+
+    public void SetPlayMode(bool state)
+    {
+        _startButton.SetActive(state);
     }
 }

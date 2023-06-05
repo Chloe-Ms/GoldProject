@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
@@ -208,7 +207,7 @@ public class MapManager : MonoBehaviour
             //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y < camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
-            //AJOUTER AVEC SELECTED SLOT
+
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
                 _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
@@ -267,6 +266,10 @@ public class MapManager : MonoBehaviour
             }
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
+        }
+        if (IsEditComplete())
+        {
+            GameManager.Instance.SetPlayMode(true);
         }
     }
 
@@ -410,6 +413,11 @@ public class MapManager : MonoBehaviour
     public bool IsRoomATrap(Room room)
     {
         return room != _start && room != _boss;
+    }
+
+    public bool IsEditComplete()
+    {
+        return _start != null && _boss != null;
     }
 }
 
