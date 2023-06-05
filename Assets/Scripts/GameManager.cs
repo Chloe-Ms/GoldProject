@@ -1,6 +1,7 @@
 using DG.Tweening;
 using NaughtyAttributes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] MapManager _mapManager;
     private static GameManager _instance;
     private bool _hasWon = false;
+    private Coroutine _routineChangeRoom;
 
     public static GameManager Instance
     {
@@ -137,7 +139,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlève l'effet de la room des plantes
 
-        if (room != null)
+        if (room != null && room.Effects.Count > 0)
         {
             _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
@@ -188,6 +190,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void PlayerWin()
     {
         _hasWon = true;
+        if (_routineChangeRoom != null)
+        {
+            StopCoroutine( _routineChangeRoom );
+            _routineChangeRoom = null;
+        }
         Debug.Log("Level cleared");
     }
 
@@ -201,6 +208,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        _routineChangeRoom = null;
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
         _heroesManager.OnChangeLevel(Level);
@@ -215,22 +223,28 @@ public class GameManager : MonoBehaviour, IDataPersistence
         List<Room> path = _mapManager.Pathfinding();
         if (path != null)
         {
-            int i = 0;
-            while (path.Count > i && !_hasWon)
-            {
-                MoveHeroesOnScreen(path[i]);
-                if (i < path.Count - 1)
-                {
-                    MoveHeroesToRoom(path[i]);
-                } else
-                {
-                    CheckWinLossContitions();
-                }
-                i++;
-            }
+            _routineChangeRoom = StartCoroutine(ChangeRoom(path));
         }
     }
 
+    IEnumerator ChangeRoom(List<Room> path)
+    {
+        int i = 0;
+        while (path.Count > i && !_hasWon)
+        {
+            MoveHeroesOnScreen(path[i]);
+            if (i < path.Count - 1)
+            {
+                MoveHeroesToRoom(path[i]);
+            }
+            else
+            {
+                CheckWinLossContitions();
+            }
+            yield return new WaitForSeconds(1);
+            i++;
+        }
+    }
     void CheckWinLossContitions()
     {
         Debug.Log("IN BOSS ROOM");
