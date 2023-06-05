@@ -72,6 +72,7 @@ public class HeroesManager : MonoBehaviour
                 _heroesInCurrentLevel.Heroes.Add(hero);
             }
         }
+        UIUpdatePlayMode.Instance.Init();
     }
 
     private void OnAnyHeroDeath(Hero hero)
@@ -106,7 +107,6 @@ public class HeroesManager : MonoBehaviour
 
     public void ApplyDamageToEachHero(Effect effect)
     {
-        
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
             Debug.Log("DAMAGE on group");

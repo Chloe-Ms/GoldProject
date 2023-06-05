@@ -50,7 +50,7 @@ public class Room : MonoBehaviour
                     _spriteRenderer.color = Color.green;
                     break;
                 case RoomColor.NotBuyable:
-                    _spriteRenderer.color = Color.black;
+                    _spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
                     break;
                 case RoomColor.Usable:
                     _spriteRenderer.color = Color.white;

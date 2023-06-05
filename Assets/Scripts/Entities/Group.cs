@@ -55,4 +55,19 @@ public class Group
         }
         return hero;
     }
+
+    public int GetHeroIndexWithRole(Role role)
+    {
+        int i = Heroes.Count - 1;
+        bool found = false;
+        while (i >= 0 && !found)
+        {
+            if (Heroes[i].Role == role)
+            {
+                found = true;
+            }
+            i--;
+        }
+        return i + 1;
+    }
 }

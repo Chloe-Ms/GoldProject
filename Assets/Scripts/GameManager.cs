@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -12,6 +11,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
+    [SerializeField] float _timePerRoom = 1f;
     private static GameManager _instance;
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
@@ -224,6 +224,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         //Enter Play Mode
         if (_mapManager.IsEditComplete())
         {
+            _startButton.SetActive(false);
             OnEnterPlayMode?.Invoke(Level);
             List<Room> path = _mapManager.Pathfinding();
             if (path != null)
@@ -247,7 +248,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             {
                 CheckWinLossContitions();
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(_timePerRoom);
             i++;
         }
     }

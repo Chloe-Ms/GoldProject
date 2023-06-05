@@ -77,6 +77,7 @@ public class Hero : MonoBehaviour
         {
             OnDamageTaken?.Invoke(realPV);
         }
+        UIUpdatePlayMode.Instance.UpdateHero(this);
     }
 
     public void LoadHeroData(HeroData data)
@@ -84,5 +85,6 @@ public class Hero : MonoBehaviour
         _heroData = data;
         _renderer.color = _heroData.color;
         _health = _heroData.maxHealth;
+        
     }
 }
