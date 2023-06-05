@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
         get { return _instance; }
     }
 
+    private Stack<MapAction> _mapActions = new Stack<MapAction>();
     private EditorState _editorState = EditorState.Select;
     private int _buyableRoomCount = 5;
     private int _currentRoomCount = 0;
@@ -262,12 +263,19 @@ public class MapManager : MonoBehaviour
 
     public void SetDataOnSelectedTrap(TrapData data)
     {
+        MapAction mapAction = new MapAction();
+
         //Debug.Log($"SetDataOnSelectedTrap = {data}");
         if (_selectedSlot != null && _boss == null) {
-            if (_selectedSlot.TrapData == null)
+            if (_selectedSlot.TrapData == null) {
+                mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
-            if (_selectedSlot != _start)
+            }
+            if (_selectedSlot != _start) {
+                if (mapAction.ActionType == ActionType.None)
+                    mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
                 _selectedSlot.SetData(data);
+            }
             if (data.Name == "Boss Room") {
                 _boss = _selectedSlot;
                 ElementList.Instance.RemoveBossRoom();
@@ -275,6 +283,8 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
         }
+        mapAction.PrintAction();
+        _mapActions.Push(mapAction);
         if (IsEditComplete())
         {
             GameManager.Instance.SetPlayMode(true);
@@ -427,6 +437,23 @@ public class MapManager : MonoBehaviour
     {
         return _start != null && _boss != null;
     }
+
+    public void Undo()
+    {
+        MapAction mapAction = _mapActions.Pop();
+        Room room = null;
+
+        if (mapAction == null)
+            return;
+        room = FindRoom(mapAction.Index);
+        if (mapAction.ActionType == ActionType.Add) {
+            room.UndoData(null, null);
+            _selectedSlot = null;
+            SetUnBuyableAdjacent(room);
+        } else if (mapAction.ActionType == ActionType.Change) {
+            room.UndoData(mapAction.TrapData);
+        }
+    }
 }
 
 public enum EditorState
@@ -434,4 +461,61 @@ public enum EditorState
     None = -1,
     Select = 0,
     Edit = 1,
+}
+
+public class MapAction
+{
+    private int _index;
+    private ActionType _actionType;
+    private TrapData _trapData;
+    private RoomData _roomData;
+
+    public int Index
+    {
+        get { return _index; }
+        set { _index = value; }
+    }
+
+    public ActionType ActionType
+    {
+        get { return _actionType; }
+        set { _actionType = value; }
+    }
+
+    public TrapData TrapData
+    {
+        get { return _trapData; }
+    }
+
+    public RoomData RoomData
+    {
+        get { return _roomData; }
+    }
+
+    public MapAction()
+    {
+        _index = -1;
+        _actionType = ActionType.None;
+    }
+
+    public void SetAction(int index, ActionType actionType, TrapData trapData = null, RoomData roomData = null)
+    {
+        _index = index;
+        _actionType = actionType;
+        _trapData = trapData;
+        _roomData = roomData;
+    }
+
+    public void PrintAction()
+    {
+        Debug.Log($"Index = {_index} ActionType = {_actionType} TrapData = {_trapData} RoomData = {_roomData}");
+    }
+}
+
+public enum ActionType
+{
+    None = -1,
+    Add = 0,
+    Remove = 1,
+    Change = 2,
 }

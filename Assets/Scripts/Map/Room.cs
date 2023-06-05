@@ -146,8 +146,35 @@ public class Room : MonoBehaviour
         _oldState = RoomColor.Usable;
         _roomData = roomData;
         _trapData = trapData;
-        SetSprite(_roomData.Sprite);
         SetIcon(_trapData.Sprite);
+        SetSprite(_roomData.Sprite);
+    }
+
+    public void UndoData(TrapData trapData)
+    {
+        if (trapData == null) {
+            RoomColor = RoomColor.NotBuyable;
+            SetIcon(null);
+            SetSprite(null);
+        }
+        else {
+            RoomColor = RoomColor.Usable;
+            SetIcon(trapData.Sprite);
+        }
+    }
+
+    public void UndoData(RoomData roomData, TrapData trapData)
+    {
+        if (roomData == null || trapData == null) {
+            RoomColor = RoomColor.NotBuyable;
+            SetIcon(null);
+            SetSprite(null);
+        }
+        else {
+            RoomColor = RoomColor.Usable;
+            SetIcon(trapData.Sprite);
+            SetSprite(roomData.Sprite);
+        }
     }
 
     public void SetSprite(Sprite sprite)
