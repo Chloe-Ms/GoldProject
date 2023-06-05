@@ -258,6 +258,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void SetPlayMode(bool state)
     {
+        Room boss = _mapManager.BossRoom;
+        if(boss != null)
+        {
+            Vector2 positionBossRoom =  boss.gameObject.transform.position;
+            _startButton.transform.position = new Vector2(positionBossRoom.x, positionBossRoom.y);
+        }
         _startButton.SetActive(state);
     }
 }

@@ -45,6 +45,10 @@ public class MapManager : MonoBehaviour
         get { return _selectedSlot; }
     }
 
+    public Room BossRoom { 
+        get => _boss;
+    }
+
     [Button("Clear Map")]
     private void Clear()
     {
@@ -214,6 +218,10 @@ public class MapManager : MonoBehaviour
             {
                 _selectedSlot.UpgradeRoom();
                 return;
+            }
+            if (room != null && room == _boss)
+            {
+                GameManager.Instance.StartPlayMode(); //DEZOOM A FAIRE
             }
             if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 _selectedSlot = room != _selectedSlot ? room : null;
