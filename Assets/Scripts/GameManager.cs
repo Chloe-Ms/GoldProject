@@ -100,6 +100,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         GameManager.Instance.SetPlayMode(false);
     }
+    public int[] MaxHealthCurrentLevel()
+    {
+        return _levels[_level].MaxHealth;
+    }
 
     private void Start()
     {
@@ -151,17 +155,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
             {
                 _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                 room.IsActive = false;
+
                 Debug.Log($"Room number of effects : {room.Effects.Count }");
                 if (room.Effects[0] == Effect.PLANTE) { _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true; }
                 for (int  j = 0; j < room.Effects.Count; j++)
                 {
-                    Debug.Log("Effect " +room.Effects[j]);
                     _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                 }
                 if (room.NbOfUpgrades > 0)
                 {
-                    Debug.Log("Apply effect of room" + _currentRoomEffect);
                     if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
                     {
                         RoomEffectManager.EffectsOnRoom[room.Effects[0]].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
@@ -177,14 +180,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void DecreaseRoomForEffectsList(Room room, Group group)
     {
-        Debug.Log("Effects count "+RoomEffectManager.EffectsEvent.Count);
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
-            Debug.Log("Decrease number for room effects list");
             RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied--;
             if (RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied == 0)
             {
-                Debug.Log("Effect applied "+ RoomEffectManager.EffectsEvent[i].Effect);
                 RoomEffectManager.EffectsAppliedAfterRoom[RoomEffectManager.EffectsEvent[i].Effect]?.Invoke(room, group, _heroesManager);
                 RoomEffectManager.EffectsEvent.RemoveAt(i);
             }

@@ -1,6 +1,5 @@
-using System;
-using System.Data;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class HeroesManager : MonoBehaviour
 {
@@ -27,7 +26,6 @@ public class HeroesManager : MonoBehaviour
 
     private void Start()
     {
-        //GameManager.Instance.OnEnterEditorMode += OnChangeLevel;
         GameManager.Instance.OnEnterPlayMode += StartPlayMode;
     }
 
@@ -39,6 +37,11 @@ public class HeroesManager : MonoBehaviour
     public void OnChangeLevel(int level)
     {
         _heroesDataInCurrentLevel = GameManager.Instance.GetHeroesCurrentLevel();
+        int[] maxHealth = GameManager.Instance.MaxHealthCurrentLevel();
+        for (int i = 0; i < maxHealth.Length; i++) {
+            _heroesDataInCurrentLevel[i].maxHealth = maxHealth[i];
+        }
+        
         Debug.Log("Heroes dans le niveau " + _heroesDataInCurrentLevel.Length);
         StartEditMode(level);
     }
@@ -48,12 +51,6 @@ public class HeroesManager : MonoBehaviour
         RemoveHeroesGameObjects();
         _heroesInCurrentLevel.Init();
         _nbHeroesLeft = _heroesDataInCurrentLevel.Length;
-        Debug.Log("HEROES \n");
-        for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
-        {
-            HeroData hero = _heroesDataInCurrentLevel[i];
-            Debug.Log("Nom : " + hero.heroName + "\n" + "MaxHealth : " + hero.maxHealth);
-        }
     }
 
     

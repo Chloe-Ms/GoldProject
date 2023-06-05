@@ -13,6 +13,8 @@ public class Hero : MonoBehaviour
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
+    
+    #region Properties
     public string HeroName
     {
         get => _heroData.heroName;
@@ -45,6 +47,7 @@ public class Hero : MonoBehaviour
         get => _nbDamageOnElementaryRoom; 
         set => _nbDamageOnElementaryRoom = value; 
     }
+    #endregion 
 
     public void TestDamage()
     {
