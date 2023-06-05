@@ -10,6 +10,7 @@ public class Room : MonoBehaviour
     [SerializeField] private TrapData _trapData;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private UIUpgradeButton _upgradeIcon;
+    [SerializeField] private SpriteRenderer _borderRenderer;
     private GameObject _icon;
 
     public RoomData RoomData
@@ -210,7 +211,6 @@ public class Room : MonoBehaviour
     {
         _nbOfUpgrades++;
         EnableUpgrade();
-        Debug.Log("UPGRADE");
     }
 }
 
