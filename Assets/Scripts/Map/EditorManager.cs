@@ -24,7 +24,8 @@ public class EditorManager : MonoBehaviour
 
     private void Start()
     {
-        CloseEditorMenu();
+        //CloseEditorMenu();
+        OpenEditorMenu();
     }
 
     public void OpenEditorMenu()
