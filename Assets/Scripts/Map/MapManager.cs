@@ -179,7 +179,7 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        InitStart();
+        //InitStart();
     } 
 
     private void InitStart()
@@ -208,6 +208,14 @@ public class MapManager : MonoBehaviour
             //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y < camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
+            //AJOUTER AVEC SELECTED SLOT
+            if (_selectedSlot != null &&
+                _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
+            {
+                _selectedSlot.UpgradeRoom();
+                return;
+            }
             if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 _selectedSlot = room != _selectedSlot ? room : null;
             }
@@ -215,6 +223,7 @@ public class MapManager : MonoBehaviour
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
                     EditorManager.Instance.OpenEditorMenu();
+                    _selectedSlot.EnableUpgrade();
                 }
                 if (oldSelectedSlot != null) {
                     _lastestSelectedSlot = oldSelectedSlot;
@@ -257,6 +266,7 @@ public class MapManager : MonoBehaviour
                 ElementList.Instance.RemoveBossRoom();
             }
             SetBuyableAdjacent(_selectedSlot);
+            _selectedSlot.EnableUpgrade();
         }
     }
 
@@ -395,6 +405,11 @@ public class MapManager : MonoBehaviour
         _buyableRoomCount = data.NbMovesMax;
         Generate();
         InitStart();
+    }
+
+    public bool IsRoomATrap(Room room)
+    {
+        return room != _start && room != _boss;
     }
 }
 

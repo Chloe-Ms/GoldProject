@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private void Start()
     {
         DOTween.Init();
+        StartEditMode();
     }
 
     private void OnValidate()
