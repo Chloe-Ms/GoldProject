@@ -11,7 +11,8 @@ public class AbilityManager
             Role.HEALER,
             (Group group, Room room) =>
             {
-                if (!room.IsActive)
+                if ((room.TrapData.RoomType == RoomType.NORMAL && !room.IsActive) ||
+                room.TrapData.RoomType == RoomType.LEVER)
                 {
                     group.Heroes.ForEach(hero =>
                     {
