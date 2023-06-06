@@ -15,6 +15,16 @@ public class ElementList : MonoBehaviour
     [SerializeField] private Vector3 _scale = new Vector3(0.2f, 0.2f, 1f);
     [ShowNonSerializedField] private List<GameObject> _elements = new List<GameObject>();
 
+    /*private void Start()
+    {
+        GameManager.Instance.OnEnterEditorMode += InitOnEditMode;
+    }
+
+    private void InitOnEditMode(int obj)
+    {
+        InitList();
+    }*/
+
     public static ElementList Instance
     {
         get { return _instance; }
@@ -130,11 +140,6 @@ public class ElementList : MonoBehaviour
             _instance = this;
     }
 
-    private void Start()
-    {
-        GenerateElement(GameManager.Instance.GeneralData.TrapList);
-    }
-
     private void PrintAllDirection()
     {
         foreach (RoomData room in list.RoomData)
@@ -166,5 +171,10 @@ public class ElementList : MonoBehaviour
     private void OnApplicationQuit()
     {
         ClearElements();
+    }
+
+    public void InitList()
+    {
+        GenerateElement(GameManager.Instance.GeneralData.TrapList);
     }
 }
