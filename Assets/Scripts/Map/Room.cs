@@ -153,29 +153,48 @@ public class Room : MonoBehaviour
 
     public void UndoData(TrapData trapData)
     {
+        Debug.Log($"undo Data by trapData {trapData}");
+        _trapData = trapData;
         if (trapData == null) {
             RoomColor = RoomColor.NotBuyable;
             SetIcon(null);
-            SetSprite(null);
+            SetSprite(GameManager.Instance.GeneralData.Square);
         }
         else {
             RoomColor = RoomColor.Usable;
             SetIcon(trapData.Sprite);
         }
+        EnableUpgrade();
     }
 
     public void UndoData(RoomData roomData, TrapData trapData)
     {
+        Debug.Log($"undo Data by roomData {roomData} && trapData {trapData}");
+        _roomData = roomData;
+        _trapData = trapData;
         if (roomData == null || trapData == null) {
             RoomColor = RoomColor.NotBuyable;
             SetIcon(null);
-            SetSprite(null);
+            SetSprite(GameManager.Instance.GeneralData.Square);
         }
         else {
             RoomColor = RoomColor.Usable;
             SetIcon(trapData.Sprite);
             SetSprite(roomData.Sprite);
         }
+        EnableUpgrade();
+    }
+
+    public void UndoData(RoomData roomData, TrapData trapData, RoomColor roomColor = RoomColor.NotBuyable)
+    {
+        Debug.Log($"undo Data by roomData {roomData} && trapData {trapData} && roomColor {roomColor}");
+        _roomData = roomData;
+        _trapData = trapData;
+        RoomColor = roomColor;
+        _oldState = roomColor;
+        SetIcon(trapData == null ? null : trapData.Sprite);
+        SetSprite(roomData == null ? GameManager.Instance.GeneralData.Square : roomData.Sprite);
+        EnableUpgrade();
     }
 
     public void SetSprite(Sprite sprite)
@@ -237,6 +256,12 @@ public class Room : MonoBehaviour
     public void UpgradeRoom()
     {
         _nbOfUpgrades++;
+        EnableUpgrade();
+    }
+
+    public void UndoUpgrade()
+    {
+        _nbOfUpgrades--;
         EnableUpgrade();
     }
 }
