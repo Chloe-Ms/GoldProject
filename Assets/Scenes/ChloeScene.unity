@@ -1320,8 +1320,8 @@ MonoBehaviour:
   - name: Level 1
     _nbMovesMax: 5
     _listHeroesInLevel:
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     _maxHealth: 2800000002000000
     _mapWidth: 5
     _mapHeight: 6
@@ -4069,7 +4069,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672548014}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 0.63, y: 0.63, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
