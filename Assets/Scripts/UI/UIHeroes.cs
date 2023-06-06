@@ -12,15 +12,11 @@ public class UIHeroes : MonoBehaviour
     [SerializeField] GameObject _imagePositiveList;
     [SerializeField] GameObject _imageNeutralList;
     [SerializeField] GameObject _imageNegativeList;
-    private void Start()
-    {
-        GameManager.Instance.OnEnterEditorMode += ChangeData;
-    }
 
-    private void ChangeData(int obj)
+    public void ChangeData(int i)
     {
         _heroesData = GameManager.Instance.GetHeroesCurrentLevel();
-        ChangeDataForHero(0);
+        ChangeDataForHero(i);
     }
 
     private void ChangeDataForHero(int index)

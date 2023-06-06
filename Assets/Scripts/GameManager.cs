@@ -222,13 +222,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
-        UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
         _displayUI.EnterEditMode();
         _routineChangeRoom = null;
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
+        UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
     }
 
     [Button("Enter play mode")]
