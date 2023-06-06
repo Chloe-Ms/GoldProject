@@ -17,7 +17,10 @@ public class AbilityManager
                 {
                     group.Heroes.ForEach(hero =>
                     {
-                        hero.UpdateHealth(1);
+                        if (!hero.IsDead)
+                        {
+                            hero.UpdateHealth(1);
+                        }
                     });
                 }
             }
