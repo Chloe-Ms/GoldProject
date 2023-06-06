@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.InputSystem.DefaultInputActions;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -14,6 +13,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] GameObject _startButton;
     [SerializeField] float _timePerRoom = 1f;
     [SerializeField] DisplayUIOnMode _displayUI;
+    [SerializeField] GameObject _winDisplayGO;
+    [SerializeField] GameObject _lossDisplayGO;
     private static GameManager _instance;
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
@@ -65,9 +66,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
+    public event Action OnWin;
+    public event Action OnLoss;
 
     #region test
-    [SerializeField] private bool _updated;
+[SerializeField] private bool _updated;
     [SerializeField] private Room _room;
     [SerializeField] private Effect _effect;
     [Button]
@@ -200,19 +203,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
             StopCoroutine( _routineChangeRoom );
             _routineChangeRoom = null;
         }
-        Debug.Log("Level cleared");
+        OnWin?.Invoke();
+        _winDisplayGO.SetActive(true);
+        //Debug.Log("Level cleared");
     }
 
     [Button("Next level")]
     public void ChangeLevel()
     {
         _level++;
-        Debug.Log("Level " + _level);
+        StartEditMode();
     }
 
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        _winDisplayGO.SetActive(false);
+        _lossDisplayGO.SetActive(false);
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
         _displayUI.EnterEditMode();
         _routineChangeRoom = null;
@@ -241,14 +248,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     IEnumerator ChangeRoom(List<Room> path)
     {
+        bool bossRoomReached = false;
         int i = 0;
-        while (path.Count > i && !_hasWon)
+        while (path.Count > i && !_hasWon && !bossRoomReached)
         {
             MoveHeroesOnScreen(path[i]);
             if (i == 0)//Waiting in entrance
             {
                 yield return new WaitForSeconds(_timePerRoom);
-            } else if (i < path.Count - 1)
+            } else if (path[i].TrapData.RoomType != RoomType.BOSS)
             {
                 MoveHeroesToRoom(path[i]);
                 yield return new WaitForSeconds(_timePerRoom);
@@ -256,12 +264,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
             else if (path[i].TrapData.RoomType == RoomType.BOSS)
             {
                 CheckWinLossContitions();
+                bossRoomReached = true;
             }
             i++;
         }
     }
     void CheckWinLossContitions()
     {
+        OnLoss?.Invoke();
+        _lossDisplayGO.SetActive(true);
         Debug.Log("IN BOSS ROOM");
     }
 
