@@ -244,7 +244,7 @@ public class Room : MonoBehaviour
 
     public void EnableUpgrade()
     {
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this)) // A AJOUTER check si le nombre d'actions est plus grand que 0
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this))
         {
             _upgradeIcon.gameObject.SetActive(true);
         } else
