@@ -10,6 +10,7 @@ public class TrapData : ScriptableObject
     [SerializeField] private Sprite _miniSprite;
     [SerializeField] private Effect _effect;
     [SerializeField] private int _nbRoomsBeforeEffect;
+    [SerializeField] private RoomType _roomType;
     public string Name
     {
         get { return _name; }
@@ -29,4 +30,15 @@ public class TrapData : ScriptableObject
     public int NbRoomsBeforeEffect { 
         get => _nbRoomsBeforeEffect;
     }
+    public RoomType RoomType { 
+        get => _roomType;
+    }
+}
+
+public enum RoomType
+{
+    NORMAL,
+    BOSS,
+    LEVER,
+    ENTRANCE
 }

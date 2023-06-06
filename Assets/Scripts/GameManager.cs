@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -12,6 +11,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
+    [SerializeField] float _timePerRoom = 1f;
+    [SerializeField] DisplayUIOnMode _displayUI;
     private static GameManager _instance;
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
@@ -99,6 +100,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         GameManager.Instance.SetPlayMode(false);
     }
+    public int[] MaxHealthCurrentLevel()
+    {
+        return _levels[_level].MaxHealth;
+    }
 
     private void Start()
     {
@@ -142,25 +147,24 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlève l'effet de la room des plantes
 
-        if (room != null && room.Effects.Count > 0)
+        if (room != null)
         {
-            _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
-            if (room.IsActive)
+            if (room.IsActive && room.Effects.Count > 0)
             {
+                _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                 room.IsActive = false;
+
                 Debug.Log($"Room number of effects : {room.Effects.Count }");
                 if (room.Effects[0] == Effect.PLANTE) { _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true; }
                 for (int  j = 0; j < room.Effects.Count; j++)
                 {
-                    Debug.Log("Effect " +room.Effects[j]);
                     _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                 }
                 if (room.NbOfUpgrades > 0)
                 {
-                    Debug.Log("Apply effect of room" + _currentRoomEffect);
                     if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
                     {
                         RoomEffectManager.EffectsOnRoom[room.Effects[0]].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
@@ -176,14 +180,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void DecreaseRoomForEffectsList(Room room, Group group)
     {
-        Debug.Log("Effects count "+RoomEffectManager.EffectsEvent.Count);
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
-            Debug.Log("Decrease number for room effects list");
             RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied--;
             if (RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied == 0)
             {
-                Debug.Log("Effect applied "+ RoomEffectManager.EffectsEvent[i].Effect);
                 RoomEffectManager.EffectsAppliedAfterRoom[RoomEffectManager.EffectsEvent[i].Effect]?.Invoke(room, group, _heroesManager);
                 RoomEffectManager.EffectsEvent.RemoveAt(i);
             }
@@ -211,6 +212,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        _displayUI.EnterEditMode();
         _routineChangeRoom = null;
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
@@ -224,6 +226,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
         //Enter Play Mode
         if (_mapManager.IsEditComplete())
         {
+            _displayUI.EnterPlayMode();
+            _startButton.SetActive(false);
             OnEnterPlayMode?.Invoke(Level);
             List<Room> path = _mapManager.Pathfinding();
             if (path != null)
@@ -242,12 +246,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
             if (i < path.Count - 1)
             {
                 MoveHeroesToRoom(path[i]);
+                yield return new WaitForSeconds(_timePerRoom);
             }
-            else
+            else if (path[i].TrapData.RoomType == RoomType.BOSS)
             {
                 CheckWinLossContitions();
             }
-            yield return new WaitForSeconds(1);
             i++;
         }
     }

@@ -8,7 +8,6 @@ public class UIUpgradeButton : MonoBehaviour
     {
         Vector2 centerCircle = gameObject.transform.position;
         float distance = Vector2.Distance(centerCircle, position);
-        Debug.Log("Distance " + distance);
         return distance <= (_collider.radius / 2);
     }
 }

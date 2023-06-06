@@ -13,6 +13,8 @@ public class Hero : MonoBehaviour
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
+    
+    #region Properties
     public string HeroName
     {
         get => _heroData.heroName;
@@ -45,6 +47,7 @@ public class Hero : MonoBehaviour
         get => _nbDamageOnElementaryRoom; 
         set => _nbDamageOnElementaryRoom = value; 
     }
+    #endregion 
 
     public void TestDamage()
     {
@@ -77,6 +80,7 @@ public class Hero : MonoBehaviour
         {
             OnDamageTaken?.Invoke(realPV);
         }
+        UIUpdatePlayMode.Instance.UpdateHero(this);
     }
 
     public void LoadHeroData(HeroData data)
@@ -84,5 +88,6 @@ public class Hero : MonoBehaviour
         _heroData = data;
         _renderer.color = _heroData.color;
         _health = _heroData.maxHealth;
+        
     }
 }

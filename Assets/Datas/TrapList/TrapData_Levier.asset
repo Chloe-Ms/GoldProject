@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 748b0940c90a4c14cb271744798306e9, type: 3}
-  m_Name: TrapData_Boss
+  m_Name: TrapData_Levier
   m_EditorClassIdentifier: 
-  _name: Boss Room
-  _sprite: {fileID: 21300000, guid: fac467730677e304d93d4d063f111afc, type: 3}
+  _name: Levier Room
+  _sprite: {fileID: 21300000, guid: d202233598898134bb2e657f99b53112, type: 3}
   _miniSprite: {fileID: 0}
   _effect: 7
   _nbRoomsBeforeEffect: 0
-  _roomType: 1
+  _roomType: 2
