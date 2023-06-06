@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] DisplayUIOnMode _displayUI;
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
+    [SerializeField] ElementList _roomsInList;
     private static GameManager _instance;
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
@@ -218,6 +219,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);

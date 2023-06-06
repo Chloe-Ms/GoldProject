@@ -1,7 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(HeroesSensibility))]
 public class HeroesSensibilityEditor : Editor
 {
@@ -110,3 +110,4 @@ public class HeroesSensibilityEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif

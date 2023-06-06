@@ -438,6 +438,7 @@ public class MapManager : MonoBehaviour
     public void InitLevel(LevelData data)
     {
         Clear();
+        _editorState = EditorState.Select;
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
         _buyableRoomCount = data.NbMovesMax;

@@ -899,17 +899,8 @@ MonoBehaviour:
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     _maxHealth: 
-    _mapWidth: 0
-    _mapHeight: 0
-  - name: Level 3
-    _nbMovesMax: 10
-    _listHeroesInLevel:
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 0}
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    _maxHealth: 28000000030000000a000000
     _mapWidth: 5
-    _mapHeight: 0
+    _mapHeight: 5
   _heroesManager: {fileID: 1497098839}
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
@@ -917,6 +908,7 @@ MonoBehaviour:
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
+  _roomsInList: {fileID: 1088869273}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _updated: 0
   _room: {fileID: 0}

@@ -1081,9 +1081,8 @@ MonoBehaviour:
   - name: Level 1
     _nbMovesMax: 5
     _listHeroesInLevel:
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    _maxHealth: 0700000014000000
+    _maxHealth: 01000000
     _mapWidth: 5
     _mapHeight: 6
   - name: Level 2
@@ -1091,8 +1090,8 @@ MonoBehaviour:
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     _maxHealth: 
-    _mapWidth: 0
-    _mapHeight: 0
+    _mapWidth: 5
+    _mapHeight: 5
   - name: Level 3
     _nbMovesMax: 10
     _listHeroesInLevel:
