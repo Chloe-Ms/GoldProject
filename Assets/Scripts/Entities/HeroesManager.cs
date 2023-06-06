@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class HeroesManager : MonoBehaviour
 {
@@ -8,19 +8,24 @@ public class HeroesManager : MonoBehaviour
 
     [SerializeField] float _spaceBetweenHeroes = 1f;
     [SerializeField] GameObject _heroPrefab;
+    [SerializeField] GameObject _groupGO;
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
-
+    int _nbHeroesLeft;
     public Group HeroesInCurrentLevel { 
         get => _heroesInCurrentLevel; 
         set => _heroesInCurrentLevel = value; 
     }
-
-    public event Action OnAnyHeroDeath;
+    public int NbHeroesLeft { 
+        get => _nbHeroesLeft; 
+        set => _nbHeroesLeft = value; 
+    }
+    public GameObject GroupParent { 
+        get => _groupGO;
+    }
 
     private void Start()
     {
-        GameManager.Instance.OnEnterEditorMode += OnChangeLevel;
         GameManager.Instance.OnEnterPlayMode += StartPlayMode;
     }
 
@@ -29,9 +34,15 @@ public class HeroesManager : MonoBehaviour
         InstantiateHeroesInLevel(level);
     }
 
-    private void OnChangeLevel(int level)
+    public void OnChangeLevel(int level)
     {
         _heroesDataInCurrentLevel = GameManager.Instance.GetHeroesCurrentLevel();
+        int[] maxHealth = GameManager.Instance.MaxHealthCurrentLevel();
+        for (int i = 0; i < maxHealth.Length; i++) {
+            _heroesDataInCurrentLevel[i].maxHealth = maxHealth[i];
+        }
+        
+        Debug.Log("Heroes dans le niveau " + _heroesDataInCurrentLevel.Length);
         StartEditMode(level);
     }
 
@@ -39,37 +50,52 @@ public class HeroesManager : MonoBehaviour
     {
         RemoveHeroesGameObjects();
         _heroesInCurrentLevel.Init();
-        for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
-        {
-            HeroData hero = _heroesDataInCurrentLevel[i];
-            Debug.Log("Nom : " + hero.heroName + "\n" + "MaxHealth : " + hero.maxHealth);
-        }
+        _nbHeroesLeft = _heroesDataInCurrentLevel.Length;
     }
 
     
     void InstantiateHeroesInLevel(int level)
     {
-        if (_heroesDataInCurrentLevel.Length >= level)
+        for(int i = 0;i < _heroesDataInCurrentLevel.Length; i++)
         {
-            for(int i = 0;i < _heroesDataInCurrentLevel.Length; i++)
+            GameObject go = Instantiate(_heroPrefab);
+            go.transform.position = go.transform.position + new Vector3(i * _spaceBetweenHeroes, 0,0);
+            go.transform.parent = _groupGO.transform;
+            Hero hero = go?.GetComponent<Hero>();
+            hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
+            if (hero != null)
             {
-                GameObject go = Instantiate(_heroPrefab);
-                go.transform.position = go.transform.position + new Vector3(i * _spaceBetweenHeroes, 0,0);
-                Hero hero = go?.GetComponent<Hero>();
-                hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
-                if (hero != null)
-                {
-                    _heroesInCurrentLevel.Heroes.Add(hero);
-                }
+                hero.OnHeroDeath += OnAnyHeroDeath;
+                _heroesInCurrentLevel.Heroes.Add(hero);
             }
         }
+        UIUpdatePlayMode.Instance.Init();
     }
+
+    private void OnAnyHeroDeath(Hero hero)
+    {
+        if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+        {
+            AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
+        }
+        _nbHeroesLeft--;
+        if (_nbHeroesLeft <= 0)
+        {
+            GameManager.Instance.PlayerWin();
+        }
+        if (_heroesInCurrentLevel.AffectedByPlants)
+        {
+            ApplyDamageToEachHero(Effect.PLANTE);
+        }
+    }
+
     public void RemoveHeroesGameObjects()
     {
         if (_heroesInCurrentLevel != null)
         {
             for (int i = _heroesInCurrentLevel.Heroes.Count - 1; i >= 0; i--)
             {
+                _heroesInCurrentLevel.Heroes[i].OnHeroDeath -= OnAnyHeroDeath;
                 Destroy(_heroesInCurrentLevel.Heroes[i].gameObject);
             }
             _heroesInCurrentLevel.Heroes.Clear();
@@ -78,19 +104,62 @@ public class HeroesManager : MonoBehaviour
 
     public void ApplyDamageToEachHero(Effect effect)
     {
+        if (!_heroesInCurrentLevel.IsInvulnerable)
+        {
+            Debug.Log("DAMAGE on group");
+            foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+            {
+                Debug.Log("Before Hero " + hero.Role + " " + hero.Health);
+                if (!hero.IsDead)
+                {
+                    Hero heroAttacked = hero;
+                    if (heroAttacked.Isinvulnerable)
+                    {
+                        heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
+                    }
+                    int damage = _heroesSensibilities.GetSensibility(effect, heroAttacked.Role);
+
+                    if (_heroesInCurrentLevel.IsPoisoned)
+                    {
+                        damage *= _poisonDamageMultiplier;
+                    }
+                    heroAttacked.UpdateHealth(damage);
+                }
+                Debug.Log("After Hero " + hero.Role + " " + hero.Health);
+            }
+        }
+    }
+
+    public void ApplyAbilities(Room room)
+    {
         foreach (Hero hero in _heroesInCurrentLevel.Heroes)
         {
             if (!hero.IsDead)
             {
-                int damage = _heroesSensibilities.GetSensibility(effect, hero.Role);
-
-                if (_heroesInCurrentLevel.IsPoisoned)
+                if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    damage *= _poisonDamageMultiplier;
+                    AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel,room);
                 }
-                hero.TakeDamage(damage);
             }
-            Debug.Log("Hero " + hero.Role + " " + hero.Health);
         }
+    }
+
+    public void RemoveAbilities(Room room)
+    {
+        foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.DeactivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel);
+                }
+            }
+        }
+    }
+
+    public int GetSensibility(Effect effect, Role role)
+    {
+        return _heroesSensibilities.GetSensibility(effect, role);
     }
 }

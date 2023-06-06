@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
@@ -36,12 +35,18 @@ public class MapManager : MonoBehaviour
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
 
+    private Room _start = null;
+    private Room _boss = null;
     private Room _selectedSlot = null;
     private Room _lastestSelectedSlot = null;
 
     public Room SelectedSlot
     {
         get { return _selectedSlot; }
+    }
+
+    public Room BossRoom { 
+        get => _boss;
     }
 
     [Button("Clear Map")]
@@ -99,6 +104,11 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
+    private Room FindRoom(int index)
+    {
+        return _slots[index].GetComponent<Room>();
+    }
+
     private Room FindRoom(int x, int y)
     {
         return _slots[(x * (_heightSize)) + y ].GetComponent<Room>();
@@ -136,7 +146,7 @@ public class MapManager : MonoBehaviour
     {
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
-        Debug.Log("SetBuyableAdjacent");
+        //Debug.Log("SetBuyableAdjacent");
         if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor != RoomColor.Usable)
             _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
         if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor != RoomColor.Usable)
@@ -151,7 +161,7 @@ public class MapManager : MonoBehaviour
     {
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
-        Debug.Log("SetUnBuyableAdjacent");
+        //Debug.Log("SetUnBuyableAdjacent");
         if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor == RoomColor.Buyable)
             _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
         if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor == RoomColor.Buyable)
@@ -172,18 +182,16 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        InitStart();
+        //InitStart();
     } 
 
     private void InitStart()
     {
-        Room start = null;
-
-        start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
-        start.SetColor(RoomColor.Buyable);
-        start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[0]);
+        _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
+        _start.SetColor(RoomColor.Buyable);
+        _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
         UpdateText();
-        Debug.Log($"Start in {start.RoomColor}");
+        //Debug.Log($"Start in {_start.RoomColor}");
     }
 
     private void Update()
@@ -203,6 +211,18 @@ public class MapManager : MonoBehaviour
             //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y < camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
+
+            if (_selectedSlot != null &&
+                _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
+            {
+                _selectedSlot.UpgradeRoom();
+                return;
+            }
+            if (room != null && room == _boss)
+            {
+                GameManager.Instance.StartPlayMode(); //DEZOOM A FAIRE
+            }
             if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 _selectedSlot = room != _selectedSlot ? room : null;
             }
@@ -210,6 +230,7 @@ public class MapManager : MonoBehaviour
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
                     EditorManager.Instance.OpenEditorMenu();
+                    _selectedSlot.EnableUpgrade();
                 }
                 if (oldSelectedSlot != null) {
                     _lastestSelectedSlot = oldSelectedSlot;
@@ -217,7 +238,7 @@ public class MapManager : MonoBehaviour
                     oldSelectedSlot.UnSelect();
                 }
             }
-            Debug.Log($"SelectedSlot = {_selectedSlot == null} Color = {_selectedSlot?.RoomColor} Data = {_selectedSlot?.RoomData}");
+            //Debug.Log($"SelectedSlot = {_selectedSlot == null} Color = {_selectedSlot?.RoomColor} Data = {_selectedSlot?.RoomData}");
             if (_selectedSlot == null)
                 EditorManager.Instance.CloseEditorMenu();
             else if (_selectedSlot.RoomData != null) {
@@ -241,11 +262,22 @@ public class MapManager : MonoBehaviour
 
     public void SetDataOnSelectedTrap(TrapData data)
     {
-        if (_selectedSlot != null) {
+        //Debug.Log($"SetDataOnSelectedTrap = {data}");
+        if (_selectedSlot != null && _boss == null) {
             if (_selectedSlot.TrapData == null)
                 FindRoomPatern();
-            _selectedSlot.SetData(data);
+            if (_selectedSlot != _start)
+                _selectedSlot.SetData(data);
+            if (data.Name == "Boss Room") {
+                _boss = _selectedSlot;
+                ElementList.Instance.RemoveBossRoom();
+            }
             SetBuyableAdjacent(_selectedSlot);
+            _selectedSlot.EnableUpgrade();
+        }
+        if (IsEditComplete())
+        {
+            GameManager.Instance.SetPlayMode(true);
         }
     }
 
@@ -266,9 +298,7 @@ public class MapManager : MonoBehaviour
         } else if (GetIndexOfRoom(_selectedSlot) - GetIndexOfRoom(_lastestSelectedSlot) == -_heightSize) {
             newDirection = Direction.Right;
             direction += (int)Direction.Left;
-        } else
-            direction = Direction.None;
-        Debug.Log($"oldPatern {PrintDirection(direction)} {PrintDirection(newDirection)}");
+        }
         _lastestSelectedSlot.SetData(FindRoomDataByDirections(direction));
         _selectedSlot.SetData(FindRoomDataByDirections(newDirection));
     }
@@ -276,12 +306,81 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
+            //Debug.Log($"Room Data Directions = {room.Directions} direction = {direction}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
                 return room;
         }
         return null;
+    }
+
+    [Button("Pathfinding")]
+    public List<Room> Pathfinding()
+    {
+        List<Room> _travelList = new List<Room>();
+
+        if (_start == null || _boss == null)
+            return null;
+        GetRoom(_start, _travelList);
+        return _travelList;
+    }
+
+    private void GetRoom(Room room, List<Room> travelList = null)
+    {
+        Direction actualDirection = Direction.None;
+
+        travelList.Add(room);
+        actualDirection = room.RoomData.Directions;
+        // if (travelList.Count > 5)
+        //     return;
+        Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
+        //pathfinding with recursion with using actualdirection
+        if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
+        if (HaveDirection(ref actualDirection, Direction.Right) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + _heightSize)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) + _heightSize), travelList);
+        if (HaveDirection(ref actualDirection, Direction.Up) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + 1)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) + 1), travelList);
+        if (HaveDirection(ref actualDirection, Direction.Down) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - 1)))
+            GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
+
+    }
+
+    private bool HaveDirection(ref Direction direction , Direction directionToCheck)
+    {
+        Direction tmp = direction;
+
+        //Debug.Log($"{direction} & {directionToCheck}");
+        if (tmp >= Direction.Down) {
+            tmp -= Direction.Down;
+            if (directionToCheck == Direction.Down) {
+                direction -= Direction.Down;
+                return true;
+            }
+        }
+        if (tmp >= Direction.Up) {
+            tmp -= Direction.Up;
+            if (directionToCheck == Direction.Up) {
+                direction -= Direction.Up;
+                return true;
+            }
+        }
+        if (tmp >= Direction.Left) {
+            tmp -= Direction.Left;
+            if (directionToCheck == Direction.Left) {
+                direction -= Direction.Left;
+                return true;
+            }
+        }
+        if (tmp >= Direction.Right) {
+            tmp -= Direction.Right;
+            if (directionToCheck == Direction.Right) {
+                direction -= Direction.Right;
+                return true;
+            }
+        }
+        return false;
     }
 
     public string PrintDirection(Direction direction)
@@ -307,6 +406,26 @@ public class MapManager : MonoBehaviour
         }
         str += "}";
         return str;
+    }
+
+    public void InitLevel(LevelData data)
+    {
+        Clear();
+        _widthSize = data.MapWidth;
+        _heightSize = data.MapHeight;
+        _buyableRoomCount = data.NbMovesMax;
+        Generate();
+        InitStart();
+    }
+
+    public bool IsRoomATrap(Room room)
+    {
+        return room != _start && room != _boss;
+    }
+
+    public bool IsEditComplete()
+    {
+        return _start != null && _boss != null;
     }
 }
 

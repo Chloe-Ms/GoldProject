@@ -8,9 +8,13 @@ public class Hero : MonoBehaviour
     private HeroData _heroData;
     private int _health;
     private bool _isDead = false;
+    private bool _isinvulnerable = false;
+    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit où le mettre :/
 
-    public event Action OnHeroDeath;
+    public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
+    
+    #region Properties
     public string HeroName
     {
         get => _heroData.heroName;
@@ -35,23 +39,48 @@ public class Hero : MonoBehaviour
         get => _health; 
         set => _health = value; 
     }
+    public bool Isinvulnerable {
+        get => _isinvulnerable; 
+        set => _isinvulnerable = value; 
+    }
+    public int NbDamageOnElementaryRoom { 
+        get => _nbDamageOnElementaryRoom; 
+        set => _nbDamageOnElementaryRoom = value; 
+    }
+    #endregion 
 
     public void TestDamage()
     {
-        TakeDamage(1);
+        UpdateHealth(1);
     }
-    public void TakeDamage(int pv)
+    public void UpdateHealth(int pv)
     {
-        int realDamage = Mathf.Min(_health,pv);
-        _health = Mathf.Clamp(_health + realDamage, 0,MaxHealth);
+        if (IsDead || Isinvulnerable)
+        {
+            return;
+        }
+
+        int realPV; ;
+        if (pv < 0) //DAMAGE
+        {
+            realPV = Mathf.Min(_health, pv);
+            if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
+                _nbDamageOnElementaryRoom++;
+
+        } else { //HEAL
+            realPV = Mathf.Min(MaxHealth - _health, pv);
+        }
+
+        _health = Mathf.Clamp(_health + realPV, 0,MaxHealth);
         if (_health <= 0)
         {
             _isDead = true;
-            OnHeroDeath?.Invoke();
+            OnHeroDeath?.Invoke(this);
         } else
         {
-            OnDamageTaken?.Invoke(realDamage);
+            OnDamageTaken?.Invoke(realPV);
         }
+        UIUpdatePlayMode.Instance.UpdateHero(this);
     }
 
     public void LoadHeroData(HeroData data)
@@ -59,5 +88,6 @@ public class Hero : MonoBehaviour
         _heroData = data;
         _renderer.color = _heroData.color;
         _health = _heroData.maxHealth;
+        
     }
 }

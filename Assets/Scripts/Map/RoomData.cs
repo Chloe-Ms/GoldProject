@@ -14,16 +14,17 @@ public class RoomData : ScriptableObject
     }
 
     public Direction Directions {
-        get { return _directions; }
+        get { return (int)_directions != -1 ? _directions : Direction.Right | Direction.Left | Direction.Up | Direction.Down; }
         private set { _directions = value; }
     }
 }
 
+[System.Flags]
 public enum Direction
 {
     None = 0,
     Right = 1 << 0,
     Left = 1 << 1,
     Up = 1 << 2,
-    Down = 1 << 3
+    Down = 1 << 3,
 }

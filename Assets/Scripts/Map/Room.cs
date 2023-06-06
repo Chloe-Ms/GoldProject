@@ -9,6 +9,8 @@ public class Room : MonoBehaviour
     [SerializeField] private RoomData _roomData;
     [SerializeField] private TrapData _trapData;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private UIUpgradeButton _upgradeIcon;
+    [SerializeField] private SpriteRenderer _borderRenderer;
     private GameObject _icon;
 
     public RoomData RoomData
@@ -49,7 +51,7 @@ public class Room : MonoBehaviour
                     _spriteRenderer.color = Color.green;
                     break;
                 case RoomColor.NotBuyable:
-                    _spriteRenderer.color = Color.black;
+                    _spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
                     break;
                 case RoomColor.Usable:
                     _spriteRenderer.color = Color.white;
@@ -62,6 +64,35 @@ public class Room : MonoBehaviour
     }
 
     [ShowNonSerializedField] private RoomColor _oldState;
+
+    List<Effect> _listEffects = new List<Effect>();
+    bool _isActive = true;
+    int _nbOfUpgrades = 0;
+
+    public bool IsActive
+    {
+        get => _isActive;
+        set => _isActive = value;
+    }
+
+    public List<Effect> Effects
+    {
+        get => _listEffects;
+        private set => _listEffects = value;
+    }
+    public int NbOfUpgrades
+    {
+        get => _nbOfUpgrades;
+        set => _nbOfUpgrades = value;
+    }
+
+    public bool IsElementary
+    {
+        get => _listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE;
+    }
+    public UIUpgradeButton UpgradeIcon { 
+        get => _upgradeIcon;
+    }
 
     public void Init()
     {
@@ -95,6 +126,7 @@ public class Room : MonoBehaviour
             RoomColor = RoomColor.Usable;
         _oldState = RoomColor.Usable;
         _roomData = roomData;
+        //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {roomData}");
         SetSprite(_roomData.Sprite);
     }
 
@@ -104,6 +136,7 @@ public class Room : MonoBehaviour
             RoomColor = RoomColor.Usable;
         _oldState = RoomColor.Usable;
         _trapData = trapData;
+        _listEffects.Add(trapData.Effect);
         SetIcon(trapData.Sprite);
     }
 
@@ -154,12 +187,30 @@ public class Room : MonoBehaviour
     public void UnSelect()
     {
         RoomColor = _oldState;
-        Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {_roomData}");
+        _upgradeIcon.gameObject.SetActive(false);
+        //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {_roomData}");
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
                 RoomColor = RoomColor.NotBuyable;
             _oldState = RoomColor.NotBuyable;
         }
+    }
+
+    public void EnableUpgrade()
+    {
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this)) // A AJOUTER check si le nombre d'actions est plus grand que 0
+        {
+            _upgradeIcon.gameObject.SetActive(true);
+        } else
+        {
+            _upgradeIcon.gameObject.SetActive(false);
+        }
+    }
+
+    public void UpgradeRoom()
+    {
+        _nbOfUpgrades++;
+        EnableUpgrade();
     }
 }
 
