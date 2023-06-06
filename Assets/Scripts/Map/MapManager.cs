@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
         get { return _instance; }
     }
 
+    private Stack<MapAction> _mapActions = new Stack<MapAction>();
     private EditorState _editorState = EditorState.Select;
     private int _buyableRoomCount = 5;
     private int _currentRoomCount = 0;
@@ -189,7 +190,7 @@ public class MapManager : MonoBehaviour
         _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
         _start.SetColor(RoomColor.Buyable);
         _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
-        UpdateText();
+        //UpdateText();
         //Debug.Log($"Start in {_start.RoomColor}");
     }
 
@@ -204,17 +205,21 @@ public class MapManager : MonoBehaviour
         Vector2 cameraPos = CameraManager.Instance.Camera.transform.position;
         Room oldSelectedSlot = _selectedSlot;
         Room room = null;
-        float camOffset = 1.8f;
+        MapAction mapAction;
+        float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0)) {
-            //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
-            if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y < camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play) {
+            Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
+            if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
                 _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
             {
+                mapAction = new MapAction();
+                mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
+                _mapActions.Push(mapAction);
                 _selectedSlot.UpgradeRoom();
                 _currentRoomCount++;
                 UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
@@ -222,7 +227,14 @@ public class MapManager : MonoBehaviour
             }
             if (room != null && room == _boss)
             {
+                Debug.Log($"Play Mode");
+                _editorState = EditorState.Play;
+                SetUnBuyableAdjacent(room);
+                _selectedSlot.UnSelect();
+                _selectedSlot = null;
+                Debug.Log($"Selected Slot = {_selectedSlot}");
                 GameManager.Instance.StartPlayMode();
+                return;
             }
             if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 _selectedSlot = room != _selectedSlot ? room : null;
@@ -248,11 +260,6 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private void UpdateText()
-    {
-        _roomText.text = $"You have {BuyableRoomCount} rooms buyable";
-    }
-
     public void SetDataOnSelectedRoom(RoomData data)
     {
         if (_selectedSlot != null) {
@@ -263,12 +270,19 @@ public class MapManager : MonoBehaviour
 
     public void SetDataOnSelectedTrap(TrapData data)
     {
+        MapAction mapAction = new MapAction();
+
         //Debug.Log($"SetDataOnSelectedTrap = {data}");
         if (_selectedSlot != null && _boss == null) {
-            if (_selectedSlot.TrapData == null)
+            if (_selectedSlot.TrapData == null) {
+                mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
-            if (_selectedSlot != _start)
+            }
+            if (_selectedSlot != _start) {
+                if (mapAction.ActionType == ActionType.None)
+                    mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
                 _selectedSlot.SetData(data);
+            }
             if (data.Name == "Boss Room") {
                 _boss = _selectedSlot;
                 ElementList.Instance.RemoveBossRoom();
@@ -278,6 +292,8 @@ public class MapManager : MonoBehaviour
             _currentRoomCount++;
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
         }
+        mapAction.PrintAction();
+        _mapActions.Push(mapAction);
         if (IsEditComplete())
         {
             GameManager.Instance.SetPlayMode(true);
@@ -339,14 +355,22 @@ public class MapManager : MonoBehaviour
         //     return;
         Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
         //pathfinding with recursion with using actualdirection
-        if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize)))
+        if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
-        if (HaveDirection(ref actualDirection, Direction.Right) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + _heightSize)))
+            travelList.Add(room);
+        }
+        if (HaveDirection(ref actualDirection, Direction.Right) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + _heightSize))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) + _heightSize), travelList);
-        if (HaveDirection(ref actualDirection, Direction.Up) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + 1)))
+            travelList.Add(room);
+        }
+        if (HaveDirection(ref actualDirection, Direction.Up) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) + 1))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) + 1), travelList);
-        if (HaveDirection(ref actualDirection, Direction.Down) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - 1)))
+            travelList.Add(room);
+        }
+        if (HaveDirection(ref actualDirection, Direction.Down) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - 1))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
+            travelList.Add(room);
+        }
 
     }
 
@@ -430,6 +454,28 @@ public class MapManager : MonoBehaviour
     {
         return _start != null && _boss != null;
     }
+
+    public void Undo()
+    {
+        MapAction mapAction = _mapActions.Count > 0 ? _mapActions.Pop() : null;
+        Room room = null;
+
+        if (mapAction == null)
+            return;
+        room = FindRoom(mapAction.Index);
+        mapAction.PrintAction();
+        if (mapAction.ActionType == ActionType.Add) {
+            room.UndoData(null, null, RoomColor.NotBuyable);
+            _selectedSlot = null;
+            SetUnBuyableAdjacent(room);
+        } else if (mapAction.ActionType == ActionType.Change) {
+            room.UndoData(mapAction.TrapData);
+        } else if (mapAction.ActionType == ActionType.Upgrade) {
+            room.UndoUpgrade();
+        }
+        _currentRoomCount--;
+        UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
+    }
 }
 
 public enum EditorState
@@ -437,4 +483,63 @@ public enum EditorState
     None = -1,
     Select = 0,
     Edit = 1,
+    Play = 2,
+}
+
+public class MapAction
+{
+    private int _index;
+    private ActionType _actionType;
+    private TrapData _trapData;
+    private RoomData _roomData;
+
+    public int Index
+    {
+        get { return _index; }
+        set { _index = value; }
+    }
+
+    public ActionType ActionType
+    {
+        get { return _actionType; }
+        set { _actionType = value; }
+    }
+
+    public TrapData TrapData
+    {
+        get { return _trapData; }
+    }
+
+    public RoomData RoomData
+    {
+        get { return _roomData; }
+    }
+
+    public MapAction()
+    {
+        _index = -1;
+        _actionType = ActionType.None;
+    }
+
+    public void SetAction(int index, ActionType actionType, TrapData trapData = null, RoomData roomData = null)
+    {
+        _index = index;
+        _actionType = actionType;
+        _trapData = trapData;
+        _roomData = roomData;
+    }
+
+    public void PrintAction()
+    {
+        Debug.Log($"Index = {_index} ActionType = {_actionType} TrapData = {_trapData} RoomData = {_roomData}");
+    }
+}
+
+public enum ActionType
+{
+    None = -1,
+    Add = 0,
+    Remove = 1,
+    Change = 2,
+    Upgrade = 3,
 }
