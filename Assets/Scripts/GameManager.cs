@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.InputSystem.DefaultInputActions;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -212,6 +213,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
         _displayUI.EnterEditMode();
         _routineChangeRoom = null;
         _hasWon = false;

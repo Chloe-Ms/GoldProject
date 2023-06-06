@@ -183,7 +183,6 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        //InitStart();
     } 
 
     private void InitStart()
@@ -218,6 +217,8 @@ public class MapManager : MonoBehaviour
                 _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
             {
                 _selectedSlot.UpgradeRoom();
+                _currentRoomCount++;
+                UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
                 return;
             }
             if (room != null && room == _boss)
@@ -282,6 +283,8 @@ public class MapManager : MonoBehaviour
             }
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
+            _currentRoomCount++;
+            UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
         }
         mapAction.PrintAction();
         _mapActions.Push(mapAction);
