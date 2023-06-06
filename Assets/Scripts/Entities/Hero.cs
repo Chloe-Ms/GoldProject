@@ -9,7 +9,7 @@ public class Hero : MonoBehaviour
     private int _health;
     private bool _isDead = false;
     private bool _isinvulnerable = false;
-    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit où le mettre :/
+    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit oï¿½ le mettre :/
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
@@ -86,7 +86,8 @@ public class Hero : MonoBehaviour
     public void LoadHeroData(HeroData data)
     {
         _heroData = data;
-        _renderer.color = _heroData.color;
+        //_renderer.color = _heroData.color;
+        _renderer.sprite = _heroData._sprite;
         _health = _heroData.maxHealth;
         
     }

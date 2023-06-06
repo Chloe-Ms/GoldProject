@@ -1344,7 +1344,7 @@ MonoBehaviour:
   _heroesManager: {fileID: 147781381}
   _mapManager: {fileID: 1277845744}
   _startButton: {fileID: 17827539}
-  _timePerRoom: 5
+  _timePerRoom: 2
   _displayUI: {fileID: 1519186617}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _updated: 0
@@ -2804,7 +2804,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _editorMenu: {fileID: 48649514}
-  _editorOpener: {fileID: 569859772}
+  _menuPosition: {x: 0, y: 0, z: 0}
+  _vectorOffset: {x: 0, y: 0.5, z: 0}
 --- !u!114 &1213510540
 MonoBehaviour:
   m_ObjectHideFlags: 0
