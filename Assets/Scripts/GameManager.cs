@@ -248,14 +248,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     IEnumerator ChangeRoom(List<Room> path)
     {
+        bool bossRoomReached = false;
         int i = 0;
-        while (path.Count > i && !_hasWon)
+        while (path.Count > i && !_hasWon && !bossRoomReached)
         {
             MoveHeroesOnScreen(path[i]);
             if (i == 0)//Waiting in entrance
             {
                 yield return new WaitForSeconds(_timePerRoom);
-            } else if (i < path.Count - 1)
+            } else if (path[i].TrapData.RoomType != RoomType.BOSS)
             {
                 MoveHeroesToRoom(path[i]);
                 yield return new WaitForSeconds(_timePerRoom);
@@ -263,6 +264,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             else if (path[i].TrapData.RoomType == RoomType.BOSS)
             {
                 CheckWinLossContitions();
+                bossRoomReached = true;
             }
             i++;
         }
@@ -271,7 +273,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         OnLoss?.Invoke();
         _lossDisplayGO.SetActive(true);
-        //Debug.Log("IN BOSS ROOM");
+        Debug.Log("IN BOSS ROOM");
     }
 
     public void SetPlayMode(bool state)
