@@ -1324,13 +1324,22 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     _maxHealth: 2800000002000000
     _mapWidth: 5
-    _mapHeight: 8
+    _mapHeight: 6
   - name: Level 2
     _nbMovesMax: 10
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     _maxHealth: 
     _mapWidth: 0
+    _mapHeight: 0
+  - name: Level 3
+    _nbMovesMax: 10
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 28000000030000000a000000
+    _mapWidth: 5
     _mapHeight: 0
   _heroesManager: {fileID: 147781381}
   _mapManager: {fileID: 1277845744}
@@ -2179,6 +2188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 951595769}
+  - component: {fileID: 951595770}
   m_Layer: 5
   m_Name: EditMode
   m_TagString: Untagged
@@ -2209,6 +2219,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &951595770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951595768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598f075346dfbdd4a9efbf8cd698c096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nbActionsLeft: {fileID: 1666666442}
+  _nbActionsTotal: {fileID: 56569414}
 --- !u!1 &1031496135
 GameObject:
   m_ObjectHideFlags: 0
