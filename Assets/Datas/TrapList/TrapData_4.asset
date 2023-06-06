@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: TrapData_4
   m_EditorClassIdentifier: 
   _name: Poison Trap
-  _sprite: {fileID: 21300000, guid: 690da66321fc18a45a76627bb1646e85, type: 3}
+  _sprite: {fileID: 21300000, guid: 7cc34a190507cd0479cad951e05331f1, type: 3}
   _miniSprite: {fileID: 21300000, guid: 27c7b361cc9a7974fa214966aa839c94, type: 3}
   _effect: 4
+  _nbRoomsBeforeEffect: 0
+  _roomType: 0

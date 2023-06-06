@@ -245,7 +245,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         while (path.Count > i && !_hasWon)
         {
             MoveHeroesOnScreen(path[i]);
-            if (i < path.Count - 1)
+            if (i > 0 && i < path.Count - 1)
             {
                 MoveHeroesToRoom(path[i]);
                 yield return new WaitForSeconds(_timePerRoom);

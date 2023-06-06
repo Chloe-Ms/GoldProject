@@ -223,7 +223,7 @@ public class MapManager : MonoBehaviour
             }
             if (room != null && room == _boss)
             {
-                GameManager.Instance.StartPlayMode(); //DEZOOM A FAIRE
+                GameManager.Instance.StartPlayMode();
             }
             if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 _selectedSlot = room != _selectedSlot ? room : null;
