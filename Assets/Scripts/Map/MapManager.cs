@@ -440,6 +440,8 @@ public class MapManager : MonoBehaviour
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
         _buyableRoomCount = data.NbMovesMax;
+        _start = null;
+        _boss = null;
         Generate();
         InitStart();
     }
