@@ -887,20 +887,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levels:
   - name: Level 1
-    _nbMovesMax: 5
+    _nbMovesMax: 2
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 01000000
+    _mapWidth: 1
+    _mapHeight: 3
+  - name: Level 2
+    _nbMovesMax: 4
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    _maxHealth: 0700000014000000
-    _mapWidth: 5
-    _mapHeight: 6
-  - name: Level 2
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 0500000005000000
+    _mapWidth: 1
+    _mapHeight: 5
+  - name: Level 3
     _nbMovesMax: 10
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    _maxHealth: 
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 28000000030000000a000000
     _mapWidth: 5
-    _mapHeight: 5
+    _mapHeight: 0
   _heroesManager: {fileID: 1497098839}
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
@@ -908,7 +917,6 @@ MonoBehaviour:
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
-  _roomsInList: {fileID: 1088869273}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _updated: 0
   _room: {fileID: 0}
@@ -2571,7 +2579,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &917408893
@@ -6169,7 +6177,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1825076039
@@ -6551,7 +6559,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 696818461}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: Undo
         m_Mode: 1

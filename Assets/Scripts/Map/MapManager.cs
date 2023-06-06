@@ -190,8 +190,6 @@ public class MapManager : MonoBehaviour
         _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
         _start.SetColor(RoomColor.Buyable);
         _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
-        //UpdateText();
-        //Debug.Log($"Start in {_start.RoomColor}");
     }
 
     private void Update()
@@ -442,13 +440,15 @@ public class MapManager : MonoBehaviour
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
         _buyableRoomCount = data.NbMovesMax;
+        _start = null;
+        _boss = null;
         Generate();
         InitStart();
     }
 
     public bool IsRoomATrap(Room room)
     {
-        return room != _start && room != _boss;
+        return room != _start && room != _boss && room == _selectedSlot;
     }
 
     public bool IsEditComplete()
