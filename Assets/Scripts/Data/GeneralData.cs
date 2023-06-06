@@ -7,6 +7,7 @@ public class GeneralData : ScriptableObject
 {
     [SerializeField] private RoomList _roomList;
     [SerializeField] private TrapList _trapList;
+    [SerializeField] private Sprite _square;
 
     public RoomList RoomList
     {
@@ -16,5 +17,10 @@ public class GeneralData : ScriptableObject
     public TrapList TrapList
     {
         get { return _trapList; }
+    }
+
+    public Sprite Square
+    {
+        get { return _square; }
     }
 }

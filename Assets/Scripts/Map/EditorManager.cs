@@ -10,7 +10,8 @@ public class EditorManager : MonoBehaviour
     }
 
     [SerializeField] private GameObject _editorMenu;
-    [SerializeField] private GameObject _editorOpener;
+    [SerializeField] private Vector3 _menuPosition;
+    [SerializeField] private Vector3 _vectorOffset = new Vector3(0f, 0.5f, 0f);
 
     private void Awake()
     {
@@ -22,22 +23,22 @@ public class EditorManager : MonoBehaviour
 
     private void Start()
     {
-        //CloseEditorMenu();
-        OpenEditorMenu();
+        _menuPosition = _editorMenu.transform.position;
+        CloseEditorMenu();
     }
 
     public void OpenEditorMenu()
     {
         MapManager.Instance.EditorState = EditorState.Edit;
-        _editorMenu.SetActive(true);
-        _editorOpener.SetActive(false);
+        _editorMenu.transform.position = _menuPosition;
     }
 
     public void CloseEditorMenu()
     {
         MapManager.Instance.EditorState = EditorState.Select;
-        _editorMenu.SetActive(false);
-        _editorOpener.SetActive(true);
+        Debug.Log($"CloseEditorMenu() _editorMenu.transform.position = {_editorMenu.transform.position} _menuPosition = {_menuPosition} condition = {_editorMenu.transform.position == _menuPosition}   ");
+        if (_editorMenu.transform.position == _menuPosition)
+            _editorMenu.transform.position += -_vectorOffset;
     }
 
     public void SetDataOnSelectedRoom(RoomData data)
@@ -49,7 +50,6 @@ public class EditorManager : MonoBehaviour
     public void SetDataOnSelectedTrap(TrapData data)
     {
         if (MapManager.Instance.SelectedSlot != null)
-
             MapManager.Instance.SetDataOnSelectedTrap(data);
     }
 }

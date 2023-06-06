@@ -12,11 +12,15 @@ public class AbilityManager
             (Group group, Room room) =>
             {
                 if ((room.TrapData.RoomType == RoomType.NORMAL && !room.IsActive) ||
-                room.TrapData.RoomType == RoomType.LEVER)
+                room.TrapData.RoomType == RoomType.LEVER ||
+                room.TrapData.RoomType == RoomType.ENTRANCE)
                 {
                     group.Heroes.ForEach(hero =>
                     {
-                        hero.UpdateHealth(1);
+                        if (!hero.IsDead)
+                        {
+                            hero.UpdateHealth(1);
+                        }
                     });
                 }
             }

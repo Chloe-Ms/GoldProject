@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: TrapData_5
   m_EditorClassIdentifier: 
   _name: Spikes Trap
-  _sprite: {fileID: 21300000, guid: ffce807e9f087f14690172bed862d949, type: 3}
+  _sprite: {fileID: 21300000, guid: d350f4126f990a946b75c8e6723ffcff, type: 3}
   _miniSprite: {fileID: 21300000, guid: f222e88c3efbb994e995ce6694f50f60, type: 3}
   _effect: 2
+  _nbRoomsBeforeEffect: 0
+  _roomType: 0

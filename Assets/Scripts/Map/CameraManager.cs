@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
         get { return _instance; }
     }
 
-    private float _zoomSize = 2.5f;
+    private float _zoomSize = 3f;
     private float _initZoomSize;
     private Vector3 _initPosition;
     private Camera _camera;
