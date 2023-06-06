@@ -23,7 +23,7 @@ public class UIHeroes : MonoBehaviour
     {
         _image.color = _heroesData[index].color;
         _text.text = _heroesData[index].maxHealth.ToString();
-
+        ClearLists();
         foreach (Effect effect in Enum.GetValues(typeof(Effect)))
         {
             if (effect != Effect.NONE)
@@ -44,11 +44,27 @@ public class UIHeroes : MonoBehaviour
                             parentObject = _imageNegativeList;
                             break;
                     }
+                    
                     GameObject go = Instantiate(_imageIconPrefab, parentObject.transform);
                     go.GetComponent<UIHero>()?.ChangeData(effect, sensibility);
 
                 }
             }
+        }
+    }
+
+    private void ClearLists()
+    {
+        ClearList(_imagePositiveList);
+        ClearList(_imageNeutralList);
+        ClearList(_imageNegativeList);
+    }
+
+    public void ClearList(GameObject listParent)
+    {
+        foreach (Transform child in listParent.transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 }
