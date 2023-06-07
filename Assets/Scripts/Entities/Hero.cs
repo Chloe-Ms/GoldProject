@@ -80,7 +80,7 @@ public class Hero : MonoBehaviour
         {
             OnDamageTaken?.Invoke(realPV);
         }
-        UIUpdatePlayMode.Instance.UpdateHero(this);
+        UIUpdatePlayMode.Instance.UpdateHero(this,realPV);
     }
 
     public void LoadHeroData(HeroData data)

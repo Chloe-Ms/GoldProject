@@ -16,26 +16,27 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
-    private static GameManager _instance;
+    
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
+    private int _nbMoves = 0;
+    private int _level = 0;
+    private Effect _currentRoomEffect = Effect.NONE;
+    private static GameManager _instance;
 
+    [SerializeField] private GeneralData _generalData;
+    
+    #region Properties
     public static GameManager Instance
     {
         get => _instance;
         private set => _instance = value;
     }
-
-    private int _nbMoves = 0;
-    private int _level = 0;
-    private Effect _currentRoomEffect = Effect.NONE;
     public int NbMoves
     {
         get => _nbMoves;
         set => _nbMoves = value;
     }
-    [SerializeField] private GeneralData _generalData;
-
     public GeneralData GeneralData
     {
         get { return _generalData; }
@@ -65,13 +66,21 @@ public class GameManager : MonoBehaviour, IDataPersistence
         get => _levels[_level].MapHeight;
     }
 
+    public int[] MaxHealthCurrentLevel()
+    {
+        return _levels[_level].MaxHealth;
+    }
+    #endregion Properties
+
+    #region Events
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
     public event Action OnWin;
     public event Action OnLoss;
+    #endregion
 
-    #region test
-[SerializeField] private bool _updated;
+    #region Test
+    [SerializeField] private bool _updated;
     [SerializeField] private Room _room;
     [SerializeField] private Effect _effect;
     [Button]
@@ -105,10 +114,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         GameManager.Instance.SetPlayMode(false);
     }
-    public int[] MaxHealthCurrentLevel()
-    {
-        return _levels[_level].MaxHealth;
-    }
 
     private void Start()
     {
@@ -116,6 +121,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         StartEditMode();
     }
 
+    
     private void OnValidate()
     {
         for (int i = 0; i < _levels.Length; i++)

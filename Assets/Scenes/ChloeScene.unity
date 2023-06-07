@@ -1082,7 +1082,7 @@ MonoBehaviour:
     _nbMovesMax: 5
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    _maxHealth: 01000000
+    _maxHealth: 03000000
     _mapWidth: 5
     _mapHeight: 6
   - name: Level 2
@@ -1205,7 +1205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &518267758
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2554,7 +2554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &951595769
 RectTransform:
   m_ObjectHideFlags: 0
