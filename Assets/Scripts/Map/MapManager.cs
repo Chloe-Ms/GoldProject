@@ -7,16 +7,16 @@ public class MapManager : MonoBehaviour
 {
     private static MapManager _instance;
 
-    public static MapManager Instance
-    {
-        get { return _instance; }
-    }
-
     private Stack<MapAction> _mapActions = new Stack<MapAction>();
     private EditorState _editorState = EditorState.Select;
     private int _buyableRoomCount = 5;
     private int _currentRoomCount = 0;
 
+    #region Properties
+    public static MapManager Instance
+    {
+        get { return _instance; }
+    }
     public EditorState EditorState
     {
         get { return _editorState; }
@@ -27,6 +27,7 @@ public class MapManager : MonoBehaviour
     {
         get { return _buyableRoomCount - _currentRoomCount; }
     }
+    #endregion
 
     [SerializeField] private TMP_Text _roomText;
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
@@ -249,7 +250,6 @@ public class MapManager : MonoBehaviour
                     oldSelectedSlot.UnSelect();
                 }
             }
-            //Debug.Log($"SelectedSlot = {_selectedSlot == null} Color = {_selectedSlot?.RoomColor} Data = {_selectedSlot?.RoomData}");
             if (_selectedSlot == null)
                 EditorManager.Instance.CloseEditorMenu();
             else if (_selectedSlot.RoomData != null) {
@@ -270,7 +270,6 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        //Debug.Log($"SetDataOnSelectedTrap = {data}");
         if (_selectedSlot != null && _boss == null) {
             if (_selectedSlot.TrapData == null) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
@@ -323,7 +322,6 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
-            //Debug.Log($"Room Data Directions = {room.Directions} direction = {direction}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -349,8 +347,7 @@ public class MapManager : MonoBehaviour
 
         travelList.Add(room);
         actualDirection = room.RoomData.Directions;
-        // if (travelList.Count > 5)
-        //     return;
+
         Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
         //pathfinding with recursion with using actualdirection
         if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize))) {
@@ -440,6 +437,7 @@ public class MapManager : MonoBehaviour
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
         _buyableRoomCount = data.NbMovesMax;
+        _currentRoomCount = 0;
         _start = null;
         _boss = null;
         Generate();
@@ -469,6 +467,10 @@ public class MapManager : MonoBehaviour
             room.UndoData(null, null, RoomColor.NotBuyable);
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
+            if (room.TrapData.RoomType == RoomType.BOSS)
+            {
+
+            }
         } else if (mapAction.ActionType == ActionType.Change) {
             room.UndoData(mapAction.TrapData);
         } else if (mapAction.ActionType == ActionType.Upgrade) {
