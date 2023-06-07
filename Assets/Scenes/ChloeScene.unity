@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbf315f10c63314db16b4308592968a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spaceBetweenHeroes: 0.5
+  _roomWidth: 0
   _heroPrefab: {fileID: 2783475497506347363, guid: 474fd352c7b6a7b42a13b23d75380756, type: 3}
   _groupGO: {fileID: 2031365752}
   _heroesSensibilities: {fileID: 11400000, guid: 45548c6c67b1a95469b95f103389b25f, type: 2}
@@ -1082,7 +1082,7 @@ MonoBehaviour:
     _nbMovesMax: 5
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    _maxHealth: 01000000
+    _maxHealth: 03000000
     _mapWidth: 5
     _mapHeight: 6
   - name: Level 2
@@ -2554,7 +2554,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &951595769
 RectTransform:
   m_ObjectHideFlags: 0

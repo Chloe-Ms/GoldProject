@@ -6,7 +6,7 @@ public class HeroesManager : MonoBehaviour
     HeroData[] _heroesDataInCurrentLevel;
     Group _heroesInCurrentLevel = new Group();
 
-    [SerializeField] float _spaceBetweenHeroes = 1f;
+    [SerializeField] float _roomWidth;
     [SerializeField] GameObject _heroPrefab;
     [SerializeField] GameObject _groupGO;
     [SerializeField] HeroesSensibility _heroesSensibilities;
@@ -59,7 +59,8 @@ public class HeroesManager : MonoBehaviour
         for(int i = 0;i < _heroesDataInCurrentLevel.Length; i++)
         {
             GameObject go = Instantiate(_heroPrefab);
-            go.transform.position = go.transform.position + new Vector3(i * _spaceBetweenHeroes, 0,0);
+            go.transform.position = go.transform.position + 
+                new Vector3((i + 1) * (_roomWidth / (_heroesDataInCurrentLevel.Length + 1)), 0,0);
             go.transform.parent = _groupGO.transform;
             Hero hero = go?.GetComponent<Hero>();
             hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
