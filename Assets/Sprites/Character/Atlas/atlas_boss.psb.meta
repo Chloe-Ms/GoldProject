@@ -33,7 +33,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 240
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -10690,16 +10690,6 @@ ScriptedImporter:
     flatten: 0
     isImported: 1
     isVisible: 1
-  - name: lumiere bretelle
-    spriteName: lumiere bretelle
-    isGroup: 0
-    parentIndex: -1
-    spriteID: 6b3344e7b37b96c4eba17c58fa98f128
-    layerID: 63
-    mosaicPosition: {x: 4, y: 330}
-    flatten: 0
-    isImported: 1
-    isVisible: 1
   - name: main
     spriteName: main
     isGroup: 0
@@ -10717,6 +10707,16 @@ ScriptedImporter:
     spriteID: 7a7cef96225ebcf4fba005c074f7f7ab
     layerID: 122
     mosaicPosition: {x: 303, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: lumiere bretelle
+    spriteName: lumiere bretelle
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 6b3344e7b37b96c4eba17c58fa98f128
+    layerID: 63
+    mosaicPosition: {x: 4, y: 330}
     flatten: 0
     isImported: 1
     isVisible: 1
