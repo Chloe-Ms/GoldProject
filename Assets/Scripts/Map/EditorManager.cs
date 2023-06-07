@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EditorManager : MonoBehaviour
@@ -24,7 +22,8 @@ public class EditorManager : MonoBehaviour
 
     private void Start()
     {
-        CloseEditorMenu();
+        //CloseEditorMenu();
+        OpenEditorMenu();
     }
 
     public void OpenEditorMenu()
@@ -50,6 +49,7 @@ public class EditorManager : MonoBehaviour
     public void SetDataOnSelectedTrap(TrapData data)
     {
         if (MapManager.Instance.SelectedSlot != null)
+
             MapManager.Instance.SetDataOnSelectedTrap(data);
     }
 }

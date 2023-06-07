@@ -6,13 +6,8 @@ public class DisplayUIOnMode : MonoBehaviour
 {
     [SerializeField] GameObject[] _gameObjectsInEditMode;
     [SerializeField] GameObject[] _gameObjectsInPlayMode;
-    void Start()
-    {
-        GameManager.Instance.OnEnterPlayMode += EnterPlayMode;
-        GameManager.Instance.OnEnterEditorMode += EnterEditMode;
-    }
 
-    private void EnterPlayMode(int obj)
+    public void EnterPlayMode()
     {
         for(int i = 0;  i < _gameObjectsInEditMode.Length; i++)
         {
@@ -24,7 +19,7 @@ public class DisplayUIOnMode : MonoBehaviour
         }
     }
 
-    private void EnterEditMode(int obj)
+    public void EnterEditMode()
     {
         for (int i = 0; i < _gameObjectsInEditMode.Length; i++)
         {

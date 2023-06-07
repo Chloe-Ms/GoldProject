@@ -9,7 +9,7 @@ public class UpdateUI : MonoBehaviour
     [SerializeField] SpriteRenderer _sprite;
     [SerializeField] Hero _hero;
     Vector3 _startPosition;
-    [SerializeField]Vector3 _offset = Vector3.up;
+    [SerializeField] Vector3 _offset = Vector3.up;
     [SerializeField] float _timeUIDisplayed = 1f;
     [SerializeField] Sprite[] _images; // [0] = heal; [1] = nothing; [2] = damage
 
@@ -26,7 +26,6 @@ public class UpdateUI : MonoBehaviour
 
     IEnumerator RoutineMoveUI(int pvLost)
     {
-        pvLost = (-1 * pvLost);
         _text.gameObject.SetActive(true);
         _sprite.sprite = GetImageFromPvLost(pvLost);
         _text.text = pvLost.ToString();
@@ -36,15 +35,17 @@ public class UpdateUI : MonoBehaviour
         _text.transform.position = _startPosition;
     }
 
-     Sprite GetImageFromPvLost(int pvLost)
+    Sprite GetImageFromPvLost(int pvLost)
     {
         if (pvLost == 0)
         {
             return _images[1];
-        } else if (pvLost > 0)
+        }
+        else if (pvLost > 0)
         {
             return _images[0];
-        } else
+        }
+        else
         {
             return _images[2];
         }
