@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
-    
+
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
     private int _nbMoves = 0;
@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void MoveHeroesOnScreen(Room room)
     {
+        
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
     }
 
@@ -172,13 +173,13 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 for (int  j = 0; j < room.Effects.Count; j++)
                 {
                     _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
-                    //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                 }
+                //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                 if (room.NbOfUpgrades > 0)
                 {
                     if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
                     {
-                        RoomEffectManager.EffectsOnRoom[room.Effects[0]].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
+                        RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                     }
                 }
             }
@@ -200,19 +201,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 RoomEffectManager.EffectsEvent.RemoveAt(i);
             }
         }
-    }
-
-    public void PlayerWin()
-    {
-        _hasWon = true;
-        if (_routineChangeRoom != null)
-        {
-            StopCoroutine( _routineChangeRoom );
-            _routineChangeRoom = null;
-        }
-        OnWin?.Invoke();
-        _winDisplayGO.SetActive(true);
-        //Debug.Log("Level cleared");
     }
 
     [Button("Next level")]
@@ -249,40 +237,54 @@ public class GameManager : MonoBehaviour, IDataPersistence
             List<Room> path = _mapManager.Pathfinding();
             if (path != null)
             {
-                _routineChangeRoom = StartCoroutine(ChangeRoom(path));
+                _routineChangeRoom = StartCoroutine(ChangeRoomFromPath(path));
             }
         }
     }
 
-    IEnumerator ChangeRoom(List<Room> path)
+    IEnumerator ChangeRoomFromPath(List<Room> path)
     {
         bool bossRoomReached = false;
         int i = 0;
         while (path.Count > i && !_hasWon && !bossRoomReached)
         {
             MoveHeroesOnScreen(path[i]);
-            if (i == 0)//Waiting in entrance
+            if (i == 0) //Waiting in entrance
             {
                 yield return new WaitForSeconds(_timePerRoom);
-            } else if (path[i].TrapData.RoomType != RoomType.BOSS)
+            } else if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
             {
                 MoveHeroesToRoom(path[i]);
                 yield return new WaitForSeconds(_timePerRoom);
             }
-            else if (path[i].TrapData.RoomType == RoomType.BOSS)
+            else if (path[i].TrapData.RoomType == RoomType.BOSS)// Boss room
             {
-                CheckWinLossContitions();
+                PlayerLoss();
                 bossRoomReached = true;
             }
             i++;
         }
     }
-    void CheckWinLossContitions()
+
+    #region VictoryConditions
+    public void PlayerWin()
+    {
+        _hasWon = true;
+        if (_routineChangeRoom != null)
+        {
+            StopCoroutine(_routineChangeRoom);
+            _routineChangeRoom = null;
+        }
+        OnWin?.Invoke();
+        _winDisplayGO.SetActive(true);
+    }
+    void PlayerLoss()
     {
         OnLoss?.Invoke();
         _lossDisplayGO.SetActive(true);
-        Debug.Log("IN BOSS ROOM");
+        //Debug.Log("IN BOSS ROOM");
     }
+    #endregion
 
     public void SetPlayMode(bool state)
     {
