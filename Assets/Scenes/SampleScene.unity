@@ -926,7 +926,7 @@ MonoBehaviour:
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
-  _roomsInList: {fileID: 0}
+  _roomsInList: {fileID: 1088869273}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _updated: 0
   _room: {fileID: 0}
@@ -5215,7 +5215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbf315f10c63314db16b4308592968a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spaceBetweenHeroes: 0.5
+  _roomWidth: 0
   _heroPrefab: {fileID: 2783475497506347363, guid: 474fd352c7b6a7b42a13b23d75380756, type: 3}
   _groupGO: {fileID: 282415899}
   _heroesSensibilities: {fileID: 11400000, guid: 45548c6c67b1a95469b95f103389b25f, type: 2}
@@ -5380,6 +5380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nbActionsLeft: {fileID: 926708089}
   _nbActionsTotal: {fileID: 1100851581}
+  _heroesUIEditMode: []
 --- !u!1 &1581029088
 GameObject:
   m_ObjectHideFlags: 0

@@ -462,16 +462,21 @@ public class MapManager : MonoBehaviour
         if (mapAction == null)
             return;
         room = FindRoom(mapAction.Index);
+        Debug.Log("Room "+ room.RoomData);
         mapAction.PrintAction();
         if (mapAction.ActionType == ActionType.Add) {
             room.UndoData(null, null, RoomColor.NotBuyable);
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
-            if (room.TrapData.RoomType == RoomType.BOSS)
+            Debug.Log(room.TrapData);
+            //Debug.Log(room.);
+            /*if (room.TrapData.RoomType == RoomType.BOSS)
             {
-
-            }
-        } else if (mapAction.ActionType == ActionType.Change) {
+                GameManager.Instance.SetPlayMode(false);
+                //ElementList.Instance.
+            }*/
+        }
+        else if (mapAction.ActionType == ActionType.Change) {
             room.UndoData(mapAction.TrapData);
         } else if (mapAction.ActionType == ActionType.Upgrade) {
             room.UndoUpgrade();

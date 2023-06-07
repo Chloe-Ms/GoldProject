@@ -50,6 +50,9 @@ public class EditorManager : MonoBehaviour
     public void SetDataOnSelectedTrap(TrapData data)
     {
         if (MapManager.Instance.SelectedSlot != null)
+        {
             MapManager.Instance.SetDataOnSelectedTrap(data);
+        }
+            
     }
 }
