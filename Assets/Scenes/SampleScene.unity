@@ -902,14 +902,23 @@ MonoBehaviour:
     _mapWidth: 1
     _mapHeight: 5
   - name: Level 3
-    _nbMovesMax: 10
+    _nbMovesMax: 7
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 0}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 050000000600000005000000
+    _mapWidth: 3
+    _mapHeight: 4
+  - name: Level 4
+    _nbMovesMax: 9
+    _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    _maxHealth: 28000000030000000a000000
-    _mapWidth: 5
-    _mapHeight: 0
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 080000000900000008000000
+    _mapWidth: 3
+    _mapHeight: 4
   _heroesManager: {fileID: 1497098839}
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
