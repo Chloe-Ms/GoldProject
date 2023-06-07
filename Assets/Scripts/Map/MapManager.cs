@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using NaughtyAttributes;
 using TMPro;
@@ -26,6 +27,19 @@ public class MapManager : MonoBehaviour
     public int BuyableRoomCount
     {
         get { return _buyableRoomCount - _currentRoomCount; }
+    }
+
+    public List<Room> ListOfLever
+    {
+        get {
+            List<Room> leverList = new List<Room>();
+
+            _slots.ForEach(slot => {
+                if (slot.GetComponent<Room>().TrapData != null && slot.GetComponent<Room>().TrapData.RoomType == RoomType.LEVER)
+                    leverList.Add(slot.GetComponent<Room>());
+            });
+            return leverList;
+        }
     }
     #endregion
 
@@ -208,7 +222,7 @@ public class MapManager : MonoBehaviour
         float camOffset = -1.8f;
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play) {
-            Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
+            //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -289,7 +303,7 @@ public class MapManager : MonoBehaviour
             _currentRoomCount++;
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
         }
-        mapAction.PrintAction();
+        //mapAction.PrintAction();
         _mapActions.Push(mapAction);
         if (IsEditComplete())
         {
@@ -330,7 +344,6 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
-    [Button("Pathfinding")]
     public List<Room> Pathfinding()
     {
         List<Room> _travelList = new List<Room>();
@@ -348,7 +361,7 @@ public class MapManager : MonoBehaviour
         travelList.Add(room);
         actualDirection = room.RoomData.Directions;
 
-        Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
+        //Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
         //pathfinding with recursion with using actualdirection
         if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
@@ -366,7 +379,104 @@ public class MapManager : MonoBehaviour
             GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
             travelList.Add(room);
         }
+    }
 
+    private bool FindPathTo(Room actualRoom, List<Room> pathTo, Room roomToFind)
+    {
+        Direction actualDirection = Direction.None;
+        bool find = false;
+
+        pathTo.Add(actualRoom);
+        actualDirection = actualRoom.RoomData.Directions;
+        // Debug.Log($"Room = {actualRoom.name} actualDirection = {PrintDirection(actualDirection)}");
+        // pathfinding with recursion with using actualdirection
+        if (actualRoom == roomToFind)
+            return true;
+        if (HaveDirection(ref actualDirection, Direction.Left) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) - _heightSize)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) - _heightSize), pathTo, roomToFind);
+        if (HaveDirection(ref actualDirection, Direction.Right) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) + _heightSize)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) + _heightSize), pathTo, roomToFind);
+        if (HaveDirection(ref actualDirection, Direction.Up) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) + 1)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) + 1), pathTo, roomToFind);
+        if (HaveDirection(ref actualDirection, Direction.Down) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) - 1)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) - 1), pathTo, roomToFind);
+        if (find == false) {
+            pathTo.Remove(actualRoom);
+            //Debug.Log($"Remove {actualRoom.name}");
+        }
+        return find;
+    }
+
+    public List<Room>[] FindObjectif()
+    {
+        List<Room>[] travelLists;
+        List<Room> leverList = new List<Room>();
+
+        _slots.ForEach(slot => {
+            if (slot.GetComponent<Room>().TrapData != null && slot.GetComponent<Room>().TrapData.RoomType == RoomType.LEVER)
+                leverList.Add(slot.GetComponent<Room>());
+        });
+        travelLists = new List<Room>[leverList.Count];
+        Debug.Log($"leverList.Count = {leverList.Count}");
+        for (int i = 0; i < leverList.Count; i++) {
+            travelLists[i] = new List<Room>();
+            Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
+            FindPathTo(_start, travelLists[i], leverList[i]);
+        }
+        return travelLists;
+    }
+
+    public List<Room>[] FindObjectif(List<Room> leverList, Room actualRoom)
+    {
+        List<Room>[] travelLists;
+
+        if (leverList == null || leverList.Count == 0 || actualRoom == null)
+            return null;
+        travelLists = new List<Room>[leverList.Count];
+        Debug.Log($"leverList.Count = {leverList.Count}");
+        for (int i = 0; i < leverList.Count; i++) {
+            travelLists[i] = new List<Room>();
+            FindPathTo(actualRoom, travelLists[i], leverList[i]);
+        }
+        return travelLists;
+    }
+
+    [Button("Pathfinding")]
+    public void ImprovePathFinding()
+    {
+        List<Room> leverList = ListOfLever;
+        List<Room>[] travelLists;
+        List<Room> bestPath = null;
+        Room actualRoom = _start;
+
+        while (leverList != null && leverList.Count > 0) {
+            bestPath = null;
+            travelLists = null;
+            travelLists = FindObjectif(leverList, actualRoom);
+            Debug.Log($"travelLists = {travelLists} traverlists isNull ? {travelLists == null} travelLists.Length = {travelLists.Length}");
+            if (travelLists != null || travelLists.Length > 0) {
+                foreach (List<Room> travelList in travelLists) 
+                    if (bestPath == null || travelList.Count < bestPath.Count)
+                        bestPath = travelList;
+                if (bestPath != null) {
+                    int index = Array.IndexOf(travelLists, bestPath);
+                    leverList.RemoveAt(index);
+                    Debug.Log($"Path to {bestPath[bestPath.Count - 1].name} --------------------------------------------------------------------------------------");
+                    PrintListOfRoom(bestPath);
+                    actualRoom = bestPath[bestPath.Count - 1];
+                }
+            }
+        }
+    }
+
+    private void PrintListOfRoom(List<Room> roomList)
+    {
+        string str = "";
+
+        foreach (Room room in roomList) {
+            str += room.name + " ";
+        }
+        Debug.Log(str);
     }
 
     private bool HaveDirection(ref Direction direction , Direction directionToCheck)
@@ -467,10 +577,10 @@ public class MapManager : MonoBehaviour
             room.UndoData(null, null, RoomColor.NotBuyable);
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
-            if (room.TrapData.RoomType == RoomType.BOSS)
-            {
+            // if (room.TrapData.RoomType == RoomType.BOSS)
+            // {
 
-            }
+            // }
         } else if (mapAction.ActionType == ActionType.Change) {
             room.UndoData(mapAction.TrapData);
         } else if (mapAction.ActionType == ActionType.Upgrade) {
