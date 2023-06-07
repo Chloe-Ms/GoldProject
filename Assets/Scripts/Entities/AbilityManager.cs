@@ -30,16 +30,12 @@ public class AbilityManager
             (Group group, Room room) =>
             {
                 //Search hero with only one pv
-                int i = 0;
-                bool foundHero = false;
-                while (i < group.Heroes.Count && !foundHero)
+                for (int i = 0; i < group.Heroes.Count; i++)
                 {
                     if (group.Heroes[i].Health == 1 && group.Heroes[i].Role != Role.PALADIN)
                     {
                         group.Heroes[i].Isinvulnerable = true;
-                        foundHero = true;
                     }
-                    i++;
                 }
             }
         },
@@ -72,16 +68,12 @@ public class AbilityManager
             (Group group) =>
             {
                 //Remove invulnerability
-                int i = 0;
-                bool foundHero = false;
-                while (i < group.Heroes.Count && !foundHero)
+                for (int i = 0; i < group.Heroes.Count; i++)
                 {
                     if (group.Heroes[i].Isinvulnerable)
                     {
                         group.Heroes[i].Isinvulnerable = false;
-                        foundHero = true;
                     }
-                    i++;
                 }
             }
         },
