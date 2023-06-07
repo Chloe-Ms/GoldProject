@@ -42,7 +42,6 @@ public class HeroesManager : MonoBehaviour
             _heroesDataInCurrentLevel[i].maxHealth = maxHealth[i];
         }
         
-        Debug.Log("Heroes dans le niveau " + _heroesDataInCurrentLevel.Length);
         StartEditMode(level);
     }
 
@@ -107,10 +106,8 @@ public class HeroesManager : MonoBehaviour
     {
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
-            Debug.Log("DAMAGE on group");
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
-                Debug.Log("Before Hero " + hero.Role + " " + hero.Health);
                 if (!hero.IsDead)
                 {
                     Hero heroAttacked = hero;
@@ -126,7 +123,6 @@ public class HeroesManager : MonoBehaviour
                     }
                     heroAttacked.UpdateHealth(damage);
                 }
-                Debug.Log("After Hero " + hero.Role + " " + hero.Health);
             }
         }
     }
