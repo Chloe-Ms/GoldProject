@@ -12,22 +12,18 @@ public class UIHeroes : MonoBehaviour
     [SerializeField] GameObject _imagePositiveList;
     [SerializeField] GameObject _imageNeutralList;
     [SerializeField] GameObject _imageNegativeList;
-    private void Start()
-    {
-        GameManager.Instance.OnEnterEditorMode += ChangeData;
-    }
 
-    private void ChangeData(int obj)
+    public void ChangeData(int i)
     {
         _heroesData = GameManager.Instance.GetHeroesCurrentLevel();
-        ChangeDataForHero(0);
+        ChangeDataForHero(i);
     }
 
     private void ChangeDataForHero(int index)
     {
         _image.color = _heroesData[index].color;
         _text.text = _heroesData[index].maxHealth.ToString();
-
+        ClearLists();
         foreach (Effect effect in Enum.GetValues(typeof(Effect)))
         {
             if (effect != Effect.NONE)
@@ -48,11 +44,27 @@ public class UIHeroes : MonoBehaviour
                             parentObject = _imageNegativeList;
                             break;
                     }
+                    
                     GameObject go = Instantiate(_imageIconPrefab, parentObject.transform);
                     go.GetComponent<UIHero>()?.ChangeData(effect, sensibility);
 
                 }
             }
+        }
+    }
+
+    private void ClearLists()
+    {
+        ClearList(_imagePositiveList);
+        ClearList(_imageNeutralList);
+        ClearList(_imageNegativeList);
+    }
+
+    public void ClearList(GameObject listParent)
+    {
+        foreach (Transform child in listParent.transform)
+        {
+            Destroy(child.gameObject);
         }
     }
 }

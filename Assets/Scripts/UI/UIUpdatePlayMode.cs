@@ -46,12 +46,12 @@ public class UIUpdatePlayMode : MonoBehaviour
         }
     }
 
-    public void UpdateHero(Hero hero)
+    public void UpdateHero(Hero hero,int damage)
     {
         if (hero != null) 
         {
             int index = _heroesManager.HeroesInCurrentLevel.GetHeroIndexWithRole(hero.Role);
-            _listCharacter[index].UpdateHealth(hero.Health);
+            _listCharacter[index].UpdateHealth(hero.Health,damage);
         }
     }
 }
