@@ -149,6 +149,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
         return _heroesManager.GetSensibility(effect, role);
     }
 
+    public int GetDamageOnHero(Effect effect, Hero hero)
+    {
+        return _heroesManager.GetDamageOfEffectOnHero(effect, hero);
+    }
+
     public void MoveHeroesOnScreen(Room room)
     {
         
@@ -163,12 +168,17 @@ public class GameManager : MonoBehaviour, IDataPersistence
         {
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
+            foreach (Hero hero in _heroesManager.HeroesInCurrentLevel.Heroes)
+            {
+                Debug.Log("HEro " + hero.Role + " has ? " + hero.IsInvulnerable);
+            }
+            Debug.Log("POISON "+ _heroesManager.HeroesInCurrentLevel.IsPoisoned);
             if (room.IsActive && room.Effects.Count > 0)
             {
                 _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                 room.IsActive = false;
 
-                Debug.Log($"Room number of effects : {room.Effects.Count }");
+                //Debug.Log($"Room number of effects : {room.Effects.Count }");
                 if (room.Effects[0] == Effect.PLANTE) { _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true; }
                 for (int  j = 0; j < room.Effects.Count; j++)
                 {

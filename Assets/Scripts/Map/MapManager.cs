@@ -675,13 +675,13 @@ public class MapManager : MonoBehaviour
         room = FindRoom(mapAction.Index);
         mapAction.PrintAction();
         if (mapAction.ActionType == ActionType.Add) {
+            if (room.TrapData.RoomType == RoomType.BOSS)
+            {
+
+            }
             room.UndoData(null, null, RoomColor.NotBuyable);
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
-            // if (room.TrapData.RoomType == RoomType.BOSS)
-            // {
-
-            // }
         } else if (mapAction.ActionType == ActionType.Change) {
             room.UndoData(mapAction.TrapData);
         } else if (mapAction.ActionType == ActionType.Upgrade) {

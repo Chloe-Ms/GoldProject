@@ -55,17 +55,6 @@ public class HeroesSensibilityEditor : Editor
         columnLabelStyle.alignment = TextAnchor.MiddleCenter;
         columnLabelStyle.fontStyle = FontStyle.Bold;
 
-        GUIStyle cornerLabelStyle = new GUIStyle();
-        cornerLabelStyle.fixedWidth = 65;
-        cornerLabelStyle.alignment = TextAnchor.MiddleRight;
-        cornerLabelStyle.fontStyle = FontStyle.BoldAndItalic;
-        cornerLabelStyle.fontSize = 14;
-        cornerLabelStyle.padding.top = -5;
-
-        GUIStyle rowLabelStyle = new GUIStyle();
-        rowLabelStyle.fixedWidth = 65;
-        rowLabelStyle.alignment = TextAnchor.MiddleRight;
-        rowLabelStyle.fontStyle = FontStyle.Bold;
         EditorGUILayout.BeginHorizontal(tableStyle);
         for (int j = -1; j < rows; j++)
         {

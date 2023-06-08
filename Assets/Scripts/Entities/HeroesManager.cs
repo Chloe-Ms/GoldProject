@@ -121,24 +121,7 @@ public class HeroesManager : MonoBehaviour
                     {
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
-                    int damage = _heroesSensibilities.GetSensibility(effect, heroAttacked.Role);
-
-                    if (_heroesInCurrentLevel.IsPoisoned)
-                    {
-                        damage *= _poisonDamageMultiplier;
-                    }
-                    if (hero.HasDamageReduction)
-                    {
-                        if (damage > 0)
-                        {
-                            damage -= 1;
-                        }
-                        else if (damage < 0)
-                        {
-                            damage += 1;
-                        }
-                        hero.HasDamageReduction = false;
-                    }
+                    int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
                     heroAttacked.UpdateHealth(damage);
                 }
             }
@@ -150,6 +133,29 @@ public class HeroesManager : MonoBehaviour
                 hero.HasDamageReduction = false;
             }
         }
+    }
+
+    public int GetDamageOfEffectOnHero(Effect effect,Hero hero)
+    {
+        int damage = _heroesSensibilities.GetSensibility(effect, hero.Role);
+
+        if (_heroesInCurrentLevel.IsPoisoned && effect == Effect.POISON)
+        {
+            damage *= _poisonDamageMultiplier;
+        }
+        if (hero.HasDamageReduction)
+        {
+            if (damage > 0)
+            {
+                damage -= 1;
+            }
+            else if (damage < 0)
+            {
+                damage += 1;
+            }
+            hero.HasDamageReduction = false;
+        }
+        return damage;
     }
 
     public bool IsDodging(Role role)

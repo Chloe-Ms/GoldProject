@@ -1082,8 +1082,8 @@ MonoBehaviour:
     _nbMovesMax: 5
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
-    _maxHealth: 2800000028000000
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 0700000028000000
     _mapWidth: 5
     _mapHeight: 6
   - name: Level 2
@@ -2017,7 +2017,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -22.643}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 84, y: 2}
+  m_AnchoredPosition: {x: 76, y: 7}
   m_SizeDelta: {x: 119.3689, y: 87.798}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &791710649
@@ -2918,7 +2918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 48.69995, y: 145.00012}
+  m_AnchoredPosition: {x: 54, y: 145.00012}
   m_SizeDelta: {x: 153.1154, y: 153.1154}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1007814009
@@ -2965,7 +2965,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1277845744}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: Undo
         m_Mode: 1
@@ -2997,7 +2997,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 72e957e2294f6be4aa9315fb628607ba, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

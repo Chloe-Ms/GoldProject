@@ -2284,7 +2284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0224e66e423d5f944b3360061e7ded9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomText: {fileID: 0}
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _slots: []
@@ -2776,7 +2775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &855526363
 MonoBehaviour:
   m_ObjectHideFlags: 0
