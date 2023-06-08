@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 using static Cinemachine.DocumentationSortingAttribute;
 
@@ -12,6 +13,7 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
     int _nbHeroesLeft;
+    int _roomTurn = 0;
     public Group HeroesInCurrentLevel { 
         get => _heroesInCurrentLevel; 
         set => _heroesInCurrentLevel = value; 
@@ -42,7 +44,6 @@ public class HeroesManager : MonoBehaviour
             _heroesDataInCurrentLevel[i].maxHealth = maxHealth[i];
         }
         
-        Debug.Log("Heroes dans le niveau " + _heroesDataInCurrentLevel.Length);
         StartEditMode(level);
     }
 
@@ -107,14 +108,12 @@ public class HeroesManager : MonoBehaviour
     {
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
-            //Debug.Log("DAMAGE on group");
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
-                //Debug.Log("Before Hero " + hero.Role + " " + hero.Health);
-                if (!hero.IsDead)
+                if (!hero.IsDead && !IsDodging(hero.Role))
                 {
                     Hero heroAttacked = hero;
-                    if (heroAttacked.Isinvulnerable)
+                    if (heroAttacked.IsInvulnerable)
                     {
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
@@ -126,9 +125,13 @@ public class HeroesManager : MonoBehaviour
                     }
                     heroAttacked.UpdateHealth(damage);
                 }
-                //Debug.Log("After Hero " + hero.Role + " " + hero.Health);
             }
         }
+    }
+
+    public bool IsDodging(Role role)
+    {
+        return role == Role.NINJA && ((_roomTurn % 2) == 0);
     }
 
     public void ApplyAbilities(Room room)
@@ -140,7 +143,7 @@ public class HeroesManager : MonoBehaviour
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel,room);
-                    //Debug.Log("APPLY ABILITY : " + hero.Role);
+                    Debug.Log("APPLY ABILITY : " + hero.Role);
                 }
             }
         }

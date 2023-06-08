@@ -11,6 +11,7 @@ public class TrapData : ScriptableObject
     [SerializeField] private Effect _effect;
     [SerializeField] private int _nbRoomsBeforeEffect;
     [SerializeField] private RoomType _roomType;
+    [SerializeField] private Color _color;
     public string Name
     {
         get { return _name; }
@@ -33,6 +34,11 @@ public class TrapData : ScriptableObject
     public RoomType RoomType { 
         get => _roomType;
     }
+    public Color Color
+    {
+        get { return _color; }
+    }
+
 }
 
 public enum RoomType

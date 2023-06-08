@@ -39,7 +39,7 @@ public class Hero : MonoBehaviour
         get => _health; 
         set => _health = value; 
     }
-    public bool Isinvulnerable {
+    public bool IsInvulnerable {
         get => _isinvulnerable; 
         set => _isinvulnerable = value; 
     }
@@ -55,7 +55,7 @@ public class Hero : MonoBehaviour
     }
     public void UpdateHealth(int pv)
     {
-        if (IsDead || Isinvulnerable)
+        if (IsDead || IsInvulnerable)
         {
             return;
         }
