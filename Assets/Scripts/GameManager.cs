@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void MoveHeroesToRoom(Room room)
     {
-        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlève l'effet de la room des plantes
+        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlï¿½ve l'effet de la room des plantes
 
         if (room != null)
         {
@@ -234,15 +234,15 @@ public class GameManager : MonoBehaviour, IDataPersistence
             _displayUI.EnterPlayMode();
             _startButton.SetActive(false);
             OnEnterPlayMode?.Invoke(Level);
-            List<Room> path = _mapManager.Pathfinding();
-            if (path != null)
-            {
-                _routineChangeRoom = StartCoroutine(ChangeRoomFromPath(path));
-            }
+            // List<Room> path = _mapManager.Pathfinding();
+            // if (path != null)
+            // {
+            //     _routineChangeRoom = StartCoroutine(ChangeRoomFromPath(path));
+            // }
         }
     }
 
-    IEnumerator ChangeRoomFromPath(List<Room> path)
+    public IEnumerator ChangeRoomFromPath(List<Room> path)
     {
         bool bossRoomReached = false;
         int i = 0;
@@ -270,10 +270,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void PlayerWin()
     {
         _hasWon = true;
-        if (_routineChangeRoom != null)
+        if (MapManager.Instance.RoutineChangeRoom != null)
         {
-            StopCoroutine(_routineChangeRoom);
-            _routineChangeRoom = null;
+            StopCoroutine(MapManager.Instance.RoutineChangeRoom);
+            MapManager.Instance.RoutineChangeRoom = null;
         }
         OnWin?.Invoke();
         _winDisplayGO.SetActive(true);

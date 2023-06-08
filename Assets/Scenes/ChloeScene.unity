@@ -1103,7 +1103,7 @@ MonoBehaviour:
   _heroesManager: {fileID: 147781381}
   _mapManager: {fileID: 1277845744}
   _startButton: {fileID: 17827539}
-  _timePerRoom: 5
+  _timePerRoom: 2
   _displayUI: {fileID: 1519186617}
   _winDisplayGO: {fileID: 1921201058}
   _lossDisplayGO: {fileID: 627511682}
@@ -3504,14 +3504,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.06837196, b: 0, a: 1}
+  m_Color: {r: 0.8301887, g: 0.16791739, b: 0.12061229, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 414928198d66fbe468ca764c859251d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 71d11a2ce6891a54ba42019e1e62500b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4318,14 +4318,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.0824461, a: 1}
+  m_Color: {r: 0.113759324, g: 0.7830189, b: 0.16887477, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 414928198d66fbe468ca764c859251d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 71d11a2ce6891a54ba42019e1e62500b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5193,7 +5193,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 414928198d66fbe468ca764c859251d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 71d11a2ce6891a54ba42019e1e62500b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

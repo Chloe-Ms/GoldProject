@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 using static Cinemachine.DocumentationSortingAttribute;
 
@@ -12,6 +13,7 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
     int _nbHeroesLeft;
+    int _roomTurn = 0;
     public Group HeroesInCurrentLevel { 
         get => _heroesInCurrentLevel; 
         set => _heroesInCurrentLevel = value; 
@@ -108,10 +110,10 @@ public class HeroesManager : MonoBehaviour
         {
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
-                if (!hero.IsDead)
+                if (!hero.IsDead && !IsDodging(hero.Role))
                 {
                     Hero heroAttacked = hero;
-                    if (heroAttacked.Isinvulnerable)
+                    if (heroAttacked.IsInvulnerable)
                     {
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
@@ -125,6 +127,11 @@ public class HeroesManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool IsDodging(Role role)
+    {
+        return role == Role.NINJA && ((_roomTurn % 2) == 0);
     }
 
     public void ApplyAbilities(Room room)

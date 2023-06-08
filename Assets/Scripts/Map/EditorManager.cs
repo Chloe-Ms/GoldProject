@@ -36,7 +36,7 @@ public class EditorManager : MonoBehaviour
     public void CloseEditorMenu()
     {
         MapManager.Instance.EditorState = EditorState.Select;
-        Debug.Log($"CloseEditorMenu() _editorMenu.transform.position = {_editorMenu.transform.position} _menuPosition = {_menuPosition} condition = {_editorMenu.transform.position == _menuPosition}   ");
+        //Debug.Log($"CloseEditorMenu() _editorMenu.transform.position = {_editorMenu.transform.position} _menuPosition = {_menuPosition} condition = {_editorMenu.transform.position == _menuPosition}   ");
         if (_editorMenu.transform.position == _menuPosition)
             _editorMenu.transform.position += -_vectorOffset;
     }

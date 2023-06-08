@@ -34,7 +34,7 @@ public class AbilityManager
                 {
                     if (group.Heroes[i].Health == 1 && group.Heroes[i].Role != Role.PALADIN)
                     {
-                        group.Heroes[i].Isinvulnerable = true;
+                        group.Heroes[i].IsInvulnerable = true;
                     }
                 }
             }
@@ -70,9 +70,9 @@ public class AbilityManager
                 //Remove invulnerability
                 for (int i = 0; i < group.Heroes.Count; i++)
                 {
-                    if (group.Heroes[i].Isinvulnerable)
+                    if (group.Heroes[i].IsInvulnerable)
                     {
-                        group.Heroes[i].Isinvulnerable = false;
+                        group.Heroes[i].IsInvulnerable = false;
                     }
                 }
             }
