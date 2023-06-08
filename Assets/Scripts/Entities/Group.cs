@@ -39,6 +39,7 @@ public class Group
         _isPoisoned = false;
         _affectedByPlants = false;
         _isInvulnerable = false;
+        _nbKeysTaken = 0;
     }
 
     public Hero GetHeroWithRole(Role role)

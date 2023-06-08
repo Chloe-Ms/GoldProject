@@ -143,6 +143,10 @@ public class HeroesManager : MonoBehaviour
         {
             damage *= _poisonDamageMultiplier;
         }
+        if (effect == Effect.FOUDRE && GameManager.Instance.CurrentRoom.NbOfUpgrades > 0)
+        {
+            damage += _heroesInCurrentLevel.NbKeysTaken;
+        }
         if (hero.HasDamageReduction)
         {
             if (damage > 0)

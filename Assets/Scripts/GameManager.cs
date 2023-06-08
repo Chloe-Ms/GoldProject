@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private int _nbMoves = 0;
     private int _level = 0;
     private Effect _currentRoomEffect = Effect.NONE;
+    private Room _currentRoom = null;
     private static GameManager _instance;
 
     [SerializeField] private GeneralData _generalData;
@@ -64,6 +65,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public int CurrentLevelHeight
     {
         get => _levels[_level].MapHeight;
+    }
+    public Room CurrentRoom { 
+        get => _currentRoom;
     }
 
     public int[] MaxHealthCurrentLevel()
@@ -166,45 +170,56 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
         if (room != null)
         {
+            _currentRoom = room;
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
-            foreach (Hero hero in _heroesManager.HeroesInCurrentLevel.Heroes)
+            if (room.IsActive)
             {
-                Debug.Log("HEro " + hero.Role + " has ? " + hero.IsInvulnerable);
-            }
-            Debug.Log("POISON "+ _heroesManager.HeroesInCurrentLevel.IsPoisoned);
-            if (room.IsActive && room.Effects.Count > 0)
-            {
-                _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                 room.IsActive = false;
+                if (room.Effects.Count > 0)
+                {
+                    _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
 
-                //Debug.Log($"Room number of effects : {room.Effects.Count }");
-                if (room.Effects[0] == Effect.PLANTE) { _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true; }
-                for (int  j = 0; j < room.Effects.Count; j++)
-                {
-                    _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
-                }
-                //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
-                if (room.NbOfUpgrades > 0)
-                {
-                    if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
+                    ApplyCurrentRoomEffect(_currentRoomEffect);
+
+                    for (int j = 0; j < room.Effects.Count; j++)
                     {
-                        RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
+                        _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
+                    }
+                    //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
+                    if (room.NbOfUpgrades > 0)
+                    {
+                        if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
+                        {
+                            RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
+                        }
+                    }
+                    if (_currentRoomEffect == Effect.MONSTRE)
+                    {
+                        ApplyDamageReduction();
                     }
                 }
-                if (room.Effects[0] == Effect.MONSTRE)
+                if (room.TrapData.RoomType == RoomType.LEVER)
                 {
-                    ApplyDamageReduction();
+                    _heroesManager.HeroesInCurrentLevel.NbKeysTaken++;
                 }
             }
             _heroesManager.RemoveAbilities(room);
         } else
         {
             _currentRoomEffect = Effect.NONE;
+            _currentRoom = null;
         }
         _heroesManager.ChangeTurn();
     }
 
+    public void ApplyCurrentRoomEffect(Effect effect)
+    {
+        if (effect == Effect.PLANTE)
+        {
+            _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
+        }
+    }
     public void ApplyDamageReduction()
     {
         Hero hero = _heroesManager.HeroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
