@@ -251,7 +251,10 @@ public class MapManager : MonoBehaviour
                 Debug.Log($"Play Mode");
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
-                _selectedSlot.UnSelect();
+                if (_selectedSlot != null)
+                {
+                    _selectedSlot.UnSelect();
+                }
                 _selectedSlot = null;
                 Debug.Log($"Selected Slot = {_selectedSlot}");
                 GameManager.Instance.StartPlayMode();
@@ -297,6 +300,7 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot.TrapData == null) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
+                _currentRoomCount++;
             }
             if (_selectedSlot != _start) {
                 if (mapAction.ActionType == ActionType.None)
@@ -309,7 +313,6 @@ public class MapManager : MonoBehaviour
             }
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
-            _currentRoomCount++;
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
         }
         //mapAction.PrintAction();
@@ -675,10 +678,6 @@ public class MapManager : MonoBehaviour
         room = FindRoom(mapAction.Index);
         mapAction.PrintAction();
         if (mapAction.ActionType == ActionType.Add) {
-            if (room.TrapData.RoomType == RoomType.BOSS)
-            {
-
-            }
             room.UndoData(null, null, RoomColor.NotBuyable);
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
