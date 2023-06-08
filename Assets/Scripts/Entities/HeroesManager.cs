@@ -107,10 +107,10 @@ public class HeroesManager : MonoBehaviour
     {
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
-            Debug.Log("DAMAGE on group");
+            //Debug.Log("DAMAGE on group");
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
-                Debug.Log("Before Hero " + hero.Role + " " + hero.Health);
+                //Debug.Log("Before Hero " + hero.Role + " " + hero.Health);
                 if (!hero.IsDead)
                 {
                     Hero heroAttacked = hero;
@@ -126,7 +126,7 @@ public class HeroesManager : MonoBehaviour
                     }
                     heroAttacked.UpdateHealth(damage);
                 }
-                Debug.Log("After Hero " + hero.Role + " " + hero.Health);
+                //Debug.Log("After Hero " + hero.Role + " " + hero.Health);
             }
         }
     }
@@ -140,7 +140,7 @@ public class HeroesManager : MonoBehaviour
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel,room);
-                    Debug.Log("APPLY ABILITY : " + hero.Role);
+                    //Debug.Log("APPLY ABILITY : " + hero.Role);
                 }
             }
         }
