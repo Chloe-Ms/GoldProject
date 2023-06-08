@@ -9,7 +9,8 @@ public class Hero : MonoBehaviour
     private int _health;
     private bool _isDead = false;
     private bool _isinvulnerable = false;
-    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit o� le mettre :/
+    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit ou le mettre :/
+    private bool _hasDamageReduction = false;
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
@@ -47,7 +48,11 @@ public class Hero : MonoBehaviour
         get => _nbDamageOnElementaryRoom; 
         set => _nbDamageOnElementaryRoom = value; 
     }
-    #endregion 
+    public bool HasDamageReduction {
+        get => _hasDamageReduction;
+        set => _hasDamageReduction = value;
+    }
+    #endregion
 
     public void TestDamage()
     {
@@ -60,15 +65,16 @@ public class Hero : MonoBehaviour
             return;
         }
 
-        int realPV; ;
+        int realPV = pv;
         if (pv < 0) //DAMAGE
         {
-            realPV = Mathf.Min(_health, pv);
+            realPV = Mathf.Min(_health, realPV);
             if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
+            {
                 _nbDamageOnElementaryRoom++;
-
+            }
         } else { //HEAL
-            realPV = Mathf.Min(MaxHealth - _health, pv);
+            realPV = Mathf.Min(MaxHealth - _health, realPV);
         }
 
         _health = Mathf.Clamp(_health + realPV, 0,MaxHealth);

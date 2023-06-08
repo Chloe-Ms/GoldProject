@@ -182,11 +182,25 @@ public class GameManager : MonoBehaviour, IDataPersistence
                         RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                     }
                 }
+                if (room.Effects[0] == Effect.MONSTRE)
+                {
+                    ApplyDamageReduction();
+                }
             }
             _heroesManager.RemoveAbilities(room);
         } else
         {
             _currentRoomEffect = Effect.NONE;
+        }
+        _heroesManager.ChangeTurn();
+    }
+
+    public void ApplyDamageReduction()
+    {
+        Hero hero = _heroesManager.HeroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
+        if (hero != null)
+        {
+            hero.HasDamageReduction = true;
         }
     }
 

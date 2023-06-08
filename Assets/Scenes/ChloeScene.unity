@@ -1082,8 +1082,8 @@ MonoBehaviour:
     _nbMovesMax: 5
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    _maxHealth: 03000000
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    _maxHealth: 2800000028000000
     _mapWidth: 5
     _mapHeight: 6
   - name: Level 2
@@ -3351,7 +3351,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0224e66e423d5f944b3360061e7ded9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomText: {fileID: 0}
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _slots: []
