@@ -1,22 +1,25 @@
 using System.Collections.Generic;
+using System.Collections;
+using System;
 using UnityEngine;
 using NaughtyAttributes;
-using TMPro;
+using DG.Tweening;
 
 public class MapManager : MonoBehaviour
 {
     private static MapManager _instance;
 
-    public static MapManager Instance
-    {
-        get { return _instance; }
-    }
-
     private Stack<MapAction> _mapActions = new Stack<MapAction>();
     private EditorState _editorState = EditorState.Select;
     private int _buyableRoomCount = 5;
     private int _currentRoomCount = 0;
+    private Coroutine _routineChangeRoom;
 
+    #region Properties
+    public static MapManager Instance
+    {
+        get { return _instance; }
+    }
     public EditorState EditorState
     {
         get { return _editorState; }
@@ -28,7 +31,26 @@ public class MapManager : MonoBehaviour
         get { return _buyableRoomCount - _currentRoomCount; }
     }
 
-    [SerializeField] private TMP_Text _roomText;
+    public Coroutine RoutineChangeRoom
+    {
+        get { return _routineChangeRoom; }
+        set { _routineChangeRoom = value; }
+    }
+
+    public List<Room> ListOfLever
+    {
+        get {
+            List<Room> leverList = new List<Room>();
+
+            _slots.ForEach(slot => {
+                if (slot.GetComponent<Room>().TrapData != null && slot.GetComponent<Room>().TrapData.RoomType == RoomType.LEVER)
+                    leverList.Add(slot.GetComponent<Room>());
+            });
+            return leverList;
+        }
+    }
+    #endregion
+
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
     [SerializeField, Required("Slot required GameObject")] private GameObject _slot;
     [SerializeField] private List<GameObject> _slots = new List<GameObject>();
@@ -40,6 +62,9 @@ public class MapManager : MonoBehaviour
     private Room _boss = null;
     private Room _selectedSlot = null;
     private Room _lastestSelectedSlot = null;
+    private Coroutine _routineRoomMonster;
+    private Effect _effectRoomMonster = Effect.NONE;
+    [SerializeField] private GameObject _menuEffectRoomMonster;
 
     public Room SelectedSlot
     {
@@ -148,13 +173,13 @@ public class MapManager : MonoBehaviour
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
         //Debug.Log("SetBuyableAdjacent");
-        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor != RoomColor.Usable)
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsBuyable())
             _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
-        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor != RoomColor.Usable)
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().IsBuyable())
             _slots[index + 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
-        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor != RoomColor.Usable)
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().IsBuyable())
             _slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
-        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor != RoomColor.Usable)
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().IsBuyable())
             _slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
     }
 
@@ -163,13 +188,13 @@ public class MapManager : MonoBehaviour
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
         //Debug.Log("SetUnBuyableAdjacent");
-        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsNotBuy())
             _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
-        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().IsNotBuy())
             _slots[index + 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
-        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().IsNotBuy())
             _slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
-        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor == RoomColor.Buyable)
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().IsNotBuy())
             _slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
     }
 
@@ -180,10 +205,6 @@ public class MapManager : MonoBehaviour
         else
             _instance = this;
     }
-
-    private void Start()
-    {
-    } 
 
     private void InitStart()
     {
@@ -207,7 +228,6 @@ public class MapManager : MonoBehaviour
         float camOffset = -1.8f;
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play) {
-            Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -218,7 +238,13 @@ public class MapManager : MonoBehaviour
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
                 _mapActions.Push(mapAction);
-                _selectedSlot.UpgradeRoom();
+                if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
+                {
+                    _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
+                } else
+                {
+                    _selectedSlot.UpgradeRoom();
+                }
                 _currentRoomCount++;
                 UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
                 return;
@@ -228,16 +254,18 @@ public class MapManager : MonoBehaviour
                 Debug.Log($"Play Mode");
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
-                _selectedSlot.UnSelect();
+                if (_selectedSlot != null)
+                {
+                    _selectedSlot.UnSelect();
+                }
                 _selectedSlot = null;
                 Debug.Log($"Selected Slot = {_selectedSlot}");
                 GameManager.Instance.StartPlayMode();
+                _routineChangeRoom = StartCoroutine(ImprovePathFinding());
                 return;
             }
-            if (room != null && room.RoomColor != RoomColor.NotBuyable) {
+            if (room != null && room.IsClickable()) {
                 _selectedSlot = room != _selectedSlot ? room : null;
-            }
-            if (room != null && room.RoomColor != RoomColor.NotBuyable) {
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
                     EditorManager.Instance.OpenEditorMenu();
@@ -249,7 +277,6 @@ public class MapManager : MonoBehaviour
                     oldSelectedSlot.UnSelect();
                 }
             }
-            //Debug.Log($"SelectedSlot = {_selectedSlot == null} Color = {_selectedSlot?.RoomColor} Data = {_selectedSlot?.RoomData}");
             if (_selectedSlot == null)
                 EditorManager.Instance.CloseEditorMenu();
             else if (_selectedSlot.RoomData != null) {
@@ -258,6 +285,16 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    private IEnumerator RoutineMonsterRoom()
+    {
+        _menuEffectRoomMonster.SetActive(true);
+        yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
+    }
+
+    public void ModifyRoomEffectMonster(int effect)
+    {
+        _effectRoomMonster = (Effect)effect;
+    }
     public void SetDataOnSelectedRoom(RoomData data)
     {
         if (_selectedSlot != null) {
@@ -270,11 +307,11 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        //Debug.Log($"SetDataOnSelectedTrap = {data}");
         if (_selectedSlot != null && _boss == null) {
             if (_selectedSlot.TrapData == null) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
+                _currentRoomCount++;
             }
             if (_selectedSlot != _start) {
                 if (mapAction.ActionType == ActionType.None)
@@ -287,10 +324,9 @@ public class MapManager : MonoBehaviour
             }
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
-            _currentRoomCount++;
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
         }
-        mapAction.PrintAction();
+        //mapAction.PrintAction();
         _mapActions.Push(mapAction);
         if (IsEditComplete())
         {
@@ -323,7 +359,6 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
-            //Debug.Log($"Room Data Directions = {room.Directions} direction = {direction}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -332,7 +367,6 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
-    [Button("Pathfinding")]
     public List<Room> Pathfinding()
     {
         List<Room> _travelList = new List<Room>();
@@ -349,9 +383,8 @@ public class MapManager : MonoBehaviour
 
         travelList.Add(room);
         actualDirection = room.RoomData.Directions;
-        // if (travelList.Count > 5)
-        //     return;
-        Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
+
+        //Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
         //pathfinding with recursion with using actualdirection
         if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
@@ -369,7 +402,196 @@ public class MapManager : MonoBehaviour
             GetRoom(FindRoom(GetIndexOfRoom(room) - 1), travelList);
             travelList.Add(room);
         }
+    }
 
+    private bool FindPathTo(Room actualRoom, List<Room> pathTo, Room roomToFind)
+    {
+        Direction actualDirection = Direction.None;
+        bool find = false;
+
+        pathTo.Add(actualRoom);
+        actualDirection = actualRoom.RoomData.Directions;
+        // Debug.Log($"Room = {actualRoom.name} actualDirection = {PrintDirection(actualDirection)}");
+        // pathfinding with recursion with using actualdirection
+        if (actualRoom == roomToFind)
+            return true;
+        if (HaveDirection(ref actualDirection, Direction.Left) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) - _heightSize)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) - _heightSize), pathTo, roomToFind);
+        if (HaveDirection(ref actualDirection, Direction.Right) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) + _heightSize)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) + _heightSize), pathTo, roomToFind);
+        if (HaveDirection(ref actualDirection, Direction.Up) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) + 1)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) + 1), pathTo, roomToFind);
+        if (HaveDirection(ref actualDirection, Direction.Down) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) - 1)) && !find)
+            find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) - 1), pathTo, roomToFind);
+        if (find == false) {
+            pathTo.Remove(actualRoom);
+            //Debug.Log($"Remove {actualRoom.name}");
+        }
+        return find;
+    }
+
+    private List<List<Room>> FindObjectif()
+    {
+        List<List<Room>> travelLists;
+        List<Room> leverList = new List<Room>();
+
+        _slots.ForEach(slot => {
+            if (slot.GetComponent<Room>().TrapData != null && slot.GetComponent<Room>().TrapData.RoomType == RoomType.LEVER)
+                leverList.Add(slot.GetComponent<Room>());
+        });
+        travelLists = new List<List<Room>>();
+        Debug.Log($"leverList.Count = {leverList.Count}");
+        for (int i = 0; i < leverList.Count; i++) {
+            travelLists.Add(new List<Room>());
+            Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
+            FindPathTo(_start, travelLists[i], leverList[i]);
+        }
+        return travelLists;
+    }
+
+    private List<List<Room>> FindObjectif(List<Room> leverList, Room actualRoom)
+    {
+        List<List<Room>> travelLists;
+
+        if (leverList == null || leverList.Count == 0 || actualRoom == null)
+            return null;
+        travelLists = new List<List<Room>>();
+        Debug.Log($"leverList.Count = {leverList.Count}");
+        for (int i = 0; i < leverList.Count; i++) {
+            travelLists.Add(new List<Room>());
+            FindPathTo(actualRoom, travelLists[i], leverList[i]);
+        }
+        return travelLists;
+    }
+
+    private List<Room> FindObjectif(Room actualRoom, Room roomToFind)
+    {
+        List<Room> travelList = new List<Room>();
+
+        if (actualRoom == null || roomToFind == null)
+            return null;
+        FindPathTo(actualRoom, travelList, roomToFind);
+        return travelList;
+    }
+
+    [Button("Pathfinding")]
+    public void PathfindingTest()
+    {
+        _editorState = EditorState.Play;
+        GameManager.Instance.StartPlayMode();
+        RoutineChangeRoom = StartCoroutine(ImprovePathFinding());
+    }
+
+    public IEnumerator ImprovePathFinding()
+    {
+        List<Room> leverList = ListOfLever;
+        List<List<Room>> travelLists;
+        List<Room> bestPath = new List<Room>();
+        Room actualRoom = _start;
+        Room lever = null;
+        int lowestCount = _widthSize * _heightSize;
+
+        bestPath.Add(_start);
+        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        while (leverList != null && leverList.Count > 0) {
+            bestPath = null;
+            travelLists = null;
+            travelLists = FindObjectif(leverList, actualRoom);
+            if (travelLists != null || travelLists.Count > 0) {
+                lowestCount = GetLowestPathSize(travelLists);
+                Debug.Log($"lowestCount = {lowestCount}");
+                for (int i = 0; i < travelLists.Count; i++) {
+                    PrintListOfRoom(travelLists[i]);
+                    if (travelLists[i].Count > lowestCount) {
+                        Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
+                        travelLists.RemoveAt(i);
+                        i--;
+                    }
+                }
+                if (travelLists.Count > 1)
+                    bestPath = MergeCommunSlot(travelLists);
+                else 
+                    bestPath = travelLists[0];
+                bestPath.RemoveAt(0);
+                Debug.Log($"Actual Path :");
+                PrintListOfRoom(bestPath);
+                yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+                //Room lever = ask the player which path he want to take
+                if (travelLists.Count > 1) {
+                    Debug.Log($"All Path avalaible :");
+                    foreach (List<Room> path in travelLists)
+                        PrintListOfRoom(path);
+                    yield return new WaitUntil(() => {
+                        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+                            Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                            if (room != null && room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER) {
+                                List<Room> foundedPath = travelLists.Find(path => path.Contains(room));
+                                if (foundedPath != null) {
+                                    lever = room;
+                                    return true;
+                                } else
+                                    return false;
+                            } else
+                                return false;
+                        } else
+                            return false;
+                    });
+                    bestPath = travelLists.Find(path => path.Contains(lever));
+                    Debug.Log($"Selected Path :");
+                    PrintListOfRoom(bestPath);
+                    yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+                }
+                leverList.Remove(bestPath[bestPath.Count - 1]);
+                actualRoom = bestPath[bestPath.Count - 1];
+            }
+        }
+        bestPath = FindObjectif(actualRoom, _boss);
+        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+    }
+
+    private List<Room> MergeCommunSlot(List<List<Room>> path)
+    {
+        List<Room> newPath = new List<Room>();
+        bool isIdentical = true;
+
+        Debug.Log($"path.Count = {path.Count} have a lenght of {path[0].Count}");
+        for (int i = 0; i < path[0].Count && isIdentical;) {
+            for (int j = 1; j < path.Count && isIdentical; j++) {
+                if (path[j][0] == path[0][0]) {
+                    isIdentical = true;
+                } else {
+                    isIdentical = false;
+                    break;
+                }
+            }
+            if (isIdentical) {
+                Debug.Log($"Added");
+                newPath.Add(path[0][0]);
+                for (int j = 0; j < path.Count; j++)
+                    path[j].RemoveAt(0);
+            }
+        }
+        return newPath;
+    }
+
+    private int GetLowestPathSize(List<List<Room>> paths)
+    {
+        int lowest = 0;
+
+        foreach (List<Room> path in paths)
+            if (lowest == 0 || path.Count < lowest)
+                lowest = path.Count;
+        return lowest;
+    }
+
+    private void PrintListOfRoom(List<Room> roomList)
+    {
+        string str = "";
+
+        foreach (Room room in roomList) {
+            str += room.name + " ";
+        }
+        Debug.Log(str);
     }
 
     private bool HaveDirection(ref Direction direction , Direction directionToCheck)
@@ -440,10 +662,28 @@ public class MapManager : MonoBehaviour
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
         _buyableRoomCount = data.NbMovesMax;
+        _currentRoomCount = 0;
         _start = null;
         _boss = null;
+        _mapActions = new Stack<MapAction>();
+        _routineChangeRoom = null;
         Generate();
         InitStart();
+    }
+
+    private void InitMap(PrePlacedElement ElementsToPlace)
+    {
+        if (ElementsToPlace == null)
+            return;
+        if (ElementsToPlace.PreplacedBoss != null) {
+            _boss = FindRoom(ElementsToPlace.PreplacedBoss.x, ElementsToPlace.PreplacedBoss.y);
+            _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
+        }
+        if (ElementsToPlace.PreplacedObstacle != null) {
+            foreach (Vector2 Obstacle in ElementsToPlace.PreplacedObstacle) {
+                //FindRoom(Obstacle.x, Obstacle.y).SetData(GameManager.Instance.GeneralData.RoomList.RoomData[16], RoomColor.Unclickable);
+            }
+        }
     }
 
     public bool IsRoomATrap(Room room)
@@ -461,6 +701,7 @@ public class MapManager : MonoBehaviour
         MapAction mapAction = _mapActions.Count > 0 ? _mapActions.Pop() : null;
         Room room = null;
 
+        Debug.Log($"MapAction = {mapAction}");
         if (mapAction == null)
             return;
         room = FindRoom(mapAction.Index);

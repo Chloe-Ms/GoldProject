@@ -9,34 +9,36 @@ public class UIHero : MonoBehaviour
     [SerializeField] Image _image;
     public void ChangeData(Effect effect, int sensibility)
     {
-        _image.sprite = GetSpriteFromEffect(effect);
-        switch (sensibility)
-        {
-            case 1:
-                _image.color = Color.green;
-                break;
-            case 0:
-                _image.color = Color.gray;
-                break;
-            case -2:
-                _image.color = Color.red;
-                break;
-        }
+        _image.color = GetColorFromEffect(effect);
+        //_image.sprite = getspritefromeffect(effect);
+        //switch (sensibility)
+        //{
+        //    case 1:
+        //        _image.color = color.green;
+        //        break;
+        //    case 0:
+        //        _image.color = color.gray;
+        //        break;
+        //    case -2:
+        //        _image.color = color.red;
+        //        break;
+        //}
     }
 
-    private Sprite GetSpriteFromEffect(Effect effect)
+    private Color GetColorFromEffect(Effect effect)
     {
-        Debug.Log(effect);
         int i = 0;
-        Sprite sprite = null;
-        while (i < _trapsIcon.TrapData.Count && sprite == null)
+        Color color = Color.white;
+        bool found = false;
+        while (i < _trapsIcon.TrapData.Count && !found)
         {
             if (_trapsIcon.TrapData[i].Effect == effect)
             {
-                sprite = _trapsIcon.TrapData[i].MiniSprite;
+                color = _trapsIcon.TrapData[i].Color;
+                found = true;
             }
             i++;
         }
-        return sprite;
+        return color;
     }
 }

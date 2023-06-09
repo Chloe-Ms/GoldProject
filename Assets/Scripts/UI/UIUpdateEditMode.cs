@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIUpdateEditMode : MonoBehaviour
@@ -13,6 +15,7 @@ public class UIUpdateEditMode : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _nbActionsLeft;
     [SerializeField] TextMeshProUGUI _nbActionsTotal;
+    [SerializeField] UIHeroes[] _heroesUIEditMode;
 
     void Awake()
     {
@@ -30,6 +33,18 @@ public class UIUpdateEditMode : MonoBehaviour
     {
         _nbActionsTotal.text = nbActions.ToString();
         _nbActionsLeft.text = nbActions.ToString();
+        for (int i = 0;i < _heroesUIEditMode.Length;i++)
+        {
+            if (GameManager.Instance.GetHeroesCurrentLevel().Length > i)
+            {
+                _heroesUIEditMode[i].gameObject.SetActive(true);
+                _heroesUIEditMode[i].ChangeData(i);
+            } else
+            {
+                _heroesUIEditMode[i].gameObject.SetActive(false);
+
+            }
+        }
     }
 
     public void UpdateNbActionsLeft(int nbActions)

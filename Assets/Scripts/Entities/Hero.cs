@@ -9,7 +9,8 @@ public class Hero : MonoBehaviour
     private int _health;
     private bool _isDead = false;
     private bool _isinvulnerable = false;
-    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit o� le mettre :/
+    private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit ou le mettre :/
+    private bool _hasDamageReduction = false;
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
@@ -39,7 +40,7 @@ public class Hero : MonoBehaviour
         get => _health; 
         set => _health = value; 
     }
-    public bool Isinvulnerable {
+    public bool IsInvulnerable {
         get => _isinvulnerable; 
         set => _isinvulnerable = value; 
     }
@@ -47,7 +48,11 @@ public class Hero : MonoBehaviour
         get => _nbDamageOnElementaryRoom; 
         set => _nbDamageOnElementaryRoom = value; 
     }
-    #endregion 
+    public bool HasDamageReduction {
+        get => _hasDamageReduction;
+        set => _hasDamageReduction = value;
+    }
+    #endregion
 
     public void TestDamage()
     {
@@ -55,20 +60,21 @@ public class Hero : MonoBehaviour
     }
     public void UpdateHealth(int pv)
     {
-        if (IsDead || Isinvulnerable)
+        if (IsDead || IsInvulnerable)
         {
             return;
         }
 
-        int realPV; ;
+        int realPV = pv;
         if (pv < 0) //DAMAGE
         {
-            realPV = Mathf.Min(_health, pv);
+            realPV = Mathf.Min(_health, realPV);
             if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
+            {
                 _nbDamageOnElementaryRoom++;
-
+            }
         } else { //HEAL
-            realPV = Mathf.Min(MaxHealth - _health, pv);
+            realPV = Mathf.Min(MaxHealth - _health, realPV);
         }
 
         _health = Mathf.Clamp(_health + realPV, 0,MaxHealth);
@@ -80,14 +86,14 @@ public class Hero : MonoBehaviour
         {
             OnDamageTaken?.Invoke(realPV);
         }
-        UIUpdatePlayMode.Instance.UpdateHero(this);
+        UIUpdatePlayMode.Instance.UpdateHero(this,realPV);
     }
 
     public void LoadHeroData(HeroData data)
     {
         _heroData = data;
         //_renderer.color = _heroData.color;
-        _renderer.sprite = _heroData._sprite;
+        _renderer.sprite = _heroData.sprite;
         _health = _heroData.maxHealth;
         
     }

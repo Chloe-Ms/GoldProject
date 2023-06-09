@@ -15,26 +15,29 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] DisplayUIOnMode _displayUI;
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
-    private static GameManager _instance;
+    [SerializeField] ElementList _roomsInList;
+
     private bool _hasWon = false;
     private Coroutine _routineChangeRoom;
+    private int _nbMoves = 0;
+    private int _level = 0;
+    private Effect _currentRoomEffect = Effect.NONE;
+    private Room _currentRoom = null;
+    private static GameManager _instance;
 
+    [SerializeField] private GeneralData _generalData;
+    
+    #region Properties
     public static GameManager Instance
     {
         get => _instance;
         private set => _instance = value;
     }
-
-    private int _nbMoves = 0;
-    private int _level = 0;
-    private Effect _currentRoomEffect = Effect.NONE;
     public int NbMoves
     {
         get => _nbMoves;
         set => _nbMoves = value;
     }
-    [SerializeField] private GeneralData _generalData;
-
     public GeneralData GeneralData
     {
         get { return _generalData; }
@@ -63,14 +66,25 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         get => _levels[_level].MapHeight;
     }
+    public Room CurrentRoom { 
+        get => _currentRoom;
+    }
 
+    public int[] MaxHealthCurrentLevel()
+    {
+        return _levels[_level].MaxHealth;
+    }
+    #endregion Properties
+
+    #region Events
     public event Action<int> OnEnterEditorMode;
     public event Action<int> OnEnterPlayMode;
     public event Action OnWin;
     public event Action OnLoss;
+    #endregion
 
-    #region test
-[SerializeField] private bool _updated;
+    #region Test
+    [SerializeField] private bool _updated;
     [SerializeField] private Room _room;
     [SerializeField] private Effect _effect;
     [Button]
@@ -104,10 +118,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
         GameManager.Instance.SetPlayMode(false);
     }
-    public int[] MaxHealthCurrentLevel()
-    {
-        return _levels[_level].MaxHealth;
-    }
 
     private void Start()
     {
@@ -115,6 +125,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         StartEditMode();
     }
 
+    
     private void OnValidate()
     {
         for (int i = 0; i < _levels.Length; i++)
@@ -142,43 +153,79 @@ public class GameManager : MonoBehaviour, IDataPersistence
         return _heroesManager.GetSensibility(effect, role);
     }
 
+    public int GetDamageOnHero(Effect effect, Hero hero)
+    {
+        return _heroesManager.GetDamageOfEffectOnHero(effect, hero);
+    }
+
     public void MoveHeroesOnScreen(Room room)
     {
+        
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
     }
 
     public void MoveHeroesToRoom(Room room)
     {
-        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlève l'effet de la room des plantes
+        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlï¿½ve l'effet de la room des plantes
 
         if (room != null)
         {
+            _currentRoom = room;
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
-            if (room.IsActive && room.Effects.Count > 0)
+            if (room.IsActive)
             {
-                _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                 room.IsActive = false;
+                if (room.Effects.Count > 0)
+                {
+                    _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
 
-                Debug.Log($"Room number of effects : {room.Effects.Count }");
-                if (room.Effects[0] == Effect.PLANTE) { _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true; }
-                for (int  j = 0; j < room.Effects.Count; j++)
-                {
-                    _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
-                    //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
-                }
-                if (room.NbOfUpgrades > 0)
-                {
-                    if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
+                    ApplyCurrentRoomEffect(_currentRoomEffect);
+
+                    for (int j = 0; j < room.Effects.Count; j++)
                     {
-                        RoomEffectManager.EffectsOnRoom[room.Effects[0]].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
+                        _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
                     }
+                    //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
+                    if (room.NbOfUpgrades > 0)
+                    {
+                        if (RoomEffectManager.EffectsOnRoom.ContainsKey(_currentRoomEffect))
+                        {
+                            RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
+                        }
+                    }
+                    if (_currentRoomEffect == Effect.MONSTRE)
+                    {
+                        ApplyDamageReduction();
+                    }
+                }
+                if (room.TrapData.RoomType == RoomType.LEVER)
+                {
+                    _heroesManager.HeroesInCurrentLevel.NbKeysTaken++;
                 }
             }
             _heroesManager.RemoveAbilities(room);
         } else
         {
             _currentRoomEffect = Effect.NONE;
+            _currentRoom = null;
+        }
+        _heroesManager.ChangeTurn();
+    }
+
+    public void ApplyCurrentRoomEffect(Effect effect)
+    {
+        if (effect == Effect.PLANTE)
+        {
+            _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
+        }
+    }
+    public void ApplyDamageReduction()
+    {
+        Hero hero = _heroesManager.HeroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
+        if (hero != null)
+        {
+            hero.HasDamageReduction = true;
         }
     }
 
@@ -195,19 +242,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void PlayerWin()
-    {
-        _hasWon = true;
-        if (_routineChangeRoom != null)
-        {
-            StopCoroutine( _routineChangeRoom );
-            _routineChangeRoom = null;
-        }
-        OnWin?.Invoke();
-        _winDisplayGO.SetActive(true);
-        //Debug.Log("Level cleared");
-    }
-
     [Button("Next level")]
     public void ChangeLevel()
     {
@@ -218,15 +252,16 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
-        UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
         _displayUI.EnterEditMode();
         _routineChangeRoom = null;
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
+        UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
     }
 
     [Button("Enter play mode")]
@@ -238,43 +273,57 @@ public class GameManager : MonoBehaviour, IDataPersistence
             _displayUI.EnterPlayMode();
             _startButton.SetActive(false);
             OnEnterPlayMode?.Invoke(Level);
-            List<Room> path = _mapManager.Pathfinding();
-            if (path != null)
-            {
-                _routineChangeRoom = StartCoroutine(ChangeRoom(path));
-            }
+            // List<Room> path = _mapManager.Pathfinding();
+            // if (path != null)
+            // {
+            //     _routineChangeRoom = StartCoroutine(ChangeRoomFromPath(path));
+            // }
         }
     }
 
-    IEnumerator ChangeRoom(List<Room> path)
+    public IEnumerator ChangeRoomFromPath(List<Room> path)
     {
         bool bossRoomReached = false;
         int i = 0;
         while (path.Count > i && !_hasWon && !bossRoomReached)
         {
             MoveHeroesOnScreen(path[i]);
-            if (i == 0)//Waiting in entrance
+            if (i == 0) //Waiting in entrance
             {
                 yield return new WaitForSeconds(_timePerRoom);
-            } else if (path[i].TrapData.RoomType != RoomType.BOSS)
+            } else if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
             {
                 MoveHeroesToRoom(path[i]);
                 yield return new WaitForSeconds(_timePerRoom);
             }
-            else if (path[i].TrapData.RoomType == RoomType.BOSS)
+            else if (path[i].TrapData.RoomType == RoomType.BOSS)// Boss room
             {
-                CheckWinLossContitions();
+                PlayerLoss();
                 bossRoomReached = true;
             }
             i++;
         }
     }
-    void CheckWinLossContitions()
+
+    #region VictoryConditions
+    public void PlayerWin()
+    {
+        _hasWon = true;
+        if (MapManager.Instance.RoutineChangeRoom != null)
+        {
+            StopCoroutine(MapManager.Instance.RoutineChangeRoom);
+            MapManager.Instance.RoutineChangeRoom = null;
+        }
+        OnWin?.Invoke();
+        _winDisplayGO.SetActive(true);
+    }
+    void PlayerLoss()
     {
         OnLoss?.Invoke();
         _lossDisplayGO.SetActive(true);
-        Debug.Log("IN BOSS ROOM");
+        //Debug.Log("IN BOSS ROOM");
     }
+    #endregion
 
     public void SetPlayMode(bool state)
     {

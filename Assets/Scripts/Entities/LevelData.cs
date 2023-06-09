@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -8,8 +9,10 @@ public class LevelData
     [SerializeField] int _nbMovesMax;
     [SerializeField] HeroData[] _listHeroesInLevel;
     [SerializeField] int[] _maxHealth;
-    [SerializeField] int _mapWidth;
-    [SerializeField] int _mapHeight;
+    [SerializeField, MinValue(2)] int _mapWidth;
+    [SerializeField, MinValue(2)] int _mapHeight;
+    [SerializeField] PrePlacedElement _prePlacedElements;
+
     public HeroData[] ListHeroesInGroup {
         get => _listHeroesInLevel;
         private set => _listHeroesInLevel = value; 
@@ -25,5 +28,9 @@ public class LevelData
     }
     public int[] MaxHealth { 
         get => _maxHealth;
+    }
+
+    public PrePlacedElement PrePlacedElements { 
+        get => _prePlacedElements;
     }
 }
