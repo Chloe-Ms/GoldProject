@@ -21,7 +21,14 @@ public class UIHeroes : MonoBehaviour
 
     private void ChangeDataForHero(int index)
     {
-        _image.color = _heroesData[index].color;
+        if (_heroesData[index].headSprite != null)
+        {
+            _image.sprite = _heroesData[index].headSprite;
+        } else
+        {
+            _image.color = _heroesData[index].color;
+        }
+        
         _text.text = _heroesData[index].maxHealth.ToString();
         ClearLists();
         foreach (Effect effect in Enum.GetValues(typeof(Effect)))

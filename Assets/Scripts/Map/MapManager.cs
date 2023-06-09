@@ -204,10 +204,6 @@ public class MapManager : MonoBehaviour
             _instance = this;
     }
 
-    private void Start()
-    {
-    } 
-
     private void InitStart()
     {
         _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
@@ -241,7 +237,13 @@ public class MapManager : MonoBehaviour
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
                 _mapActions.Push(mapAction);
-                _selectedSlot.UpgradeRoom();
+                if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
+                {
+                    //Display + wait for choice
+                } else
+                {
+                    _selectedSlot.UpgradeRoom();
+                }
                 _currentRoomCount++;
                 UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
                 return;
@@ -283,7 +285,6 @@ public class MapManager : MonoBehaviour
             }
         }
     }
-
     public void SetDataOnSelectedRoom(RoomData data)
     {
         if (_selectedSlot != null) {

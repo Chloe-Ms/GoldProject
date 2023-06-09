@@ -93,7 +93,7 @@ public class Hero : MonoBehaviour
     {
         _heroData = data;
         //_renderer.color = _heroData.color;
-        _renderer.sprite = _heroData._sprite;
+        _renderer.sprite = _heroData.sprite;
         _health = _heroData.maxHealth;
         
     }
