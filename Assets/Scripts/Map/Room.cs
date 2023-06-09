@@ -59,6 +59,9 @@ public class Room : MonoBehaviour
                 case RoomColor.Selected:
                     _spriteRenderer.color = Color.yellow;
                     break;
+                case RoomColor.Unclickable:
+                    _spriteRenderer.color = Color.white;
+                    break;
             }
         }
     }
@@ -145,6 +148,26 @@ public class Room : MonoBehaviour
         if (_roomColor != RoomColor.Selected)
             RoomColor = RoomColor.Usable;
         _oldState = RoomColor.Usable;
+        _roomData = roomData;
+        _trapData = trapData;
+        SetIcon(_trapData.Sprite);
+        SetSprite(_roomData.Sprite);
+    }
+
+    public void SetData(RoomData roomData, RoomColor roomColor = RoomColor.Unclickable)
+    {
+        if (_roomColor != RoomColor.Selected)
+            RoomColor = roomColor;
+        _oldState = roomColor;
+        _roomData = roomData;
+        SetSprite(_roomData.Sprite);
+    }
+
+    public void SetData(RoomData roomData, TrapData trapData, RoomColor roomColor = RoomColor.NotBuyable)
+    {
+        if (_roomColor != RoomColor.Selected)
+            RoomColor = roomColor;
+        _oldState = roomColor;
         _roomData = roomData;
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
@@ -275,6 +298,21 @@ public class Room : MonoBehaviour
         }
         EnableUpgrade();
     }
+
+    public bool IsBuyable()
+    {
+        return _roomColor != RoomColor.Usable && _roomColor != RoomColor.Unclickable;
+    }
+
+    public bool IsNotBuy()
+    {
+        return _roomColor == RoomColor.Buyable && _roomColor != RoomColor.Unclickable;
+    }
+
+    public bool IsClickable()
+    {
+        return _roomColor != RoomColor.NotBuyable && _roomColor != RoomColor.Unclickable;
+    }
 }
 
 public enum RoomColor
@@ -282,5 +320,6 @@ public enum RoomColor
     Buyable = 0,
     NotBuyable = 1,
     Usable = 2,
-    Selected = 3
+    Unclickable = 3,
+    Selected = 4
 }

@@ -11,4 +11,6 @@ public class HeroData : ScriptableObject
     public Sprite sprite;
     public Sprite headSprite;
     public Color color;
+    public string _soundDamage;
+    public string _soundDeath;
 }
