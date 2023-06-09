@@ -502,7 +502,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &139200371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,7 +864,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 215913040}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 216722806}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ChangeLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &215913040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1053,7 +1065,7 @@ MonoBehaviour:
   _heroesManager: {fileID: 1497098839}
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
-  _timePerRoom: 2
+  _timePerRoom: 1
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
@@ -1190,7 +1202,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 320511431}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1222718200}
+        m_TargetAssemblyTypeName: UIMenu, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuScene
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &320511431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1521,10 +1545,10 @@ RectTransform:
   m_Father: {fileID: 1222718199}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: -700, y: -1322}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &400778604
 MonoBehaviour:
@@ -1746,7 +1770,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 491295611}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 216722806}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: StartEditMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &491295611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5341,10 +5377,10 @@ RectTransform:
   m_Father: {fileID: 1222718199}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000022888184, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_SizeDelta: {x: -700, y: -1320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1568117423
 MonoBehaviour:
@@ -5540,7 +5576,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1724214069}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1222718200}
+        m_TargetAssemblyTypeName: UIMenu, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuScene
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1724214069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6508,7 +6556,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2016765133}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 216722806}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: StartEditMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2016765133
 MonoBehaviour:
   m_ObjectHideFlags: 0
