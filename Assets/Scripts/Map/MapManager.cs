@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
 using System;
 using UnityEngine;
 using NaughtyAttributes;
-using TMPro;
+using DG.Tweening;
 
 public class MapManager : MonoBehaviour
 {
@@ -63,6 +62,9 @@ public class MapManager : MonoBehaviour
     private Room _boss = null;
     private Room _selectedSlot = null;
     private Room _lastestSelectedSlot = null;
+    private Coroutine _routineRoomMonster;
+    private Effect _effectRoomMonster = Effect.NONE;
+    [SerializeField] private GameObject _menuEffectRoomMonster;
 
     public Room SelectedSlot
     {
@@ -226,7 +228,6 @@ public class MapManager : MonoBehaviour
         float camOffset = -1.8f;
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play) {
-            //Debug.Log($"Click in {cursorPos} Camera in {cameraPos} position by Camera {cursorPos - cameraPos}");
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -239,7 +240,7 @@ public class MapManager : MonoBehaviour
                 _mapActions.Push(mapAction);
                 if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
                 {
-                    //Display + wait for choice
+                    _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
                 } else
                 {
                     _selectedSlot.UpgradeRoom();
@@ -282,6 +283,17 @@ public class MapManager : MonoBehaviour
                 SetBuyableAdjacent();
             }
         }
+    }
+
+    private IEnumerator RoutineMonsterRoom()
+    {
+        _menuEffectRoomMonster.SetActive(true);
+        yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
+    }
+
+    public void ModifyRoomEffectMonster(int effect)
+    {
+        _effectRoomMonster = (Effect)effect;
     }
     public void SetDataOnSelectedRoom(RoomData data)
     {
