@@ -259,9 +259,20 @@ public class Room : MonoBehaviour
         EnableUpgrade();
     }
 
+    public void UpgradeRoom(Effect effect)
+    {
+        _nbOfUpgrades++;
+        _listEffects.Add(effect);
+        EnableUpgrade();
+    }
+
     public void UndoUpgrade()
     {
         _nbOfUpgrades--;
+        if (_trapData.Effect == Effect.MONSTRE && _listEffects.Count > 1)
+        {
+            _listEffects.RemoveAt(_listEffects.Count - 1);
+        }
         EnableUpgrade();
     }
 }

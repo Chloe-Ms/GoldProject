@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class Group
 {
@@ -38,6 +39,7 @@ public class Group
         _isPoisoned = false;
         _affectedByPlants = false;
         _isInvulnerable = false;
+        _nbKeysTaken = 0;
     }
 
     public Hero GetHeroWithRole(Role role)

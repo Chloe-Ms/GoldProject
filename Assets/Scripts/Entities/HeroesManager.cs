@@ -14,15 +14,18 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] int _poisonDamageMultiplier = 2;
     int _nbHeroesLeft;
     int _roomTurn = 0;
-    public Group HeroesInCurrentLevel { 
-        get => _heroesInCurrentLevel; 
-        set => _heroesInCurrentLevel = value; 
+    public Group HeroesInCurrentLevel
+    {
+        get => _heroesInCurrentLevel;
+        set => _heroesInCurrentLevel = value;
     }
-    public int NbHeroesLeft { 
-        get => _nbHeroesLeft; 
-        set => _nbHeroesLeft = value; 
+    public int NbHeroesLeft
+    {
+        get => _nbHeroesLeft;
+        set => _nbHeroesLeft = value;
     }
-    public GameObject GroupParent { 
+    public GameObject GroupParent
+    {
         get => _groupGO;
     }
 
@@ -40,10 +43,11 @@ public class HeroesManager : MonoBehaviour
     {
         _heroesDataInCurrentLevel = GameManager.Instance.GetHeroesCurrentLevel();
         int[] maxHealth = GameManager.Instance.MaxHealthCurrentLevel();
-        for (int i = 0; i < maxHealth.Length; i++) {
+        for (int i = 0; i < maxHealth.Length; i++)
+        {
             _heroesDataInCurrentLevel[i].maxHealth = maxHealth[i];
         }
-        
+
         StartEditMode(level);
     }
 
@@ -54,14 +58,14 @@ public class HeroesManager : MonoBehaviour
         _nbHeroesLeft = _heroesDataInCurrentLevel.Length;
     }
 
-    
+
     void InstantiateHeroesInLevel(int level)
     {
-        for(int i = 0;i < _heroesDataInCurrentLevel.Length; i++)
+        for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
             GameObject go = Instantiate(_heroPrefab);
-            go.transform.position = go.transform.position + 
-                new Vector3((i + 1) * (_roomWidth / (_heroesDataInCurrentLevel.Length + 1)), 0,0);
+            go.transform.position = go.transform.position +
+                new Vector3((i + 1) * (_roomWidth / (_heroesDataInCurrentLevel.Length + 1)), 0, 0);
             go.transform.parent = _groupGO.transform;
             Hero hero = go?.GetComponent<Hero>();
             hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
@@ -117,16 +121,45 @@ public class HeroesManager : MonoBehaviour
                     {
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
-                    int damage = _heroesSensibilities.GetSensibility(effect, heroAttacked.Role);
-
-                    if (_heroesInCurrentLevel.IsPoisoned)
-                    {
-                        damage *= _poisonDamageMultiplier;
-                    }
+                    int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
                     heroAttacked.UpdateHealth(damage);
                 }
             }
+        } else
+        {
+            Hero hero = _heroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
+            if (hero != null && hero.HasDamageReduction)
+            {
+                hero.HasDamageReduction = false;
+            }
         }
+    }
+
+    public int GetDamageOfEffectOnHero(Effect effect,Hero hero)
+    {
+        int damage = _heroesSensibilities.GetSensibility(effect, hero.Role);
+
+        if (_heroesInCurrentLevel.IsPoisoned && effect == Effect.POISON)
+        {
+            damage *= _poisonDamageMultiplier;
+        }
+        if (effect == Effect.FOUDRE && GameManager.Instance.CurrentRoom.NbOfUpgrades > 0)
+        {
+            damage += _heroesInCurrentLevel.NbKeysTaken;
+        }
+        if (hero.HasDamageReduction)
+        {
+            if (damage > 0)
+            {
+                damage -= 1;
+            }
+            else if (damage < 0)
+            {
+                damage += 1;
+            }
+            hero.HasDamageReduction = false;
+        }
+        return damage;
     }
 
     public bool IsDodging(Role role)
@@ -142,7 +175,7 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel,room);
+                    AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
                     Debug.Log("APPLY ABILITY : " + hero.Role);
                 }
             }
@@ -162,9 +195,13 @@ public class HeroesManager : MonoBehaviour
             }
         }
     }
-
     public int GetSensibility(Effect effect, Role role)
     {
         return _heroesSensibilities.GetSensibility(effect, role);
+    }
+
+    public void ChangeTurn()
+    {
+        _roomTurn++;
     }
 }

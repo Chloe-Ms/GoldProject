@@ -8,6 +8,7 @@ public class HeroData : ScriptableObject
     public string heroName;
     public Role role;
     public RuntimeAnimatorController _animator;
-    public Sprite _sprite;
+    public Sprite sprite;
+    public Sprite headSprite;
     public Color color;
 }

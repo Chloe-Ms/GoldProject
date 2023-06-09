@@ -29,12 +29,17 @@ public class AbilityManager
             Role.PALADIN,
             (Group group, Room room) =>
             {
-                //Search hero with only one pv
-                for (int i = 0; i < group.Heroes.Count; i++)
+                if (room.Effects.Count > 0)
                 {
-                    if (group.Heroes[i].Health == 1 && group.Heroes[i].Role != Role.PALADIN)
+                    Effect roomEffect = room.Effects[0];
+                    //Search hero with fatal attack
+                    for (int i = 0; i < group.Heroes.Count; i++)
                     {
-                        group.Heroes[i].IsInvulnerable = true;
+                        int damage = GameManager.Instance.GetDamageOnHero(roomEffect,group.Heroes[i]);
+                        if (group.Heroes[i].Health + damage <= 0 && group.Heroes[i].Role != Role.PALADIN)
+                        {
+                            group.Heroes[i].IsInvulnerable = true;
+                        }
                     }
                 }
             }

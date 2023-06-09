@@ -776,7 +776,7 @@ Transform:
   m_GameObject: {fileID: 159125218}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.1}
-  m_LocalScale: {x: 0.63, y: 0.63, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1053,7 +1053,7 @@ MonoBehaviour:
   _heroesManager: {fileID: 1497098839}
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
-  _timePerRoom: 5
+  _timePerRoom: 2
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
@@ -2284,7 +2284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0224e66e423d5f944b3360061e7ded9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomText: {fileID: 0}
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _slots: []
@@ -2776,7 +2775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &855526363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4864,7 +4863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.0849609, y: -0.9776001}
+  m_AnchoredPosition: {x: 1.0849609, y: -0.97766113}
   m_SizeDelta: {x: -2.17, y: -1.955}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1353477737
@@ -5096,7 +5095,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -22.643}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 84, y: 2}
+  m_AnchoredPosition: {x: 77.7, y: 12.8}
   m_SizeDelta: {x: 119.3689, y: 87.798}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1433674735
@@ -6585,7 +6584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 48.69995, y: 145.00012}
+  m_AnchoredPosition: {x: 58.6, y: 145.00012}
   m_SizeDelta: {x: 153.1154, y: 153.1154}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2035125712
@@ -6664,7 +6663,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 72e957e2294f6be4aa9315fb628607ba, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
