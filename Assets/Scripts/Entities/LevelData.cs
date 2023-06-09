@@ -11,6 +11,7 @@ public class LevelData
     [SerializeField] int[] _maxHealth;
     [SerializeField, MinValue(2)] int _mapWidth;
     [SerializeField, MinValue(2)] int _mapHeight;
+    [SerializeField] PrePlacedElement _prePlacedElements;
 
     public HeroData[] ListHeroesInGroup {
         get => _listHeroesInLevel;
@@ -27,5 +28,9 @@ public class LevelData
     }
     public int[] MaxHealth { 
         get => _maxHealth;
+    }
+
+    public PrePlacedElement PrePlacedElements { 
+        get => _prePlacedElements;
     }
 }
