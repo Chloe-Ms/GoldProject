@@ -1,6 +1,4 @@
-using System.Data;
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class HeroesManager : MonoBehaviour
 {

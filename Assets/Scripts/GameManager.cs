@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -81,6 +82,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public event Action<int> OnEnterPlayMode;
     public event Action OnWin;
     public event Action OnLoss;
+
+    [SerializeField] private UnityEvent _onWinUnityEvent;
+    [SerializeField] private UnityEvent _onLossUnityEvent;
+    [SerializeField] private UnityEvent _onHeroesMovementUnityEvent;
+    [SerializeField] private UnityEvent _onHeroesAttackUnityEvent;
     #endregion
 
     #region Test
@@ -160,14 +166,18 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public void MoveHeroesOnScreen(Room room)
     {
-        
+        _onHeroesMovementUnityEvent.Invoke();
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
+        
     }
 
     public void MoveHeroesToRoom(Room room)
     {
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enl�ve l'effet de la room des plantes
-
+        if (room.TrapData.SoundWhenApplied != "")
+        {
+            AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
+        }
         if (room != null)
         {
             _currentRoom = room;
@@ -205,6 +215,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 }
             }
             _heroesManager.RemoveAbilities(room);
+            if (room.TrapData.RoomType == RoomType.NORMAL)
+            {
+                _onHeroesAttackUnityEvent.Invoke();
+            }
         } else
         {
             _currentRoomEffect = Effect.NONE;
@@ -315,6 +329,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             MapManager.Instance.RoutineChangeRoom = null;
         }
         OnWin?.Invoke();
+        _onWinUnityEvent.Invoke();
         _winDisplayGO.SetActive(true);
     }
     void PlayerLoss()

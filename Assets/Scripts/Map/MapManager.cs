@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 using DG.Tweening;
+using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour
 {
@@ -49,6 +50,10 @@ public class MapManager : MonoBehaviour
             return leverList;
         }
     }
+    #endregion
+
+    #region Events
+    [SerializeField] private UnityEvent _onSetEffectOnRoomUnityEvent;
     #endregion
 
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
@@ -319,6 +324,7 @@ public class MapManager : MonoBehaviour
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
                 _selectedSlot.SetData(data);
+                _onSetEffectOnRoomUnityEvent.Invoke();
             }
             if (data.Name == "Boss Room") {
                 _boss = _selectedSlot;
