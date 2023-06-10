@@ -373,6 +373,7 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
+    #region Pathfinding
     public List<Room> Pathfinding()
     {
         List<Room> _travelList = new List<Room>();
@@ -599,6 +600,8 @@ public class MapManager : MonoBehaviour
         }
         Debug.Log(str);
     }
+
+    #endregion
 
     private bool HaveDirection(ref Direction direction , Direction directionToCheck)
     {
