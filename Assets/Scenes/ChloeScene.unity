@@ -1087,6 +1087,9 @@ MonoBehaviour:
     _maxHealth: 070000002800000028000000
     _mapWidth: 5
     _mapHeight: 6
+    _prePlacedElements:
+      _preplacedObstacle: []
+      _preplacedBoss: {x: 0, y: 0}
   - name: Level 2
     _nbMovesMax: 10
     _listHeroesInLevel:
@@ -1094,6 +1097,9 @@ MonoBehaviour:
     _maxHealth: 
     _mapWidth: 5
     _mapHeight: 5
+    _prePlacedElements:
+      _preplacedObstacle: []
+      _preplacedBoss: {x: 0, y: 0}
   - name: Level 3
     _nbMovesMax: 10
     _listHeroesInLevel:
@@ -1101,15 +1107,30 @@ MonoBehaviour:
     _maxHealth: 28000000
     _mapWidth: 5
     _mapHeight: 0
+    _prePlacedElements:
+      _preplacedObstacle: []
+      _preplacedBoss: {x: 0, y: 0}
   _heroesManager: {fileID: 147781381}
-  _mapManager: {fileID: 1277845744}
+  _mapManager: {fileID: 0}
   _startButton: {fileID: 17827539}
   _timePerRoom: 2
-  _displayUI: {fileID: 1519186617}
-  _winDisplayGO: {fileID: 1921201058}
-  _lossDisplayGO: {fileID: 627511682}
-  _roomsInList: {fileID: 2010524798}
+  _displayUI: {fileID: 0}
+  _winDisplayGO: {fileID: 0}
+  _lossDisplayGO: {fileID: 0}
+  _roomsInList: {fileID: 0}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
+  _onWinUnityEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _onLossUnityEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _onHeroesMovementUnityEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _onHeroesAttackUnityEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _updated: 0
   _room: {fileID: 0}
   _effect: 4
@@ -2029,7 +2050,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277845744}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -2319,7 +2340,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277845744}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -3232,7 +3253,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277845744}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: Undo
         m_Mode: 1
@@ -3618,13 +3639,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0224e66e423d5f944b3360061e7ded9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onSetEffectOnRoomUnityEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _slots: []
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
-  _menuEffectRoomMonster: {fileID: 2137913542}
+  _menuEffectRoomMonster: {fileID: 0}
 --- !u!4 &1277845745
 Transform:
   m_ObjectHideFlags: 0
@@ -5061,7 +5085,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277845744}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -5315,7 +5339,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277845744}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -5669,7 +5693,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1277845744}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
