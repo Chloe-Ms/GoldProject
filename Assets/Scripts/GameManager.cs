@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
-    [SerializeField] float _timeBetweenRoom = 1f;
+    [SerializeField] float _timeBetweenRoom = 10f;
     [SerializeField] DisplayUIOnMode _displayUI;
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
@@ -302,34 +303,32 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         bool isBossRoomReached = false;
         int i = 0;
+        bool movementComplete = false;
         while (path.Count > i && !_hasWon && !isBossRoomReached)
         {
             if (i == 0) //Waiting in entrance
             {
                 SpawnHeroesOnScreen(path[i]);
-                //yield return new WaitForSeconds(_timePerRoom);
             } else
             {
-                //MoveHeroesOnScreen(path[i]);
                 //Move avec dotween puis onended
                 _onHeroesMovementUnityEvent.Invoke();
-                //position = new Vector2(room.transform.position.x, room.transform.position.y);
-                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _timeBetweenRoom, true).OnComplete(() =>
+                movementComplete = false;
+                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _timeBetweenRoom).OnComplete(() =>
                 {
-                    /*if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
+                    if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                     {
                         MoveHeroesToRoom(path[i]);
-                        //yield return new WaitForSeconds(_timeBetweenRoom);
                     }
                     else
                     { // Boss room
                         PlayerLoss();
                         isBossRoomReached = true;
-                    }*/
+                    }
+                    movementComplete = true;
                 });
-                //_heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
+                yield return new WaitUntil(() => movementComplete);
             }
-            yield return null;
             i++;
         }
     }
