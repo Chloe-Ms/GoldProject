@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class HeroData : ScriptableObject
     public int maxHealth;
     public string heroName;
     public Role role;
+    [ResizableTextArea]
+    public string description;
     public RuntimeAnimatorController _animator;
     public Sprite sprite;
     public Sprite headSprite;
