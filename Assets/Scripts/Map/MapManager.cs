@@ -280,7 +280,6 @@ public class MapManager : MonoBehaviour
                     GameManager.Instance.IsInMenu = true;
                     _effectRoomMonster = Effect.NONE;
                     _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
-                    Debug.Log("Continue");
                 } else
                 {
                     _selectedSlot.UpgradeRoom();
@@ -291,7 +290,6 @@ public class MapManager : MonoBehaviour
             }
             if (room != null && room == _boss)
             {
-                Debug.Log($"Play Mode");
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
                 if (_selectedSlot != null)
