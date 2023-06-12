@@ -110,7 +110,7 @@ public class ElementList : MonoBehaviour
         ClearElements();
         foreach (TrapData trap in listOfTrap.TrapData)
         {
-            if (trap.Name == "Entrance")
+            if (trap.Name == "Entrance" || trap.Name == "Boss Room")
                 continue;
             instanciateBackground = Instantiate(_background);
             instanciateBackground.name = "Room_" + _elements.Count;

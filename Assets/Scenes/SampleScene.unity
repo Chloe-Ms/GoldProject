@@ -1122,7 +1122,7 @@ MonoBehaviour:
     _mapHeight: 3
     _prePlacedElements:
       _preplacedObstacle: []
-      _preplacedBoss: {x: 0, y: 0}
+      _preplacedBoss: {x: 1, y: 3}
   - name: Level 2
     _nbMovesMax: 4
     _listHeroesInLevel:
@@ -1167,8 +1167,10 @@ MonoBehaviour:
     _mapWidth: 3
     _mapHeight: 4
     _prePlacedElements:
-      _preplacedObstacle: []
-      _preplacedBoss: {x: 0, y: 0}
+      _preplacedObstacle:
+      - {x: 3, y: 1}
+      - {x: 1, y: 4}
+      _preplacedBoss: {x: 1, y: 1}
   - name: Level 6
     _nbMovesMax: 7
     _listHeroesInLevel:
@@ -2928,7 +2930,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 696818461}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -4843,7 +4845,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 696818461}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -6206,7 +6208,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 696818461}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -6609,7 +6611,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1489215845
@@ -7053,7 +7055,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 696818461}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
@@ -8510,7 +8512,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 696818461}
         m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
         m_MethodName: ModifyRoomEffectMonster
         m_Mode: 3
