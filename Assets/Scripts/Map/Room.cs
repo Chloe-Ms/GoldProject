@@ -141,6 +141,7 @@ public class Room : MonoBehaviour
         //     RoomColor = RoomColor.Usable;
         // _oldState = RoomColor.Usable;
         _trapData = trapData;
+        _listEffects.Clear();
         _listEffects.Add(trapData.Effect);
         SetIcon(trapData.Sprite);
     }
