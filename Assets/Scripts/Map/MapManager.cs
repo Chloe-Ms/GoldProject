@@ -254,6 +254,7 @@ public class MapManager : MonoBehaviour
         _mapActions = new Stack<MapAction>();
         _routineChangeRoom = null;
         Generate();
+        InitMap(data.PrePlacedElements);
         InitStart();
     }
 
@@ -262,12 +263,12 @@ public class MapManager : MonoBehaviour
         if (ElementsToPlace == null)
             return;
         if (ElementsToPlace.PreplacedBoss != null) {
-            _boss = FindRoom(ElementsToPlace.PreplacedBoss.x, ElementsToPlace.PreplacedBoss.y);
+            _boss = FindRoom(ElementsToPlace.PreplacedBoss.x - 1, ElementsToPlace.PreplacedBoss.y - 1);
             _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
         }
         if (ElementsToPlace.PreplacedObstacle != null) {
-            foreach (Vector2 Obstacle in ElementsToPlace.PreplacedObstacle) {
-                //FindRoom(Obstacle.x, Obstacle.y).SetData(GameManager.Instance.GeneralData.RoomList.RoomData[16], RoomColor.Unclickable);
+            foreach (Vector2Int Obstacle in ElementsToPlace.PreplacedObstacle) {
+                FindRoom(Obstacle.x - 1, Obstacle.y - 1).SetData(GameManager.Instance.GeneralData.RoomList.RoomData[16], RoomColor.Unclickable);
             }
         }
     }
@@ -394,7 +395,7 @@ public class MapManager : MonoBehaviour
             _selectedSlot.EnableUpgrade();
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
             if (BossIsAbove())
-                FindPatern(_selectedSlot, _boss);
+                FindRoomPatern(_selectedSlot, _boss);
         }
         //mapAction.PrintAction();
         _mapActions.Push(mapAction);
@@ -435,7 +436,7 @@ public class MapManager : MonoBehaviour
         _selectedSlot.SetData(FindRoomDataByDirections(newDirection));
     }
 
-    privatevvoid FindRoomPatern(Room fromLink, Room toLink)
+    private void FindRoomPatern(Room fromLink, Room toLink)
     {
         Direction direction = fromLink.RoomData.Directions;
         Direction newDirection = Direction.None;
