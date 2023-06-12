@@ -1,0 +1,312 @@
+fileFormatVersion: 2
+guid: eaa3091e8b2279b44976ccc20e3e16a3
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GreyClouds_Atlas_UI_6
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 358
+        width: 296
+        height: 297
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68bb7318987b854488d3dea5f68e832c
+      internalID: -378482280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreyClouds_Atlas_UI_7
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 367
+        width: 353
+        height: 281
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02aefcfd8c626404d83fe01ee443a50c
+      internalID: 1478650575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreyClouds_Atlas_UI_37
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 101
+        width: 333
+        height: 241
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8deca2c7f47c7464584e9bc517551be1
+      internalID: -306236537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreyClouds_Atlas_UI_42
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 72
+        width: 273
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca82fa49882fbe844a61ff7654727ac2
+      internalID: -2021439163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GreyClouds_Atlas_UI_48
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 77
+        width: 264
+        height: 236
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e426cbf9434ad647955ce211b93ecc2
+      internalID: 2118887816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      GreyClouds_Atlas_UI_0: 1235013970
+      GreyClouds_Atlas_UI_1: 1982254951
+      GreyClouds_Atlas_UI_10: -1181509923
+      GreyClouds_Atlas_UI_11: -1157206682
+      GreyClouds_Atlas_UI_12: -450879143
+      GreyClouds_Atlas_UI_13: 1603129776
+      GreyClouds_Atlas_UI_14: 532052606
+      GreyClouds_Atlas_UI_15: -1428263517
+      GreyClouds_Atlas_UI_16: -2142785850
+      GreyClouds_Atlas_UI_17: -954336878
+      GreyClouds_Atlas_UI_18: -194699366
+      GreyClouds_Atlas_UI_19: 303793104
+      GreyClouds_Atlas_UI_2: 951684010
+      GreyClouds_Atlas_UI_20: 492968569
+      GreyClouds_Atlas_UI_21: -944712131
+      GreyClouds_Atlas_UI_22: -1766970836
+      GreyClouds_Atlas_UI_23: 1557265615
+      GreyClouds_Atlas_UI_24: -1959296271
+      GreyClouds_Atlas_UI_25: -694664959
+      GreyClouds_Atlas_UI_26: 352423182
+      GreyClouds_Atlas_UI_27: -1498236518
+      GreyClouds_Atlas_UI_28: -1363709354
+      GreyClouds_Atlas_UI_29: 476626855
+      GreyClouds_Atlas_UI_3: 314655113
+      GreyClouds_Atlas_UI_30: -798317478
+      GreyClouds_Atlas_UI_31: -579098937
+      GreyClouds_Atlas_UI_32: -1184850803
+      GreyClouds_Atlas_UI_33: 1600655562
+      GreyClouds_Atlas_UI_34: 1583625337
+      GreyClouds_Atlas_UI_35: -101248006
+      GreyClouds_Atlas_UI_36: 400199867
+      GreyClouds_Atlas_UI_37: -306236537
+      GreyClouds_Atlas_UI_38: 323859027
+      GreyClouds_Atlas_UI_39: -2134398683
+      GreyClouds_Atlas_UI_4: 922276665
+      GreyClouds_Atlas_UI_40: -1244048731
+      GreyClouds_Atlas_UI_41: -1209962791
+      GreyClouds_Atlas_UI_42: -2021439163
+      GreyClouds_Atlas_UI_43: -758429825
+      GreyClouds_Atlas_UI_44: -450426449
+      GreyClouds_Atlas_UI_45: -551175890
+      GreyClouds_Atlas_UI_46: -1894750401
+      GreyClouds_Atlas_UI_47: 6374272
+      GreyClouds_Atlas_UI_48: 2118887816
+      GreyClouds_Atlas_UI_49: -1952870748
+      GreyClouds_Atlas_UI_5: 2267354
+      GreyClouds_Atlas_UI_50: 2107970164
+      GreyClouds_Atlas_UI_51: 623975599
+      GreyClouds_Atlas_UI_52: -1322137125
+      GreyClouds_Atlas_UI_53: -953930559
+      GreyClouds_Atlas_UI_54: 2107816059
+      GreyClouds_Atlas_UI_55: -1388319339
+      GreyClouds_Atlas_UI_56: 467622717
+      GreyClouds_Atlas_UI_57: 1349530976
+      GreyClouds_Atlas_UI_58: -2004076392
+      GreyClouds_Atlas_UI_59: 443130789
+      GreyClouds_Atlas_UI_6: -378482280
+      GreyClouds_Atlas_UI_60: -130564845
+      GreyClouds_Atlas_UI_61: -900039418
+      GreyClouds_Atlas_UI_62: -1102175507
+      GreyClouds_Atlas_UI_63: -1329229010
+      GreyClouds_Atlas_UI_64: 149125200
+      GreyClouds_Atlas_UI_65: 1330928277
+      GreyClouds_Atlas_UI_66: -1460803958
+      GreyClouds_Atlas_UI_67: -1621520284
+      GreyClouds_Atlas_UI_68: -1280761266
+      GreyClouds_Atlas_UI_69: -1649120703
+      GreyClouds_Atlas_UI_7: 1478650575
+      GreyClouds_Atlas_UI_70: -846773866
+      GreyClouds_Atlas_UI_71: 1039175079
+      GreyClouds_Atlas_UI_8: -1046086999
+      GreyClouds_Atlas_UI_9: 919647531
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
