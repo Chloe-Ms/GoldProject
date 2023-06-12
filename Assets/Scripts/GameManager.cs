@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class GameManager : MonoBehaviour, IDataPersistence
 {
@@ -20,7 +19,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] ElementList _roomsInList;
 
     private bool _hasWon = false;
-    private Coroutine _routineChangeRoom;
     private int _nbMoves = 0;
     private int _level = 0;
     private Effect _currentRoomEffect = Effect.NONE;
@@ -280,7 +278,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
-        _routineChangeRoom = null;
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
         _heroesManager.OnChangeLevel(Level);
@@ -343,6 +340,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void PlayerWin()
     {
         _hasWon = true;
+        _isInMenu = true;
         if (MapManager.Instance.RoutineChangeRoom != null)
         {
             StopCoroutine(MapManager.Instance.RoutineChangeRoom);
@@ -354,6 +352,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
     void PlayerLoss()
     {
+        _isInMenu = true;
         OnLoss?.Invoke();
         _lossDisplayGO.SetActive(true);
         //Debug.Log("IN BOSS ROOM");
