@@ -44,4 +44,12 @@ public class AudioManager : MonoBehaviour
         source.volume = s.Volume;
         source.pitch = s.Pitch;
     }
+
+    public void StopAll()
+    {
+        foreach (Sound sound in _sounds)
+        {
+            sound.Source.Stop();
+        }
+    }
 }
