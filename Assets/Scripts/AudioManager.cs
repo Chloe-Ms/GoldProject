@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -45,5 +43,13 @@ public class AudioManager : MonoBehaviour
         source.clip = s.Clip;
         source.volume = s.Volume;
         source.pitch = s.Pitch;
+    }
+
+    public void StopAll()
+    {
+        foreach (Sound sound in _sounds)
+        {
+            sound.Source.Stop();
+        }
     }
 }

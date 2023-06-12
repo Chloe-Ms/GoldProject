@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Plants Trap
   _sprite: {fileID: 21300000, guid: ef2588dda8553394dbe0fabaf7d3c930, type: 3}
-  _miniSprite: {fileID: 21300000, guid: dc845bbf6cf65c44f9c15d0fa1480580, type: 3}
+  _spriteUI: {fileID: 21300000, guid: ef2588dda8553394dbe0fabaf7d3c930, type: 3}
   _effect: 5
   _nbRoomsBeforeEffect: 0
   _roomType: 0
   _color: {r: 0.027450982, g: 0.5921569, b: 0.08627451, a: 1}
+  _soundWhenApplied: 

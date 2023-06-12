@@ -48,7 +48,7 @@ public class Room : MonoBehaviour
             switch (_roomColor)
             {
                 case RoomColor.Buyable:
-                    _spriteRenderer.color = Color.green;
+                    _spriteRenderer.color = Color.white;
                     break;
                 case RoomColor.NotBuyable:
                     _spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
@@ -58,6 +58,9 @@ public class Room : MonoBehaviour
                     break;
                 case RoomColor.Selected:
                     _spriteRenderer.color = Color.yellow;
+                    break;
+                case RoomColor.Unclickable:
+                    _spriteRenderer.color = Color.white;
                     break;
             }
         }
@@ -122,9 +125,10 @@ public class Room : MonoBehaviour
 
     public void SetData(RoomData roomData)
     {
-        if (_roomColor != RoomColor.Selected)
-            RoomColor = RoomColor.Usable;
-        _oldState = RoomColor.Usable;
+        SetColor(RoomColor.Usable);
+        // if (_roomColor != RoomColor.Selected)
+        //     RoomColor = RoomColor.Usable;
+        // _oldState = RoomColor.Usable;
         _roomData = roomData;
         //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {roomData}");
         SetSprite(_roomData.Sprite);
@@ -132,19 +136,53 @@ public class Room : MonoBehaviour
 
     public void SetData(TrapData trapData)
     {
-        if (_roomColor != RoomColor.Selected)
-            RoomColor = RoomColor.Usable;
-        _oldState = RoomColor.Usable;
+        SetColor(RoomColor.Usable);
+        // if (_roomColor != RoomColor.Selected)
+        //     RoomColor = RoomColor.Usable;
+        // _oldState = RoomColor.Usable;
         _trapData = trapData;
+        _listEffects.Clear();
         _listEffects.Add(trapData.Effect);
         SetIcon(trapData.Sprite);
     }
 
     public void SetData(RoomData roomData, TrapData trapData)
     {
-        if (_roomColor != RoomColor.Selected)
-            RoomColor = RoomColor.Usable;
-        _oldState = RoomColor.Usable;
+        SetColor(RoomColor.Usable);
+        // if (_roomColor != RoomColor.Selected)
+        //     RoomColor = RoomColor.Usable;
+        // _oldState = RoomColor.Usable;
+        _roomData = roomData;
+        _trapData = trapData;
+        SetIcon(_trapData.Sprite);
+        SetSprite(_roomData.Sprite);
+    }
+
+    public void SetData(RoomData roomData, RoomColor roomColor = RoomColor.Unclickable)
+    {
+        SetColor(roomColor);
+        // if (_roomColor != RoomColor.Selected)
+        //     RoomColor = roomColor;
+        // _oldState = roomColor;
+        _roomData = roomData;
+        SetSprite(_roomData.Sprite);
+    }
+
+    public void SetData(Sprite sprite, RoomColor roomColor = RoomColor.Unclickable)
+    {
+        SetColor(roomColor);
+        // if (_roomColor != RoomColor.Selected)
+        //     RoomColor = roomColor;
+        // _oldState = roomColor;
+        SetSprite(sprite);
+    }
+
+    public void SetData(RoomData roomData, TrapData trapData, RoomColor roomColor = RoomColor.NotBuyable)
+    {
+        SetColor(roomColor);
+        // if (_roomColor != RoomColor.Selected)
+        //     RoomColor = roomColor;
+        // _oldState = roomColor;
         _roomData = roomData;
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
@@ -212,9 +250,17 @@ public class Room : MonoBehaviour
     {
         if (_spriteRenderer == null)
             _spriteRenderer = GetComponent<SpriteRenderer>();
-        if (_roomColor != RoomColor.Selected)
+        if (color != RoomColor.Selected)
             _oldState = color != _oldState ? _roomColor : _oldState;
         RoomColor = color;
+    }
+
+    public void SetColor(RoomColor color, RoomColor oldColor)
+    {
+        if (_spriteRenderer == null)
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+        RoomColor = color;
+        _oldState = oldColor;
     }
 
     public bool IsInBound(Vector2 mousePosition)
@@ -275,6 +321,26 @@ public class Room : MonoBehaviour
         }
         EnableUpgrade();
     }
+
+    public bool IsBuyable()
+    {
+        return _roomColor != RoomColor.Usable && _roomColor != RoomColor.Unclickable;
+    }
+
+    public bool IsNotBuy()
+    {
+        return _roomColor == RoomColor.Buyable && _roomColor != RoomColor.Unclickable;
+    }
+
+    public bool IsClickable()
+    {
+        return _roomColor != RoomColor.NotBuyable && _roomColor != RoomColor.Unclickable;
+    }
+
+    public bool IsUsable()
+    {
+        return _roomColor == RoomColor.Usable || _oldState == RoomColor.Usable;
+    }
 }
 
 public enum RoomColor
@@ -282,5 +348,6 @@ public enum RoomColor
     Buyable = 0,
     NotBuyable = 1,
     Usable = 2,
-    Selected = 3
+    Unclickable = 3,
+    Selected = 4
 }

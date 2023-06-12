@@ -911,14 +911,58 @@ MonoBehaviour:
     _mapWidth: 3
     _mapHeight: 4
   - name: Level 4
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    _maxHealth: 0500000006000000
+    _mapWidth: 3
+    _mapHeight: 3
+  - name: Level 5
     _nbMovesMax: 9
     _listHeroesInLevel:
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     _maxHealth: 080000000900000008000000
     _mapWidth: 3
     _mapHeight: 4
+  - name: Level 6
+    _nbMovesMax: 7
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 04000000060000000a000000
+    _mapWidth: 3
+    _mapHeight: 4
+  - name: Level 7
+    _nbMovesMax: 9
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 050000000700000007000000
+    _mapWidth: 3
+    _mapHeight: 4
+  - name: Level 8
+    _nbMovesMax: 10
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    _maxHealth: 100000000300000007000000
+    _mapWidth: 3
+    _mapHeight: 4
+  - name: Level 9
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    _maxHealth: 040000000800000005000000
+    _mapWidth: 3
+    _mapHeight: 3
   _heroesManager: {fileID: 1497098839}
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
@@ -2114,7 +2158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0224e66e423d5f944b3360061e7ded9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomText: {fileID: 0}
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _slots: []
@@ -5215,7 +5258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbf315f10c63314db16b4308592968a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spaceBetweenHeroes: 0.5
+  _roomWidth: 0
   _heroPrefab: {fileID: 2783475497506347363, guid: 474fd352c7b6a7b42a13b23d75380756, type: 3}
   _groupGO: {fileID: 282415899}
   _heroesSensibilities: {fileID: 11400000, guid: 45548c6c67b1a95469b95f103389b25f, type: 2}
