@@ -658,7 +658,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &139200371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1205,7 +1205,7 @@ MonoBehaviour:
     _mapHeight: 5
     _prePlacedElements:
       _preplacedObstacle: []
-      _preplacedBoss: {x: 0, y: 0}
+      _preplacedBoss: {x: 1, y: 4}
   - name: Level 3
     _nbMovesMax: 7
     _listHeroesInLevel:
@@ -7977,7 +7977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1568117422
 RectTransform:
   m_ObjectHideFlags: 0
