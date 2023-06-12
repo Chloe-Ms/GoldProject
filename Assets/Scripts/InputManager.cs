@@ -18,7 +18,6 @@ public class InputManager : MonoBehaviour
     Camera _camera;
 
     Coroutine _holdRoutine;
-    Coroutine _zoomRoutine;
 
     bool _hasHoldInputStarted = false;
 
@@ -35,63 +34,8 @@ public class InputManager : MonoBehaviour
         _touchPut.action.performed += OnTouchTap;
         _touchPress.action.performed += OnHoldStarted;
         _touchPress.action.canceled += OnHoldEnded;
-/*        _secondaryTouchContact.action.started += ZoomStart;
-        _secondaryTouchContact.action.canceled += ZoomEnd;
-        _primaryTouchContact.action.canceled += ZoomEnd;*/
     }
 
-/*    private void ZoomStart(InputAction.CallbackContext obj)
-    {
-        Debug.Log("Zoom");
-        _zoomRoutine = StartCoroutine(ZoomDetection());
-    }
-
-    private void ZoomEnd(InputAction.CallbackContext obj)
-    {
-        if (_zoomRoutine != null)
-        {
-            Debug.Log("ZoomEnd");
-            //_cameraManager.InitZoomSize = Camera.main.orthographicSize;
-            StopCoroutine(_zoomRoutine);
-            _zoomRoutine = null;
-        }
-    }*/
-
-    IEnumerator ZoomDetection()
-    {
-        float previousDistance = Vector2.Distance(_primaryTouchPosition.action.ReadValue<Vector2>(),
-                _secondaryTouchPosition.action.ReadValue<Vector2>());
-        float distance = 0f;
-        while(true)
-        {
-            /*Vector2 primaryPrevPos = _primaryTouchPosition.action.ReadValue<Vector2>() - _primaryDelta.action.ReadValue<Vector2>();
-            Vector2 secondaryPrevPos = _secondaryTouchPosition.action.ReadValue<Vector2>() - _secondaryDelta.action.ReadValue<Vector2>();
-            float prevMagnitude = (primaryPrevPos - secondaryPrevPos).magnitude;
-            float currentMagnitude = (_primaryTouchPosition.action.ReadValue<Vector2>() - _secondaryTouchPosition.action.ReadValue<Vector2>()).magnitude;
-
-            float difference = currentMagnitude - prevMagnitude;*/
-
-            distance = Vector2.Distance(_primaryTouchPosition.action.ReadValue<Vector2>(),
-                _secondaryTouchPosition.action.ReadValue<Vector2>());
-            float size = 0f;
-            //Zoom out
-            if (distance - previousDistance  > .2f)
-            {
-                size = _camera.orthographicSize - distance * _cameraSpeed;
-                Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + size * 0.05f, 2f, 10f);
-            }
-            //Zoom in
-            else if (distance - previousDistance < .2f)
-            {
-                size = _camera.orthographicSize + distance * _cameraSpeed;
-                Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize + size * 0.05f, 2f, 10f);
-            }
-            Debug.Log(Camera.main.orthographicSize);
-            //Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - (difference *0.01f), 2f, 10f);
-            //previousDistance = distance;
-            yield return null;
-        }
-    }
     private void OnDisable()
     {
         _touchPut.action.performed -= OnTouchTap;
@@ -109,8 +53,7 @@ public class InputManager : MonoBehaviour
     {
         Vector2 value = _primaryTouchPosition.action.ReadValue<Vector2>();
         Vector3 position = Camera.main.ScreenToWorldPoint(value);
-        _holdRoutine = StartCoroutine(StartDrag());
-        OnHoldStartedEvent?.Invoke();
+        //MapManager.Instance.
     }
 
     private void OnHoldEnded(InputAction.CallbackContext obj)

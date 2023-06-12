@@ -38,6 +38,10 @@ public class AudioManager : MonoBehaviour
     {
         if (!_isMuted){
             Sound s = Array.Find(_sounds, sound => sound.Name == name);
+            if (s.Source.isPlaying)
+            {
+                s.Source.Stop();
+            }
             s.Source.Play();
         }
     }

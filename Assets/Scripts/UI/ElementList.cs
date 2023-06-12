@@ -58,6 +58,7 @@ public class ElementList : MonoBehaviour
             instanciateBackground.name = "Room_" + _elements.Count;
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateBackground.AddComponent<Button>();
+            instanciateBackground.AddComponent<InputRoom>();
             instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
             instanciateElement.name = "Element_" + _elements.Count;
@@ -86,6 +87,7 @@ public class ElementList : MonoBehaviour
             instanciateBackground.name = "Room_" + _elements.Count;
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateBackground.AddComponent<Button>();
+            instanciateBackground.AddComponent<InputRoom>();
             instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
             instanciateElement.name = "Element_" + _elements.Count;
@@ -116,6 +118,7 @@ public class ElementList : MonoBehaviour
             instanciateBackground.name = "Room_" + _elements.Count;
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateBackground.AddComponent<Button>();
+            instanciateBackground.AddComponent<InputRoom>();
             instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
             instanciateElement.name = "Element_" + _elements.Count;

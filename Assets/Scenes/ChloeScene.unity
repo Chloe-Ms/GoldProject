@@ -1171,7 +1171,7 @@ MonoBehaviour:
     _mapHeight: 6
     _prePlacedElements:
       _preplacedObstacle: []
-      _preplacedBoss: {x: 0, y: 0}
+      _preplacedBoss: {x: 1, y: 3}
   - name: Level 2
     _nbMovesMax: 10
     _listHeroesInLevel:
@@ -4668,6 +4668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1ca99a7cdf5674dbaad0c73fa7f1e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _menuCharacter: {fileID: 0}
 --- !u!1 &1520744248
 GameObject:
   m_ObjectHideFlags: 0
