@@ -2,12 +2,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHeroes : MonoBehaviour
+public class UIHeroInfos : MonoBehaviour
 {
     [SerializeField] Image _image;
-    [SerializeField] TextMeshProUGUI _text;
-    HeroData[] _heroesData;
+    [SerializeField] TextMeshProUGUI _name;
+    [SerializeField] TextMeshProUGUI _description;
     [SerializeField] UIHeroSensibilities _heroesSensibilities;
+    HeroData[] _heroesData;
 
     public void ChangeData(int i)
     {
@@ -17,16 +18,10 @@ public class UIHeroes : MonoBehaviour
 
     private void ChangeDataForHero(int index)
     {
-        if (_heroesData[index].headSprite != null)
-        {
-            _image.sprite = _heroesData[index].headSprite;
-        } else
-        {
-            _image.color = _heroesData[index].color;
-        }
-        
-        _text.text = _heroesData[index].maxHealth.ToString();
-
+        HeroData heroData = _heroesData[index];
+        _image.sprite = heroData.sprite;
+        _name.text = heroData.name;
+        _description.text = heroData.description;
         _heroesSensibilities?.ChangeDataForHero(_heroesData[index]);
     }
 }
