@@ -264,7 +264,7 @@ public class MapManager : MonoBehaviour
         MapAction mapAction;
         float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && !GameManager.Instance.IsInMenu) {
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -277,6 +277,7 @@ public class MapManager : MonoBehaviour
                 _mapActions.Push(mapAction);
                 if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
                 {
+                    GameManager.Instance.IsInMenu = true;
                     _effectRoomMonster = Effect.NONE;
                     _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
                     Debug.Log("Continue");
@@ -332,6 +333,7 @@ public class MapManager : MonoBehaviour
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
         _selectedSlot.UpgradeRoom();
+        GameManager.Instance.IsInMenu = false;
     }
 
     public void ModifyRoomEffectMonster(int effect)
