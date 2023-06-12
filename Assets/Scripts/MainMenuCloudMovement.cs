@@ -7,11 +7,13 @@ public class MainMenuCloudMovement : MonoBehaviour
     private Rigidbody2D _rb;
     [SerializeField] private float _speed;
     private Vector2 _initPosition;
+    private RectTransform _rectTransform;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _initPosition = this.transform.position;
+        _rectTransform = GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
@@ -20,15 +22,15 @@ public class MainMenuCloudMovement : MonoBehaviour
         if (this.transform.parent.gameObject.name == "CloudsBottom")
         {
             _rb.velocity = new Vector2(_speed, 0);
-            if (this.transform.position.x >= 1280){
-                this.transform.position = new Vector2(-200,_initPosition.y);
+            if (_rectTransform.anchoredPosition.x >= 240){
+                _rectTransform.anchoredPosition = new Vector2(-240, 0);
             }
         }
         else
         {
             _rb.velocity = new Vector2(-_speed, 0);
-            if (this.transform.position.x <= -200){
-                this.transform.position = new Vector2(1280, _initPosition.y);
+            if (_rectTransform.anchoredPosition.x >= 240){
+                _rectTransform.anchoredPosition = new Vector2(-240, 0);
             }
         }
     }

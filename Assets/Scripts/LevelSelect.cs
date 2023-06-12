@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class LevelSelect : MonoBehaviour
 {
 
-    public Sprite shurikenFull;
+    [SerializeField] private Sprite _shurikenFull;
+
     void Start()
     {
         OpenDoor();
@@ -16,7 +17,7 @@ public class LevelSelect : MonoBehaviour
 
     void FillStars(int stars){
         for (int i=0; i<stars; i++){
-            this.transform.GetChild(i).gameObject.GetComponent<Image>().sprite= shurikenFull;
+            this.transform.GetChild(i).gameObject.GetComponent<Image>().sprite= _shurikenFull;
         }
     }
 
