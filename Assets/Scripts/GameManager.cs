@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private Effect _currentRoomEffect = Effect.NONE;
     private Room _currentRoom = null;
     private static GameManager _instance;
+    private bool _isInMenu = false;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -75,6 +76,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public int[] MaxHealthCurrentLevel()
     {
         return _levels[_level].MaxHealth;
+    }
+    public bool IsInMenu { 
+        get => _isInMenu; 
+        set => _isInMenu = value; 
     }
     #endregion Properties
 
@@ -270,6 +275,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        _isInMenu = false;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
