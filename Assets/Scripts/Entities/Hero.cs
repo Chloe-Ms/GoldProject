@@ -26,11 +26,6 @@ public class Hero : MonoBehaviour
         set => _heroData.maxHealth = value;
     }
 
-    public Sprite HeadSprite
-    {
-        get => _heroData.headSprite;
-    }
-
     public Role Role 
     {
         get => _heroData.role;

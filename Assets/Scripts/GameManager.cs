@@ -12,19 +12,19 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
-    [SerializeField] float _timeBetweenRoom = 10f;
+    [SerializeField] float _timePerRoom = 1f;
     [SerializeField] DisplayUIOnMode _displayUI;
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
 
     private bool _hasWon = false;
+    private Coroutine _routineChangeRoom;
     private int _nbMoves = 0;
     private int _level = 0;
     private Effect _currentRoomEffect = Effect.NONE;
     private Room _currentRoom = null;
     private static GameManager _instance;
-    private bool _isInMenu = false;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -74,10 +74,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public int[] MaxHealthCurrentLevel()
     {
         return _levels[_level].MaxHealth;
-    }
-    public bool IsInMenu { 
-        get => _isInMenu; 
-        set => _isInMenu = value; 
     }
     #endregion Properties
 
@@ -168,14 +164,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
         return _heroesManager.GetDamageOfEffectOnHero(effect, hero);
     }
 
-    public void SpawnHeroesOnScreen(Room room)
-    {
-        _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
-    }
     public void MoveHeroesOnScreen(Room room)
     {
         _onHeroesMovementUnityEvent.Invoke();
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
+        
     }
 
     public void MoveHeroesToRoom(Room room)
@@ -273,11 +266,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
-        _isInMenu = false;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
+        _routineChangeRoom = null;
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
         _heroesManager.OnChangeLevel(Level);
@@ -304,33 +297,23 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     public IEnumerator ChangeRoomFromPath(List<Room> path)
     {
-        bool isBossRoomReached = false;
+        bool bossRoomReached = false;
         int i = 0;
-        bool movementComplete = false;
-        while (path.Count > i && !_hasWon && !isBossRoomReached)
+        while (path.Count > i && !_hasWon && !bossRoomReached)
         {
+            MoveHeroesOnScreen(path[i]);
             if (i == 0) //Waiting in entrance
             {
-                SpawnHeroesOnScreen(path[i]);
-            } else
+                yield return new WaitForSeconds(_timePerRoom);
+            } else if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
             {
-                //Move avec dotween puis onended
-                _onHeroesMovementUnityEvent.Invoke();
-                movementComplete = false;
-                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _timeBetweenRoom).OnComplete(() =>
-                {
-                    if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
-                    {
-                        MoveHeroesToRoom(path[i]);
-                    }
-                    else
-                    { // Boss room
-                        PlayerLoss();
-                        isBossRoomReached = true;
-                    }
-                    movementComplete = true;
-                });
-                yield return new WaitUntil(() => movementComplete);
+                MoveHeroesToRoom(path[i]);
+                yield return new WaitForSeconds(_timePerRoom);
+            }
+            else if (path[i].TrapData.RoomType == RoomType.BOSS)// Boss room
+            {
+                PlayerLoss();
+                bossRoomReached = true;
             }
             i++;
         }
@@ -340,7 +323,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void PlayerWin()
     {
         _hasWon = true;
-        _isInMenu = true;
         if (MapManager.Instance.RoutineChangeRoom != null)
         {
             StopCoroutine(MapManager.Instance.RoutineChangeRoom);
@@ -352,7 +334,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
     void PlayerLoss()
     {
-        _isInMenu = true;
         OnLoss?.Invoke();
         _lossDisplayGO.SetActive(true);
         //Debug.Log("IN BOSS ROOM");

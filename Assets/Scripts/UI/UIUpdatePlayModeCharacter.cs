@@ -14,7 +14,6 @@ public class UIUpdatePlayModeCharacter : MonoBehaviour
 
     public void Init(Hero hero)
     {
-        _heroHead.sprite = hero.HeadSprite;
         _maxHealth.text = hero.MaxHealth.ToString();
         _health.text = hero.MaxHealth.ToString();
         _feedbackPV.gameObject.SetActive(false);

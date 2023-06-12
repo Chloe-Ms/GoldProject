@@ -16,8 +16,9 @@ public class UI : MonoBehaviour
 
     public void Option()
     {
-        
+        //_mainMenu.SetActive(false);
         _optionMenu.SetActive(true);
+        Debug.Log("Option");
     }
 
     public void Quit()
@@ -28,6 +29,7 @@ public class UI : MonoBehaviour
 
     public void OptionMenu()
     {
+        //_mainMenu.SetActive(true);
         _optionMenu.SetActive(false);
         Debug.Log("OptionMenu");
     }
