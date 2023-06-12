@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundOff : MonoBehaviour
 {
-    public GameObject ButtonOn;
-    public GameObject ButtonOff;
+    [SerializeField] Image _image;
+    [SerializeField] Sprite _imageOn;
+    [SerializeField] Sprite _imageOff;
+    private bool _isClicked = false;
 
     public void Clicked()
     {
-        ButtonOn.SetActive(false);
-        ButtonOff.SetActive(true);
-    }
-
-    public void ReClicked()
-    {
-        ButtonOn.SetActive(true);
-        ButtonOff.SetActive(false);
+        _isClicked = !_isClicked;
+        if (_isClicked){
+            AudioManager.Instance.MuteAllSounds();
+            _image.sprite = _imageOff;
+        } else {
+            AudioManager.Instance.DemuteAllSounds();
+            _image.sprite = _imageOn;
+        }
     }
 }
