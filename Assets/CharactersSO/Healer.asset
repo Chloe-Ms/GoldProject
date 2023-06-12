@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b30d486b46a0404aa112e6547f97303, type: 3}
   m_Name: Healer
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 40
   heroName: Healer
   role: 0
   _animator: {fileID: 0}
   sprite: {fileID: 21300000, guid: 14e8560c95272144283cb9fcbbf500f6, type: 3}
-  headSprite: {fileID: 21300000, guid: 1f0cbf5c9f3f9f849be7202db9007875, type: 3}
+  headSprite: {fileID: 21300000, guid: 4a913e2d077dc55438f6911432ba36be, type: 3}
   color: {r: 0.014051199, g: 1, b: 0, a: 1}
+  _soundDamage: 
+  _soundDeath: 

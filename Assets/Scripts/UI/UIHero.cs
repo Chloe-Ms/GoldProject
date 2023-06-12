@@ -9,7 +9,7 @@ public class UIHero : MonoBehaviour
     [SerializeField] Image _image;
     public void ChangeData(Effect effect, int sensibility)
     {
-        _image.color = GetColorFromEffect(effect);
+        _image.sprite = GetSpriteFromEffect(effect);
         //_image.sprite = getspritefromeffect(effect);
         //switch (sensibility)
         //{
@@ -40,5 +40,19 @@ public class UIHero : MonoBehaviour
             i++;
         }
         return color;
+    }
+    private Sprite GetSpriteFromEffect(Effect effect)
+    {
+        int i = 0;
+        Sprite sprite = null;
+        while (i < _trapsIcon.TrapData.Count && sprite == null)
+        {
+            if (_trapsIcon.TrapData[i].Effect == effect)
+            {
+                sprite = _trapsIcon.TrapData[i].Sprite;
+            }
+            i++;
+        }
+        return sprite;
     }
 }
