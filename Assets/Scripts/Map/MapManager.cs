@@ -3,7 +3,6 @@ using System.Collections;
 using System;
 using UnityEngine;
 using NaughtyAttributes;
-using DG.Tweening;
 using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour
@@ -50,6 +49,14 @@ public class MapManager : MonoBehaviour
             return leverList;
         }
     }
+    public Room SelectedSlot
+    {
+        get { return _selectedSlot; }
+    }
+
+    public Room BossRoom { 
+        get => _boss;
+    }
     #endregion
 
     #region Events
@@ -70,15 +77,6 @@ public class MapManager : MonoBehaviour
     private Coroutine _routineRoomMonster;
     private Effect _effectRoomMonster = Effect.NONE;
     [SerializeField] private GameObject _menuEffectRoomMonster;
-
-    public Room SelectedSlot
-    {
-        get { return _selectedSlot; }
-    }
-
-    public Room BossRoom { 
-        get => _boss;
-    }
 
     [Button("Clear Map")]
     private void Clear()
@@ -121,6 +119,7 @@ public class MapManager : MonoBehaviour
         transform.position = new Vector3(-_margin * ((_widthSize - 2f) / 2f + 0.5f), -_margin * ((_heightSize - 2f) / 2f + 0.5f), 0);
     }
 
+    #region FindFunctions
     private GameObject FindSlot(int x, int y)
     {
         return _slots[(x * (_heightSize)) + y ];
@@ -153,6 +152,7 @@ public class MapManager : MonoBehaviour
         }
         return null;
     }
+    #endregion
 
     private int GetIndexOfRoom(Room room)
     {
@@ -211,12 +211,44 @@ public class MapManager : MonoBehaviour
             _instance = this;
     }
 
+    #region Init
     private void InitStart()
     {
         _start = FindRoom(_widthSize % 2 == 0 ? _widthSize / 2 - 1 : _widthSize / 2, 0);
         _start.SetColor(RoomColor.Buyable);
         _start.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[0]);
     }
+    public void InitLevel(LevelData data)
+    {
+        Clear();
+        _editorState = EditorState.Select;
+        _widthSize = data.MapWidth;
+        _heightSize = data.MapHeight;
+        _buyableRoomCount = data.NbMovesMax;
+        _currentRoomCount = 0;
+        _start = null;
+        _boss = null;
+        _mapActions = new Stack<MapAction>();
+        _routineChangeRoom = null;
+        Generate();
+        InitStart();
+    }
+
+    private void InitMap(PrePlacedElement ElementsToPlace)
+    {
+        if (ElementsToPlace == null)
+            return;
+        if (ElementsToPlace.PreplacedBoss != null) {
+            _boss = FindRoom(ElementsToPlace.PreplacedBoss.x, ElementsToPlace.PreplacedBoss.y);
+            _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
+        }
+        if (ElementsToPlace.PreplacedObstacle != null) {
+            foreach (Vector2 Obstacle in ElementsToPlace.PreplacedObstacle) {
+                //FindRoom(Obstacle.x, Obstacle.y).SetData(GameManager.Instance.GeneralData.RoomList.RoomData[16], RoomColor.Unclickable);
+            }
+        }
+    }
+    #endregion
 
     private void Update()
     {
@@ -232,7 +264,7 @@ public class MapManager : MonoBehaviour
         MapAction mapAction;
         float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && !GameManager.Instance.IsInMenu) {
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -245,6 +277,8 @@ public class MapManager : MonoBehaviour
                 _mapActions.Push(mapAction);
                 if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
                 {
+                    GameManager.Instance.IsInMenu = true;
+                    _effectRoomMonster = Effect.NONE;
                     _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
                 } else
                 {
@@ -256,7 +290,6 @@ public class MapManager : MonoBehaviour
             }
             if (room != null && room == _boss)
             {
-                Debug.Log($"Play Mode");
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
                 if (_selectedSlot != null)
@@ -290,16 +323,22 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    #region MonsterRoom
     private IEnumerator RoutineMonsterRoom()
     {
         _menuEffectRoomMonster.SetActive(true);
         yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
+        _menuEffectRoomMonster.SetActive(false);
+        _selectedSlot.Effects.Add(_effectRoomMonster);
+        _selectedSlot.UpgradeRoom();
+        GameManager.Instance.IsInMenu = false;
     }
 
     public void ModifyRoomEffectMonster(int effect)
     {
         _effectRoomMonster = (Effect)effect;
     }
+    #endregion
     public void SetDataOnSelectedRoom(RoomData data)
     {
         if (_selectedSlot != null) {
@@ -664,40 +703,10 @@ public class MapManager : MonoBehaviour
         return str;
     }
 
-    public void InitLevel(LevelData data)
-    {
-        Clear();
-        _editorState = EditorState.Select;
-        _widthSize = data.MapWidth;
-        _heightSize = data.MapHeight;
-        _buyableRoomCount = data.NbMovesMax;
-        _currentRoomCount = 0;
-        _start = null;
-        _boss = null;
-        _mapActions = new Stack<MapAction>();
-        _routineChangeRoom = null;
-        Generate();
-        InitStart();
-    }
-
-    private void InitMap(PrePlacedElement ElementsToPlace)
-    {
-        if (ElementsToPlace == null)
-            return;
-        if (ElementsToPlace.PreplacedBoss != null) {
-            _boss = FindRoom(ElementsToPlace.PreplacedBoss.x, ElementsToPlace.PreplacedBoss.y);
-            _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
-        }
-        if (ElementsToPlace.PreplacedObstacle != null) {
-            foreach (Vector2 Obstacle in ElementsToPlace.PreplacedObstacle) {
-                //FindRoom(Obstacle.x, Obstacle.y).SetData(GameManager.Instance.GeneralData.RoomList.RoomData[16], RoomColor.Unclickable);
-            }
-        }
-    }
 
     public bool IsRoomATrap(Room room)
     {
-        return room != _start && room != _boss && room == _selectedSlot;
+        return room.TrapData != null && room.TrapData.RoomType == RoomType.NORMAL;
     }
 
     public bool IsEditComplete()
