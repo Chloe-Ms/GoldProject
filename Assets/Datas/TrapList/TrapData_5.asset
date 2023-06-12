@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Spikes Trap
   _sprite: {fileID: 21300000, guid: d350f4126f990a946b75c8e6723ffcff, type: 3}
-  _miniSprite: {fileID: 21300000, guid: f222e88c3efbb994e995ce6694f50f60, type: 3}
+  _spriteUI: {fileID: 21300000, guid: d350f4126f990a946b75c8e6723ffcff, type: 3}
   _effect: 2
   _nbRoomsBeforeEffect: 0
   _roomType: 0
   _color: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
+  _soundWhenApplied: 

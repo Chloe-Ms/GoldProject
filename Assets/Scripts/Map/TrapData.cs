@@ -7,7 +7,7 @@ public class TrapData : ScriptableObject
 {
     [SerializeField] private string _name;
     [SerializeField] private Sprite _sprite;
-    [SerializeField] private Sprite _miniSprite;
+    [SerializeField] private Sprite _spriteUI;
     [SerializeField] private Effect _effect;
     [SerializeField] private int _nbRoomsBeforeEffect;
     [SerializeField] private RoomType _roomType;
@@ -26,8 +26,8 @@ public class TrapData : ScriptableObject
     public Effect Effect { 
         get => _effect; 
     }
-    public Sprite MiniSprite { 
-        get => _miniSprite; 
+    public Sprite SpriteUI { 
+        get => _spriteUI; 
     }
     public int NbRoomsBeforeEffect { 
         get => _nbRoomsBeforeEffect;

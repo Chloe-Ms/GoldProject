@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Levier Room
   _sprite: {fileID: 21300000, guid: d202233598898134bb2e657f99b53112, type: 3}
-  _miniSprite: {fileID: 0}
+  _spriteUI: {fileID: 21300000, guid: d202233598898134bb2e657f99b53112, type: 3}
   _effect: 7
   _nbRoomsBeforeEffect: 0
   _roomType: 2
+  _color: {r: 0, g: 0, b: 0, a: 0}
+  _soundWhenApplied: 
