@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using System;
 using UnityEngine;
 
@@ -25,6 +24,11 @@ public class Hero : MonoBehaviour
     {
         get => _heroData.maxHealth;
         set => _heroData.maxHealth = value;
+    }
+
+    public Sprite HeadSprite
+    {
+        get => _heroData.headSprite;
     }
 
     public Role Role 
@@ -81,9 +85,17 @@ public class Hero : MonoBehaviour
         if (_health <= 0)
         {
             _isDead = true;
+            if (_heroData._soundDeath != "")
+            {
+                AudioManager.Instance.Play(_heroData._soundDeath);
+            }
             OnHeroDeath?.Invoke(this);
         } else
         {
+            if (_heroData._soundDamage != "")
+            {
+                AudioManager.Instance.Play(_heroData._soundDamage);
+            }
             OnDamageTaken?.Invoke(realPV);
         }
         UIUpdatePlayMode.Instance.UpdateHero(this,realPV);
