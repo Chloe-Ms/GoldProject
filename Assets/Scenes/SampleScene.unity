@@ -1167,8 +1167,10 @@ MonoBehaviour:
     _mapWidth: 3
     _mapHeight: 4
     _prePlacedElements:
-      _preplacedObstacle: []
-      _preplacedBoss: {x: 0, y: 0}
+      _preplacedObstacle:
+      - {x: 3, y: 1}
+      - {x: 1, y: 4}
+      _preplacedBoss: {x: 1, y: 1}
   - name: Level 6
     _nbMovesMax: 7
     _listHeroesInLevel:
