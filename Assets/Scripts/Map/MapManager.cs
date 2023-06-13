@@ -384,9 +384,15 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot != _start) {
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
+                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) //si l'ancienne salle avait un upgrade on l'enlève
+                {
+                    _selectedSlot.UndoUpgrade();
+                    _currentRoomCount--;
+                }
                 _selectedSlot.SetData(data);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
+
             // if (data.Name == "Boss Room") {
             //     _boss = _selectedSlot;
             //     ElementList.Instance.RemoveBossRoom();
@@ -394,7 +400,7 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
-            if (BossIsAbove())
+            if (BossIsAbove() && _selectedSlot.TrapData == null) // A VOIR Ligne changée à cause du nullrefexception
                 FindRoomPatern(_selectedSlot, _boss);
         }
         //mapAction.PrintAction();
