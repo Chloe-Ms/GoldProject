@@ -400,8 +400,10 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
-            if (BossIsAbove() && _selectedSlot.TrapData == null) // A VOIR Ligne changée à cause du nullrefexception
+            if (BossIsAbove() && mapAction.ActionType == ActionType.Add)
+            {
                 FindRoomPatern(_selectedSlot, _boss);
+            } 
         }
         //mapAction.PrintAction();
         _mapActions.Push(mapAction);

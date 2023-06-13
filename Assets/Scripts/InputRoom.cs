@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputRoom : MonoBehaviour
 {
-    /*private float _thresholdHold = 0.5f;
+    private float _thresholdHold = 0.5f;
     private float _timeInput = 0f;
     private bool _hasInput = false;
     private bool _isCalledOnce = false;
@@ -20,23 +20,29 @@ public class InputRoom : MonoBehaviour
                 StartHold();
             }
         }
-        if (Input.GetMouseButtonDown(0))
+        /*if (Input.GetMouseButtonDown(0))
         {
-            _hasInput = true;
-            _isCalledOnce = false;
-        }
+            OnRoomInput();
+        }*/
         if (Input.GetMouseButtonUp(0))
         {
-            if (_timeInput < _thresholdHold && !_isCalledOnce)
+            if (_timeInput < _thresholdHold && !_isCalledOnce && _hasInput)
             {
                 _isCalledOnce = true;
                 Tap();
             }
 
             _timeInput = 0f;
+            _hasInput = false;
         }
     }
 
+    public void OnRoomInput()
+    {
+        _hasInput = true;
+        _isCalledOnce = false;
+        Debug.Log("COUCU");
+    }
 
     private void Tap()
     {
@@ -45,5 +51,5 @@ public class InputRoom : MonoBehaviour
     private void StartHold()
     {
         Debug.Log("HOLD");
-    }*/
+    }
 }
