@@ -375,7 +375,7 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        if (_selectedSlot != null) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
+        if (_selectedSlot != null && BuyableRoomCount > 0) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
             if (_selectedSlot.TrapData == null) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
@@ -384,9 +384,15 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot != _start) {
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
+                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) //si l'ancienne salle avait un upgrade on l'enlève
+                {
+                    _selectedSlot.UndoUpgrade();
+                    _currentRoomCount--;
+                }
                 _selectedSlot.SetData(data);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
+
             // if (data.Name == "Boss Room") {
             //     _boss = _selectedSlot;
             //     ElementList.Instance.RemoveBossRoom();
@@ -394,8 +400,10 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
-            if (BossIsAbove())
+            if (BossIsAbove() && mapAction.ActionType == ActionType.Add)
+            {
                 FindRoomPatern(_selectedSlot, _boss);
+            } 
         }
         //mapAction.PrintAction();
         _mapActions.Push(mapAction);

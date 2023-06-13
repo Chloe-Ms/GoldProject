@@ -70,7 +70,9 @@ public class ElementList : MonoBehaviour
             instanciateElement.transform.SetParent(instanciateBackground.transform);
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
-            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { Debug.Log("DZNJ"); });
+            //instanciateBackground.GetComponent<InputRoom>().OnRoomInput();
+            //SetDataOnSelectedRoom(room);
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
     }
@@ -99,7 +101,9 @@ public class ElementList : MonoBehaviour
             instanciateElement.transform.SetParent(instanciateBackground.transform);
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
-            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { Debug.Log("DZNJ"); });
+            //instanciateBackground.GetComponent<InputRoom>().OnRoomInput();
+            //SetDataOnSelectedRoom(room);
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
     }
@@ -131,6 +135,8 @@ public class ElementList : MonoBehaviour
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
             instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedTrap(trap); });
+            //instanciateBackground.GetComponent<InputRoom>().OnRoomInput();
+            //SetDataOnSelectedTrap(trap);
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
     }
