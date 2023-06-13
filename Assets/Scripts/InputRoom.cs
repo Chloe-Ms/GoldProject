@@ -8,6 +8,7 @@ public class InputRoom : MonoBehaviour
     private float _timeInput = 0f;
     private bool _hasInput = false;
     private bool _isCalledOnce = false;
+    [SerializeField] bool _isHolding;
     void Update()
     {
         if (_hasInput)
@@ -20,10 +21,11 @@ public class InputRoom : MonoBehaviour
                 StartHold();
             }
         }
-        /*if (Input.GetMouseButtonDown(0))
+
+        if (Input.GetMouseButtonDown(0))
         {
             OnRoomInput();
-        }*/
+        }
         if (Input.GetMouseButtonUp(0))
         {
             if (_timeInput < _thresholdHold && !_isCalledOnce && _hasInput)
