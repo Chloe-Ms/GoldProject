@@ -375,7 +375,7 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        if (_selectedSlot != null) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
+        if (_selectedSlot != null && BuyableRoomCount > 0) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
             if (_selectedSlot.TrapData == null) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
