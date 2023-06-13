@@ -14,6 +14,7 @@ public class ElementList : MonoBehaviour
     [SerializeField, Range(0.1f, 2f)] private float _margin = 2f;
     [SerializeField] private Vector3 _scale = new Vector3(0.2f, 0.2f, 1f);
     [ShowNonSerializedField] private List<GameObject> _elements = new List<GameObject>();
+    [SerializeField] private UIMenu _uiMenu;
 
     /*private void Start()
     {
@@ -70,7 +71,7 @@ public class ElementList : MonoBehaviour
             instanciateElement.transform.SetParent(instanciateBackground.transform);
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
-            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { Debug.Log("DZNJ"); });
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => {});
             //instanciateBackground.GetComponent<InputRoom>().OnRoomInput();
             //SetDataOnSelectedRoom(room);
         }
@@ -89,7 +90,6 @@ public class ElementList : MonoBehaviour
             instanciateBackground.name = "Room_" + _elements.Count;
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateBackground.AddComponent<Button>();
-            instanciateBackground.AddComponent<InputRoom>();
             instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
             instanciateElement.name = "Element_" + _elements.Count;
@@ -99,9 +99,10 @@ public class ElementList : MonoBehaviour
             instanciateElement.AddComponent<Image>();
             instanciateElement.GetComponent<Image>().sprite = room.Sprite;
             instanciateElement.transform.SetParent(instanciateBackground.transform);
+            instanciateBackground.AddComponent<InputRoom>();
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
-            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { Debug.Log("DZNJ"); });
+            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedRoom(room); });
             //instanciateBackground.GetComponent<InputRoom>().OnRoomInput();
             //SetDataOnSelectedRoom(room);
         }
@@ -112,6 +113,7 @@ public class ElementList : MonoBehaviour
     {
         GameObject instanciateElement = null;
         GameObject instanciateBackground = null;
+        GameObject instanciateTop = null;
 
         ClearElements();
         foreach (TrapData trap in listOfTrap.TrapData)
@@ -123,6 +125,7 @@ public class ElementList : MonoBehaviour
             instanciateBackground.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateBackground.AddComponent<Button>();
             instanciateBackground.AddComponent<InputRoom>();
+            instanciateBackground.GetComponent<InputRoom>().Init(this, trap, _uiMenu);
             instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
             instanciateElement.name = "Element_" + _elements.Count;
@@ -132,11 +135,14 @@ public class ElementList : MonoBehaviour
             instanciateElement.AddComponent<Image>();
             instanciateElement.GetComponent<Image>().sprite = trap.Sprite;
             instanciateElement.transform.SetParent(instanciateBackground.transform);
+            instanciateTop = new GameObject();
+            instanciateTop.name = "Top";
+            instanciateTop.AddComponent<RectTransform>();
+            instanciateTop.transform.SetParent(instanciateBackground.transform);
+            instanciateTop.GetComponent<RectTransform>().localPosition = new Vector2(0, 50);
             _elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
-            instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedTrap(trap); });
-            //instanciateBackground.GetComponent<InputRoom>().OnRoomInput();
-            //SetDataOnSelectedTrap(trap);
+            //instanciateBackground.GetComponent<Button>().onClick.AddListener(() => { SetDataOnSelectedTrap(trap); });
         }
         GetComponent<ScrollRect>().content = _parent.GetComponent<RectTransform>();
     }
