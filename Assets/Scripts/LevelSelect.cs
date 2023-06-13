@@ -10,7 +10,7 @@ public class LevelSelect : MonoBehaviour
 
     void Start()
     {
-        OpenDoor();
+        OpenDoorAndAddSmoke();
         HideClosedDoor();
         FillStars(3);
     }
@@ -22,9 +22,10 @@ public class LevelSelect : MonoBehaviour
     }
 
     //ouvre la porte (à faire pour le plus haut niveau accessible)
-    void OpenDoor(){
-        this.transform.GetChild(3).transform.GetChild(0).localPosition += new Vector3(-35, 0, 0);
-        this.transform.GetChild(3).transform.GetChild(1).localPosition += new Vector3(35, 0, 0);
+    void OpenDoorAndAddSmoke(){
+        this.transform.GetChild(3).transform.GetChild(0).localPosition += new Vector3(-30, 0, 0);
+        this.transform.GetChild(3).transform.GetChild(1).localPosition += new Vector3(30, 0, 0);
+        this.transform.GetChild(4).gameObject.SetActive(true);
     }
 
     //cache la porte rouge avec des chaine (à faire pour tous les niveaux disponibles)
