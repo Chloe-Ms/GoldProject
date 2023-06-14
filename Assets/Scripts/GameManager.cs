@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GameManager : MonoBehaviour, IDataPersistence
+public class GameManager : MonoBehaviour//, IDataPersistence
 {
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
 
     private bool _hasWon = false;
     private int _nbMoves = 0;
-    private int _level = 0;
+    private int _level;
     private Effect _currentRoomEffect = Effect.NONE;
     private Room _currentRoom = null;
     private static GameManager _instance;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     
     public int Level {
         get => _level;
-        private set => _level = value;
+        set => _level = value;
     }
     public Effect CurrentRoomEffect { 
         get => _currentRoomEffect; 
@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] private UnityEvent _onLossUnityEvent;
     [SerializeField] private UnityEvent _onHeroesMovementUnityEvent;
     [SerializeField] private UnityEvent _onHeroesAttackUnityEvent;
+    [SerializeField] private LevelManager _levelManager; //ligne ajoutée par JNicoco donc potentiellement extrèmement problématique
     #endregion
 
     #region Test
@@ -146,15 +147,17 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
-    public void LoadData(GameData data)
+    /*public void LoadData(GameData data)
     {
-        NbMoves = data.golds;
+        _level = data.level;
+        _levelManager.CurrentLevelMax = _level;
+        _levelManager.UpdateDoors();
     }
 
     public void SaveData(ref GameData data)
     {
-        data.golds = NbMoves;
-    }
+        data.level = _level;
+    }*/
 
     public HeroData[] GetHeroesCurrentLevel()
     {
@@ -290,6 +293,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
+        Debug.Log("NIVEAU " + _level);
         _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
@@ -371,6 +375,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
         OnWin?.Invoke();
         _onWinUnityEvent.Invoke();
         _winDisplayGO.SetActive(true);
+        //_levelManager.UpdateCurrentLevel(_level); //ligne ajoutée par JNicoco donc potentiellement extrèmement problématique
     }
     void PlayerLoss()
     {
@@ -395,5 +400,6 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void ChangeNbMenuIn(int offset)
     {
         _nbMenuIn += offset;
+        Debug.Log("Nombre Menu" + _nbMenuIn);
     }
 }

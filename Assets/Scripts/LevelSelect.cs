@@ -9,8 +9,12 @@ public class LevelSelect : MonoBehaviour
     [SerializeField] private Sprite _shurikenFull;
     [SerializeField] private Sprite _playButton;
     [SerializeField] private Sprite _retryButton;
+    private bool _isOpen;
 
-
+    public bool IsOpen {
+        get => _isOpen;
+        set => _isOpen = value;
+    }
 
     void FillStars(int stars){
         for (int i=0; i<stars; i++){
