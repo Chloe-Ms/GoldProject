@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b30d486b46a0404aa112e6547f97303, type: 3}
   m_Name: Chevalier
   m_EditorClassIdentifier: 
-  maxHealth: 6
+  maxHealth: 9
   heroName: Chevalier
   role: 1
-  description: 
+  description: After a fight against monsters, he reduces the damage by one in the
+    next trapped room.
   _animator: {fileID: 0}
   sprite: {fileID: 21300000, guid: a703b6159f8bc4b4da83a25a3da6c0a7, type: 3}
   headSprite: {fileID: 21300000, guid: 77fa5d624ae0a0d46b2aab2f6dc13061, type: 3}

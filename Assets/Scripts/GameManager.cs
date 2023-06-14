@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
     [SerializeField] float _durationBetweenRoom = 10f;
-    [SerializeField] float _durationInRoom = 3f;
+    [SerializeField] float _durationWaitInRoom = 1f;
     [SerializeField] DisplayUIOnMode _displayUI;
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
@@ -349,6 +349,10 @@ public class GameManager : MonoBehaviour, IDataPersistence
                     movementComplete = true;
                 });
                 yield return new WaitUntil(() => movementComplete);
+                if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
+                {
+                    yield return new WaitForSeconds(_durationWaitInRoom);
+                }
             }
             i++;
         }
@@ -391,6 +395,5 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void ChangeNbMenuIn(int offset)
     {
         _nbMenuIn += offset;
-        Debug.Log("NB MENU " + _nbMenuIn);
     }
 }

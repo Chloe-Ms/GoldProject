@@ -15,9 +15,9 @@ MonoBehaviour:
   maxHealth: 1
   heroName: Paladin
   role: 2
-  description: 'Test
-
-    dE DESc'
+  description: "When an adventurer is about to die from a trap, the paladin will
+    take blows from that trap\ninstead of the adventurer \n(if more than one adventurer
+    is about to die,the paladin will take blows for all of them).\r\n"
   _animator: {fileID: 0}
   sprite: {fileID: 21300000, guid: 2b085ac74965bf24ca450a0f3b10fb88, type: 3}
   headSprite: {fileID: 21300000, guid: 2f8c7ca802bcfce48b7556db492ab3b1, type: 3}
