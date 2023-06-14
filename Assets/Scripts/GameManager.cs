@@ -357,6 +357,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     #region VictoryConditions
     public void PlayerWin()
     {
+        Debug.Log("ANIIDO");
         _hasWon = true;
         ChangeNbMenuIn(1);
         if (MapManager.Instance.RoutineChangeRoom != null)
