@@ -30,31 +30,23 @@ public class LevelManager : MonoBehaviour, IDataPersistence
     public void UpdateDoors(){
         int currentLevel = _currentLevelMax;
         LevelSelect currentLevelSelect = _levelContainer.transform.GetChild(currentLevel).GetComponent<LevelSelect>();
-        
-        /*LevelSelect previousLevelSelect = null;
-        if (_previousLevel >= 0)
+
+        LevelSelect roomLevelSelect = null;
+        for (int i = 0; i <= currentLevel; i++)
         {
-            previousLevelSelect = _levelContainer.transform.GetChild(_previousLevel).GetComponent<LevelSelect>();
-        }*/
-            for (int i = 0; i <= currentLevel; i++)
-        {
-            _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>().HideClosedDoor();
-            if (i < currentLevel && _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>().IsOpen)
+            roomLevelSelect = _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>();
+            roomLevelSelect.HideClosedDoor();
+            if (i < currentLevel && roomLevelSelect.IsOpen)
             {
-                _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>().CloseDoorAndRemoveSmoke();
-                _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>().IsOpen = false;
+                roomLevelSelect.CloseDoorAndRemoveSmoke();
+                roomLevelSelect.IsOpen = false;
             }
-            Debug.Log($"LEVEL UNDER {currentLevel} : {i}");
         }
         if (!currentLevelSelect.IsOpen)
         {
             currentLevelSelect.OpenDoorAndAddSmoke();
             currentLevelSelect.IsOpen = true;
-            Debug.Log("CURRENT LEVEL OPEN " + currentLevel);
         }
-/*            previousLevelSelect.CloseDoorAndRemoveSmoke();
-            previousLevelSelect.IsOpen = false;
-            Debug.Log("CURRENT LEVEL PREVIOUS " + _previousLevel);*/
         _previousLevel = GameManager.Instance.Level;
     }
 

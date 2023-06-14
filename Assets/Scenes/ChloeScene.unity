@@ -1195,7 +1195,8 @@ MonoBehaviour:
   _heroesManager: {fileID: 147781381}
   _mapManager: {fileID: 1277845744}
   _startButton: {fileID: 17827539}
-  _timeBetweenRoom: 5
+  _durationBetweenRoom: 10
+  _durationWaitInRoom: 1
   _displayUI: {fileID: 1519186617}
   _winDisplayGO: {fileID: 1921201058}
   _lossDisplayGO: {fileID: 627511682}
@@ -1872,7 +1873,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -29.99997, y: 142}
+  m_AnchoredPosition: {x: -29.999939, y: 142}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &655870737
@@ -4311,7 +4312,9 @@ MonoBehaviour:
       m_Calls: []
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
+  _grid: {fileID: 0}
   _slots: []
+  _grids: {fileID: 0}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
