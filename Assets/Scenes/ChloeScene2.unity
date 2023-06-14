@@ -1189,7 +1189,7 @@ MonoBehaviour:
     _nbMovesMax: 3
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    _maxHealth: 01000000
+    _maxHealth: 05000000
     _mapWidth: 1
     _mapHeight: 5
     _prePlacedElements:
@@ -1295,7 +1295,7 @@ MonoBehaviour:
   _mapManager: {fileID: 696818461}
   _startButton: {fileID: 216036721}
   _durationBetweenRoom: 10
-  _durationInRoom: 3
+  _durationWaitInRoom: 1
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
