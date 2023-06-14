@@ -47,9 +47,9 @@ public class GooglePlayManager : MonoBehaviour
 
     private void HandleAchievement(string achievementName)
     {
-        string achievementID = _achievementID[achievementName];
+        //string achievementID = _achievementID[achievementName];
 
-        Social.ReportProgress(achievementID, 100.0f, (bool success) => {
+        Social.ReportProgress(achievementName, 100.0f, (bool success) => {
             if (success)
             {
                 Debug.Log("GooglePlayManager: HandleAchievement: ReportProgress: success");
