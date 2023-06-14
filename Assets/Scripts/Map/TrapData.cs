@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 [CreateAssetMenu(fileName = "Trap Data", menuName = "GoldProject/Trap Data", order = 3)]
 public class TrapData : ScriptableObject
@@ -12,6 +11,7 @@ public class TrapData : ScriptableObject
     [SerializeField] private int _nbRoomsBeforeEffect;
     [SerializeField] private RoomType _roomType;
     [SerializeField] private Color _color;
+    [ResizableTextArea,SerializeField] private string _description;
     [SerializeField] private string _soundWhenApplied;
     public string Name
     {
@@ -42,6 +42,9 @@ public class TrapData : ScriptableObject
 
     public string SoundWhenApplied { 
         get => _soundWhenApplied;
+    }
+    public string Description { 
+        get => _description;
     }
 }
 

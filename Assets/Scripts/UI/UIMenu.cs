@@ -4,12 +4,9 @@ using UnityEngine.SceneManagement;
 public class UIMenu : MonoBehaviour
 {
     [SerializeField] UIHeroInfos _menuCharacter;
+    [SerializeField] UIRoomInfos _menuRoom;
     HeroData[] _heroesData;
 
-    private void Start()
-    {
-        
-    }
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -19,5 +16,11 @@ public class UIMenu : MonoBehaviour
     {
         _menuCharacter.gameObject.SetActive(true);
         _menuCharacter.ChangeData(i);
+    }
+
+    public void DisplayRoom(TrapData trapData)
+    {
+        _menuRoom.gameObject.SetActive(true);
+        _menuRoom.Init(trapData);
     }
 }
