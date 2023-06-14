@@ -7,10 +7,9 @@ using GooglePlayGames.BasicApi;
 
 public class GooglePlayManager : MonoBehaviour
 {
-    private static Dictionnary<string, string> _achievementID = {
+    private static Dictionary<string, string> _achievementID = new Dictionary<string, string>{
         {"Here comes a new challenger", "CgkIvpfI760aEAIQAA" }
     };
-
     private static GooglePlayManager _instance;
 
     public static GooglePlayManager Instance
