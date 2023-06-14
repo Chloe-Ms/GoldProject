@@ -1191,10 +1191,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     _maxHealth: 01000000
     _mapWidth: 1
-    _mapHeight: 3
+    _mapHeight: 5
     _prePlacedElements:
       _preplacedObstacle: []
-      _preplacedBoss: {x: 1, y: 3}
+      _preplacedBoss: {x: 1, y: 5}
   - name: Level 2
     _nbMovesMax: 4
     _listHeroesInLevel:
@@ -8561,7 +8561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1568117422
 RectTransform:
   m_ObjectHideFlags: 0
