@@ -3337,7 +3337,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &603374693
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3861,7 +3861,9 @@ MonoBehaviour:
       m_Calls: []
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
+  _grid: {fileID: 3021073565053402859, guid: 750b1fe1780e09948af23160f0ccfcf3, type: 3}
   _slots: []
+  _grids: {fileID: 0}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
