@@ -71,6 +71,7 @@ public class InputRoom : MonoBehaviour
     }
     private void StartHold()
     {
+        GameManager.Instance.NbMenuIn++;
         if (_uiMenu != null)
         {
             _uiMenu.DisplayRoom(_trapdata);

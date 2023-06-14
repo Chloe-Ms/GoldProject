@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
-    [SerializeField] float _timeBetweenRoom = 10f;
+    [SerializeField] float _durationBetweenRoom = 10f;
+    [SerializeField] float _durationInRoom = 3f;
     [SerializeField] DisplayUIOnMode _displayUI;
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
@@ -24,7 +25,8 @@ public class GameManager : MonoBehaviour, IDataPersistence
     private Effect _currentRoomEffect = Effect.NONE;
     private Room _currentRoom = null;
     private static GameManager _instance;
-    private bool _isInMenu = false;
+    private int _nbMenuIn = 0;
+    private Coroutine _routineWaitInRoom;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -75,9 +77,9 @@ public class GameManager : MonoBehaviour, IDataPersistence
     {
         return _levels[_level].MaxHealth;
     }
-    public bool IsInMenu { 
-        get => _isInMenu; 
-        set => _isInMenu = value; 
+    public int NbMenuIn { 
+        get => _nbMenuIn; 
+        set => _nbMenuIn = value; 
     }
     #endregion Properties
 
@@ -175,12 +177,12 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void MoveHeroesOnScreen(Room room)
     {
         _onHeroesMovementUnityEvent.Invoke();
-        _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
+        MoveHeroesToRoom(room);
     }
 
     public void MoveHeroesToRoom(Room room)
     {
-        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enlï¿½ve l'effet de la room des plantes
+        _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enleve l'effet de la room des plantes
         if (room.TrapData.SoundWhenApplied != "")
         {
             AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
@@ -263,6 +265,21 @@ public class GameManager : MonoBehaviour, IDataPersistence
         }
     }
 
+    #region Level
+    public void LoadLevel(int level)
+    {
+        if (level < 1 && _levels.Length <= level)
+        {
+            Debug.LogWarning($"Numéro de niveau invalide : le niveau doit être supérieur à 0 et inférieur à {_levels.Length + 1}");
+        }
+        else
+        {
+            _level = level - 1;
+            StartEditMode();
+        }
+
+    }
+
     [Button("Next level")]
     public void ChangeLevel()
     {
@@ -273,7 +290,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     [Button("Enter edit mode")]
     public void StartEditMode()
     {
-        _isInMenu = false;
+        _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
@@ -301,6 +318,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             // }
         }
     }
+    #endregion
 
     public IEnumerator ChangeRoomFromPath(List<Room> path)
     {
@@ -317,11 +335,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
                 //Move avec dotween puis onended
                 _onHeroesMovementUnityEvent.Invoke();
                 movementComplete = false;
-                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _timeBetweenRoom).OnComplete(() =>
+                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom).OnComplete(() =>
                 {
                     if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                     {
-                        MoveHeroesToRoom(path[i]);
+                        MoveHeroesOnScreen(path[i]);
                     }
                     else
                     { // Boss room
@@ -340,7 +358,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void PlayerWin()
     {
         _hasWon = true;
-        _isInMenu = true;
+        ChangeNbMenuIn(1);
         if (MapManager.Instance.RoutineChangeRoom != null)
         {
             StopCoroutine(MapManager.Instance.RoutineChangeRoom);
@@ -352,7 +370,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     }
     void PlayerLoss()
     {
-        _isInMenu = true;
+        ChangeNbMenuIn(1);
         OnLoss?.Invoke();
         _lossDisplayGO.SetActive(true);
         //Debug.Log("IN BOSS ROOM");
@@ -368,5 +386,11 @@ public class GameManager : MonoBehaviour, IDataPersistence
             _startButton.transform.position = new Vector2(positionBossRoom.x, positionBossRoom.y);
         }
         _startButton.SetActive(state);
+    }
+
+    public void ChangeNbMenuIn(int offset)
+    {
+        _nbMenuIn += offset;
+        Debug.Log("NB MENU " + _nbMenuIn);
     }
 }
