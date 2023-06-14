@@ -65,7 +65,9 @@ public class MapManager : MonoBehaviour
 
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
     [SerializeField, Required("Slot required GameObject")] private GameObject _slot;
+    [SerializeField, Required("Grid required GameObject")] private GameObject _grid;
     [SerializeField] private List<GameObject> _slots = new List<GameObject>();
+    [SerializeField] private GameObject _grids;
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
@@ -95,9 +97,11 @@ public class MapManager : MonoBehaviour
     private void Generate()
     {
         GameObject instantiateObject = null;
+        GameObject instantiateGrid = null;
 
         if (_slots.Count > 0)
         {
+            DestroyImmediate(_grids);
             foreach (var slot in _slots)
             {
                 DestroyImmediate(slot);
@@ -105,18 +109,26 @@ public class MapManager : MonoBehaviour
             _slots.Clear();
         }
         transform.position = new Vector3(0, 0, 0);
+        _grids = new GameObject("Grids");
+        _grids.transform.parent = transform;
+        GetComponent<Grid>().Init(_widthSize, _heightSize);
         for (int i = 0; i < _widthSize; i++)
         {
             for (int j = 0; j < _heightSize; j++)
             {
+                instantiateGrid = Instantiate(_grid, _grids.transform);
                 instantiateObject = Instantiate(_slot, transform);
                 instantiateObject.name = "Slot_" + i + "_" + j;
+                instantiateGrid.name = "Grid_" + i + "_" + j;
                 instantiateObject.transform.position = new Vector3(_margin * i, _margin * j, 0);
+                instantiateGrid.transform.position = instantiateObject.transform.position;
                 instantiateObject.GetComponent<Room>().Init();
+                instantiateGrid.GetComponent<SpriteRenderer>().sprite = GetComponent<Grid>().GetSprite(i, j);
                 _slots.Add(instantiateObject);
             }
         }
         transform.position = new Vector3(-_margin * ((_widthSize - 2f) / 2f + 0.5f), -_margin * ((_heightSize - 2f) / 2f + 0.5f), 0);
+        _grids.transform.position = transform.position;
     }
 
     #region FindFunctions
@@ -322,6 +334,7 @@ public class MapManager : MonoBehaviour
                 }
                 _selectedSlot = null;
                 Debug.Log($"Selected Slot = {_selectedSlot}");
+                _grids.SetActive(false);
                 GameManager.Instance.StartPlayMode();
                 _routineChangeRoom = StartCoroutine(ImprovePathFinding());
                 return;
