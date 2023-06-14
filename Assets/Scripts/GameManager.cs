@@ -93,7 +93,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] private UnityEvent _onLossUnityEvent;
     [SerializeField] private UnityEvent _onHeroesMovementUnityEvent;
     [SerializeField] private UnityEvent _onHeroesAttackUnityEvent;
-    [SerializeField] private LevelManager _levelManager; //ligne ajoutée par JNicoco donc potentiellement extrèmement problématique
     #endregion
 
     #region Test
@@ -147,17 +146,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         }
     }
 
-    /*public void LoadData(GameData data)
-    {
-        _level = data.level;
-        _levelManager.CurrentLevelMax = _level;
-        _levelManager.UpdateDoors();
-    }
-
-    public void SaveData(ref GameData data)
-    {
-        data.level = _level;
-    }*/
+    
 
     public HeroData[] GetHeroesCurrentLevel()
     {
@@ -375,7 +364,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         OnWin?.Invoke();
         _onWinUnityEvent.Invoke();
         _winDisplayGO.SetActive(true);
-        //_levelManager.UpdateCurrentLevel(_level); //ligne ajoutée par JNicoco donc potentiellement extrèmement problématique
     }
     void PlayerLoss()
     {
