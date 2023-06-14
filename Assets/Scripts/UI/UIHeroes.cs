@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +6,8 @@ public class UIHeroes : MonoBehaviour
 {
     [SerializeField] Image _image;
     [SerializeField] TextMeshProUGUI _text;
-    [SerializeField] GameObject _imageIconPrefab;
     HeroData[] _heroesData;
-    [SerializeField] GameObject _imagePositiveList;
-    [SerializeField] GameObject _imageNeutralList;
-    [SerializeField] GameObject _imageNegativeList;
+    [SerializeField] UIHeroSensibilities _heroesSensibilities;
 
     public void ChangeData(int i)
     {
@@ -30,48 +26,7 @@ public class UIHeroes : MonoBehaviour
         }
         
         _text.text = _heroesData[index].maxHealth.ToString();
-        ClearLists();
-        foreach (Effect effect in Enum.GetValues(typeof(Effect)))
-        {
-            if (effect != Effect.NONE)
-            {
-                int sensibility = GameManager.Instance.GetHeroesSensibility(effect, _heroesData[index].role);
-                GameObject parentObject = null; ;
-                if (sensibility != -1)
-                {
-                    switch (sensibility)
-                    {
-                        case 1:
-                            parentObject = _imagePositiveList;
-                            break;
-                        case 0:
-                            parentObject = _imageNeutralList;
-                            break;
-                        case -2:
-                            parentObject = _imageNegativeList;
-                            break;
-                    }
-                    
-                    GameObject go = Instantiate(_imageIconPrefab, parentObject.transform);
-                    go.GetComponent<UIHero>()?.ChangeData(effect, sensibility);
 
-                }
-            }
-        }
-    }
-
-    private void ClearLists()
-    {
-        ClearList(_imagePositiveList);
-        ClearList(_imageNeutralList);
-        ClearList(_imageNegativeList);
-    }
-
-    public void ClearList(GameObject listParent)
-    {
-        foreach (Transform child in listParent.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        _heroesSensibilities?.ChangeDataForHero(_heroesData[index]);
     }
 }
