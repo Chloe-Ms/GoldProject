@@ -15,6 +15,9 @@ MonoBehaviour:
   maxHealth: 5
   heroName: Ninja
   role: 3
+  description: "Every two rooms, she'll dodge the trap. If the trap was about to
+    heal her, \nshe won't receive the health point.\nThe healer keep healing her
+    even if she dodge the room."
   _animator: {fileID: 0}
   sprite: {fileID: 21300000, guid: d91b313f5aac97f43ade04937e269ef7, type: 3}
   headSprite: {fileID: 21300000, guid: 9739c5550c40b5746ae6d7e0c02f4c1b, type: 3}
