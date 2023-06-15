@@ -65,7 +65,9 @@ public class MapManager : MonoBehaviour
 
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
     [SerializeField, Required("Slot required GameObject")] private GameObject _slot;
+    [SerializeField, Required("Grid required GameObject")] private GameObject _grid;
     [SerializeField] private List<GameObject> _slots = new List<GameObject>();
+    [SerializeField] private GameObject _grids;
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
@@ -95,9 +97,11 @@ public class MapManager : MonoBehaviour
     private void Generate()
     {
         GameObject instantiateObject = null;
+        GameObject instantiateGrid = null;
 
         if (_slots.Count > 0)
         {
+            DestroyImmediate(_grids);
             foreach (var slot in _slots)
             {
                 DestroyImmediate(slot);
@@ -105,18 +109,26 @@ public class MapManager : MonoBehaviour
             _slots.Clear();
         }
         transform.position = new Vector3(0, 0, 0);
+        _grids = new GameObject("Grids");
+        _grids.transform.parent = transform;
+        GetComponent<Grid>().Init(_widthSize, _heightSize);
         for (int i = 0; i < _widthSize; i++)
         {
             for (int j = 0; j < _heightSize; j++)
             {
+                instantiateGrid = Instantiate(_grid, _grids.transform);
                 instantiateObject = Instantiate(_slot, transform);
                 instantiateObject.name = "Slot_" + i + "_" + j;
+                instantiateGrid.name = "Grid_" + i + "_" + j;
                 instantiateObject.transform.position = new Vector3(_margin * i, _margin * j, 0);
+                instantiateGrid.transform.position = instantiateObject.transform.position;
                 instantiateObject.GetComponent<Room>().Init();
+                instantiateGrid.GetComponent<SpriteRenderer>().sprite = GetComponent<Grid>().GetSprite(i, j);
                 _slots.Add(instantiateObject);
             }
         }
         transform.position = new Vector3(-_margin * ((_widthSize - 2f) / 2f + 0.5f), -_margin * ((_heightSize - 2f) / 2f + 0.5f), 0);
+        _grids.transform.position = transform.position;
     }
 
     #region FindFunctions
@@ -288,7 +300,7 @@ public class MapManager : MonoBehaviour
         MapAction mapAction;
         float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && !GameManager.Instance.IsInMenu) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0) {
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -301,7 +313,7 @@ public class MapManager : MonoBehaviour
                 _mapActions.Push(mapAction);
                 if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
                 {
-                    GameManager.Instance.IsInMenu = true;
+                    GameManager.Instance.NbMenuIn++;
                     _effectRoomMonster = Effect.NONE;
                     _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
                 } else
@@ -322,6 +334,7 @@ public class MapManager : MonoBehaviour
                 }
                 _selectedSlot = null;
                 Debug.Log($"Selected Slot = {_selectedSlot}");
+                _grids.SetActive(false);
                 GameManager.Instance.StartPlayMode();
                 _routineChangeRoom = StartCoroutine(ImprovePathFinding());
                 return;
@@ -355,7 +368,7 @@ public class MapManager : MonoBehaviour
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
         _selectedSlot.UpgradeRoom();
-        GameManager.Instance.IsInMenu = false;
+        GameManager.Instance.NbMenuIn--;
     }
 
     public void ModifyRoomEffectMonster(int effect)
@@ -375,7 +388,7 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        if (_selectedSlot != null) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
+        if (_selectedSlot != null && BuyableRoomCount > 0) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
             if (_selectedSlot.TrapData == null) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
@@ -384,9 +397,15 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot != _start) {
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
+                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) //si l'ancienne salle avait un upgrade on l'enlève
+                {
+                    _selectedSlot.UndoUpgrade();
+                    _currentRoomCount--;
+                }
                 _selectedSlot.SetData(data);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
+
             // if (data.Name == "Boss Room") {
             //     _boss = _selectedSlot;
             //     ElementList.Instance.RemoveBossRoom();
@@ -394,8 +413,10 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent(_selectedSlot);
             _selectedSlot.EnableUpgrade();
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
-            if (BossIsAbove())
+            if (BossIsAbove() && mapAction.ActionType == ActionType.Add)
+            {
                 FindRoomPatern(_selectedSlot, _boss);
+            } 
         }
         //mapAction.PrintAction();
         _mapActions.Push(mapAction);

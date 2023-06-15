@@ -11,7 +11,7 @@ public class EditorManager : MonoBehaviour
 
     [SerializeField] private GameObject _editorMenu;
     [SerializeField] private Vector3 _menuPosition;
-    [SerializeField] private Vector3 _vectorOffset = new Vector3(0f, 0.5f, 0f);
+    [SerializeField] private Vector3 _vectorOffset = new Vector3(0f, 175f, 0f);
 
     private void Awake()
     {
@@ -36,9 +36,9 @@ public class EditorManager : MonoBehaviour
     public void CloseEditorMenu()
     {
         MapManager.Instance.EditorState = EditorState.Select;
-        //Debug.Log($"CloseEditorMenu() _editorMenu.transform.position = {_editorMenu.transform.position} _menuPosition = {_menuPosition} condition = {_editorMenu.transform.position == _menuPosition}   ");
-        if (_editorMenu.transform.position == _menuPosition)
+        if (_editorMenu.transform.position.magnitude == _menuPosition.magnitude) {
             _editorMenu.transform.position += -_vectorOffset;
+        }
     }
 
     public void SetDataOnSelectedRoom(RoomData data)

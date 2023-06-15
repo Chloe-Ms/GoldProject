@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748b0940c90a4c14cb271744798306e9, type: 3}
   m_Name: TrapData_5
   m_EditorClassIdentifier: 
-  _name: Spikes Trap
+  _name: Spikes
   _sprite: {fileID: 21300000, guid: d350f4126f990a946b75c8e6723ffcff, type: 3}
   _spriteUI: {fileID: 21300000, guid: d350f4126f990a946b75c8e6723ffcff, type: 3}
   _effect: 2
   _nbRoomsBeforeEffect: 0
   _roomType: 0
   _color: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
+  _description: After each passage of the adventurers, the trap reactivates
   _soundWhenApplied: 
+  _bgEffectUIImage: {fileID: 21300000, guid: 1cfe20d2d201123489d55d7da92dd973, type: 3}
+  _roomEffectImage: {fileID: 0}
+  _isRoomEffectImageBehindHeroes: 0

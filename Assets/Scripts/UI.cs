@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,13 +8,11 @@ public class UI : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("SampleScene");
-        Debug.Log("Play");
+        SceneManager.LoadScene("JeanNicolasScene");
     }
 
     public void Option()
     {
-        
         _optionMenu.SetActive(true);
     }
 
@@ -31,8 +27,5 @@ public class UI : MonoBehaviour
         _optionMenu.SetActive(false);
         Debug.Log("OptionMenu");
     }
-
-
-
 
 }
