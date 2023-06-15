@@ -44,34 +44,43 @@ public class CameraManager : MonoBehaviour
 
     private void Start()
     {
-        //_groupParentGO = 
+        _groupParentGO = GameManager.Instance.GetHeroesParentGameObject();
         GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
         GameManager.Instance.OnEnterPlayMode += SetCameraPlay;
     }
 
     private void SetCameraPlay(int obj)
     {
+        _isInPlayMode = true;
         _camera.orthographicSize = _zoomSizePlayMode;
+        FollowGroupHeroes();
     }
 
     private void SetCameraEdit(int obj)
     {
+        _isInPlayMode = false;
         _camera.orthographicSize = _initZoomSize;
         _camera.transform.position = _initPosition;
     }
 
     private void MoveCamera(Vector3 position)
     {
-        
         position.z = _initPosition.z;
         transform.DOMove(position, _speedMove);
+    }
+
+    private void FollowGroupHeroes()
+    {
+        Vector3 position = _groupParentGO.transform.position;
+        position.z = _initPosition.z;
+        _camera.transform.position = position;
     }
 
     private void Update()
     {
         if (_isInPlayMode)
         {
-            _camera.transform.position = GameManager.Instance.GetHeroesParentGameObject().transform.position;
+            FollowGroupHeroes();
         }
         else
         {
