@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float _zoomSizeEditMode = 3f;
     [SerializeField] private float _zoomSizePlayMode = 3f;
     private float _initZoomSize;
+    private float _startZoomSize;
     private Vector3 _initPosition;
     private Camera _camera;
     [SerializeField] private float _speedZoom = 3f;
@@ -23,7 +24,9 @@ public class CameraManager : MonoBehaviour
     private float _timer = 0f;
     private bool _isZooming = false;
     private bool _isZoomed = false;
+    private bool _isDezoomed = true;
     private bool _isInPlayMode = false;
+    private bool _isDezooming = false;
     private GameObject _groupParentGO;
 
     public Camera Camera
@@ -40,6 +43,7 @@ public class CameraManager : MonoBehaviour
         this._camera = GetComponent<Camera>();
         this._initZoomSize = _camera.orthographicSize;
         this._initPosition = transform.position;
+        this._startZoomSize = this._initZoomSize;
     }
 
     private void Start()
@@ -84,11 +88,86 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
+            if (MapManager.Instance.SelectedSlot != null) //Selection d'une salle
+            {
+                MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
+                MoveCamera(_initPosition);
+                if (!_isZoomed && !_isZooming)
+                {
+                    Debug.Log("ZOOM");
+                    _isZooming = true;
+                    _isDezooming = false;
+                    _timer = 0;
+                    _isDezoomed = false;
+                    this._startZoomSize = _camera.orthographicSize;
+                }
+                //_camera.orthographicSize = _zoomSizeEditMode;
+                /*_isZooming = true;
+                _timer = 0;*/
+            }
+            else //Aucune salle sélectionnée
+            {
+                MoveCamera(_initPosition);
+                if (!_isDezoomed && !_isDezooming)
+                {
+                    Debug.Log("DEZOOM");
+                    _isDezooming = true;
+                    _isZooming = false;
+                    _timer = 0;
+                    _isZoomed = false;
+                    this._startZoomSize = _camera.orthographicSize;
+                }
+                //_camera.orthographicSize = _initZoomSize;
+                /*if (_isZoomed && !_isZooming)
+                {
+                    Debug.Log("deZOOM");
+                    _isZooming = true;
+                    _isZoomed = false;
+                    _timer = 0;
+                }*/
+            }
+        }
+        
+        if (_isZooming || _isDezooming)
+        {
+            _timer += Time.deltaTime;
+            if (_isZooming) //De l'init au normal
+            {
+                _camera.orthographicSize = Mathf.Lerp(this._startZoomSize, _zoomSizeEditMode, (_timer * _speedZoom) / Mathf.Abs(this._startZoomSize - _zoomSizeEditMode));
+                if (_timer >= Mathf.Abs(this._startZoomSize - _zoomSizeEditMode)/ _speedZoom)
+                {
+                    _camera.orthographicSize = _zoomSizeEditMode;
+                    _timer = 0;
+                    _isZooming = false;
+                    _isZoomed = true;
+                }
+            }
+            if (_isDezooming)
+            {
+                _camera.orthographicSize = Mathf.Lerp(this._startZoomSize, _initZoomSize, (_timer * _speedZoom) / Mathf.Abs(_initZoomSize - this._startZoomSize));
+                if (_timer >= Mathf.Abs(_initZoomSize - this._startZoomSize) / _speedZoom)
+                {
+                    _camera.orthographicSize = _initZoomSize;
+                    _timer = 0;
+                    _isDezooming = false;
+                    _isDezoomed = true;
+                }
+            }
+        }
+
+        /*if (_isInPlayMode)
+        {
+            FollowGroupHeroes();
+        }
+        else
+        {
             if (MapManager.Instance.SelectedSlot != null)
             {
+                Debug.Log("SELECTED");
                 MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
                 if (!_isZoomed && !_isZooming)
                 {
+                    Debug.Log("ZOOm");
                     _isZooming = true;
                     _timer = 0;
                 }
@@ -99,12 +178,14 @@ public class CameraManager : MonoBehaviour
 
                 if (_isZoomed && !_isZooming)
                 {
+                    Debug.Log("deZOOM");
                     _isZooming = true;
+                    _isZoomed = false;
                     _timer = 0;
                 }
             }
         }
-        
+
         if (_isZooming)
         {
             _timer += Time.deltaTime;
@@ -130,6 +211,6 @@ public class CameraManager : MonoBehaviour
                     _isZoomed = false;
                 }
             }
-        }
+        }*/
     }
 }
