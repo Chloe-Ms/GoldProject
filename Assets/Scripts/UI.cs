@@ -8,7 +8,7 @@ public class UI : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("JeanNicolasScene");
+        SceneManager.LoadScene("SampleScene");
     }
 
     public void Option()
