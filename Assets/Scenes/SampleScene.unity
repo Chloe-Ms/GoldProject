@@ -12977,8 +12977,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoomSizeEditMode: 3
   _zoomSizePlayMode: 3
-  _timeToZoom: 0.7
-  _timeToMove: 0.5
+  _speedZoom: 3
+  _speedMove: 0.5
 --- !u!81 &765153957
 AudioListener:
   m_ObjectHideFlags: 0
@@ -23572,8 +23572,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495878167}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0567, y: -1.8499756, z: 0}
-  m_LocalScale: {x: 0.7737058, y: 0.65999997, z: 0.65999997}
+  m_LocalPosition: {x: -0.0567, y: -1.8034, z: 0}
+  m_LocalScale: {x: 0.7737058, y: 0.66482574, z: 0.65999997}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
