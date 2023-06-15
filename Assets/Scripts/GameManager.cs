@@ -265,7 +265,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         if (level < 1 && _levels.Length <= level)
         {
-            Debug.LogWarning($"Numéro de niveau invalide : le niveau doit être supérieur à 0 et inférieur à {_levels.Length + 1}");
+            Debug.LogWarning($"Numï¿½ro de niveau invalide : le niveau doit ï¿½tre supï¿½rieur ï¿½ 0 et infï¿½rieur ï¿½ {_levels.Length + 1}");
         }
         else
         {
@@ -288,8 +288,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         Debug.Log("NIVEAU " + _level);
         _nbMenuIn = 0;
         _roomsInList.InitList();
-        _winDisplayGO.SetActive(false);
-        _lossDisplayGO.SetActive(false);
+        //_winDisplayGO.SetActive(false);
+        //_lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
