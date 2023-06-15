@@ -201,6 +201,7 @@ public class MapManager : MonoBehaviour
 
     private void SetUnBuyableAdjacent(Room indexedRoom)
     {
+        Debug.Log($"Room unbuy {indexedRoom}");
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
         if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsNotBuy())
@@ -329,7 +330,8 @@ public class MapManager : MonoBehaviour
                     oldSelectedSlot.UnSelect();
                 }
             }
-            Debug.Log($"Selected Slot = {_selectedSlot.IsUsable()}");
+            if (_selectedSlot != null)
+                Debug.Log($"Selected Slot = {_selectedSlot.IsUsable()}");
             if (_selectedSlot == null)
                 EditorManager.Instance.CloseEditorMenu();
             else if (_selectedSlot.IsUsable()) {
@@ -406,7 +408,7 @@ public class MapManager : MonoBehaviour
     {
         int index = _slots.IndexOf(_selectedSlot.gameObject);
 
-        if (_slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
+        if (index + 1 < _slots.Count && _slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
             return true;
         return false;
     }
@@ -415,7 +417,7 @@ public class MapManager : MonoBehaviour
     {
         int index = _slots.IndexOf(room.gameObject);
 
-        if (_slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
+        if (index + 1 < _slots.Count && _slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
             return true;
         return false;
     }
@@ -780,8 +782,10 @@ public class MapManager : MonoBehaviour
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
             room.UndoData(null, null, RoomColor.NotBuyable);
-            SetUnBuyableAdjacent(_selectedSlot);
-            _selectedSlot.UnSelect();
+            if (_selectedSlot != null){
+                SetUnBuyableAdjacent(_selectedSlot);
+                _selectedSlot.UnSelect();
+            }
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
             _currentRoomCount--;
