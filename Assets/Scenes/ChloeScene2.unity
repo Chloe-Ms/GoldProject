@@ -3784,7 +3784,7 @@ MonoBehaviour:
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _grid: {fileID: 3021073565053402859, guid: 750b1fe1780e09948af23160f0ccfcf3, type: 3}
   _slots: []
-  _grids: {fileID: 696818460}
+  _grids: {fileID: 0}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
@@ -7136,6 +7136,7 @@ MonoBehaviour:
   - {fileID: 1568117421}
   _gameObjectsInPlayMode:
   - {fileID: 139200370}
+  _hideOnEditMode: []
 --- !u!114 &1222718202
 MonoBehaviour:
   m_ObjectHideFlags: 0
