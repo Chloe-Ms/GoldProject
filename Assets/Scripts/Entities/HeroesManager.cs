@@ -51,6 +51,7 @@ public class HeroesManager : MonoBehaviour
 
     private void StartEditMode(int level)
     {
+        _groupGO.transform.position = Vector3.zero;
         RemoveHeroesGameObjects();
         _heroesInCurrentLevel.Init();
         _nbHeroesLeft = _heroesDataInCurrentLevel.Length;
@@ -62,8 +63,7 @@ public class HeroesManager : MonoBehaviour
         for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
             GameObject go = Instantiate(_heroPrefab);
-            go.transform.position = go.transform.position +
-                new Vector3((i + 1) * (_roomWidth / (_heroesDataInCurrentLevel.Length + 1)), 0, 0);
+            go.transform.position = new Vector3((i + 1) * (_roomWidth / (_heroesDataInCurrentLevel.Length + 1)), 0, 0);
             go.transform.parent = _groupGO.transform;
             Hero hero = go?.GetComponent<Hero>();
             hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
@@ -85,9 +85,8 @@ public class HeroesManager : MonoBehaviour
         _nbHeroesLeft--;
         if (_nbHeroesLeft <= 0)
         {
-            GameManager.Instance.PlayerWin();
-        }
-        if (_heroesInCurrentLevel.AffectedByPlants)
+            StartCoroutine(GameManager.Instance.PlayerWin());
+        } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
             ApplyDamageToEachHero(Effect.PLANTE);
         }

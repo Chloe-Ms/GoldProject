@@ -1,9 +1,11 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hero : MonoBehaviour 
 {
     [SerializeField] SpriteRenderer _renderer;
+    Animator _animator;
     private HeroData _heroData;
     private int _health;
     private bool _isDead = false;
@@ -57,7 +59,6 @@ public class Hero : MonoBehaviour
         set => _hasDamageReduction = value;
     }
     #endregion
-
     public void TestDamage()
     {
         UpdateHealth(1);
@@ -89,12 +90,20 @@ public class Hero : MonoBehaviour
             {
                 AudioManager.Instance.Play(_heroData._soundDeath);
             }
+            if (_animator != null)
+            {
+                _animator.SetTrigger("IsDead");
+            }
             OnHeroDeath?.Invoke(this);
         } else
         {
             if (_heroData._soundDamage != "")
             {
                 AudioManager.Instance.Play(_heroData._soundDamage);
+            }
+            if (_animator != null)
+            {
+                _animator.SetTrigger("IsHurt");
             }
             OnDamageTaken?.Invoke(realPV);
         }
@@ -104,9 +113,29 @@ public class Hero : MonoBehaviour
     public void LoadHeroData(HeroData data)
     {
         _heroData = data;
-        //_renderer.color = _heroData.color;
-        _renderer.sprite = _heroData.sprite;
+        //_renderer.sprite = _heroData.sprite;
         _health = _heroData.maxHealth;
-        
+        GameObject atlas = null;
+        if (_heroData.atlas != null)
+        {
+            atlas = Instantiate(_heroData.atlas, this.transform);
+            Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
+            if (atlasTronc != null)
+            {
+                _animator = atlasTronc.AddComponent<Animator>();
+                _animator.runtimeAnimatorController = _heroData.animatorController;
+            } else
+            {
+                Debug.LogWarning($"{_heroData.atlasTroncName} not found");
+            }
+        }
+    }
+
+    public void IsRunningInAnimator(bool isRunning)
+    {
+        if (_animator != null)
+        {
+            _animator.SetBool("IsRunning", isRunning);
+        }
     }
 }

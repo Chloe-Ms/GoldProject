@@ -215,8 +215,9 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (_instance != null && _instance != this){
             Destroy(gameObject);
+        }
         else
             _instance = this;
     }
@@ -238,7 +239,8 @@ public class MapManager : MonoBehaviour
         _currentRoomCount = 0;
         _start = null;
         _boss = null;
-        DestroyImmediate(_grids);
+        if (_grids != null)
+            DestroyImmediate(_grids);
         _mapActions = new Stack<MapAction>();
         _routineChangeRoom = null;
         Generate();
