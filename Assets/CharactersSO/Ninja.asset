@@ -18,9 +18,11 @@ MonoBehaviour:
   description: "Every two rooms, she'll dodge the trap. If the trap was about to
     heal her, \nshe won't receive the health point.\nThe healer keep healing her
     even if she dodge the room."
-  _animator: {fileID: 0}
+  animatorController: {fileID: 9100000, guid: 146ae8dbfc0cb7b4e89407849ca80c2c, type: 2}
+  atlas: {fileID: -8653719598885068355, guid: 5d2e12e906db7494f8066230e6466f90, type: 3}
   sprite: {fileID: 21300000, guid: d91b313f5aac97f43ade04937e269ef7, type: 3}
   headSprite: {fileID: 21300000, guid: 9739c5550c40b5746ae6d7e0c02f4c1b, type: 3}
   color: {r: 0, g: 0.21268582, b: 1, a: 1}
   _soundDamage: 
   _soundDeath: 
+  atlasTroncName: tronc bas_1
