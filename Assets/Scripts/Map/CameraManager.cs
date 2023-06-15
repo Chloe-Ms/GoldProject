@@ -18,11 +18,13 @@ public class CameraManager : MonoBehaviour
     private float _initZoomSize;
     private Vector3 _initPosition;
     private Camera _camera;
-    [SerializeField] private float _timeToZoom = .7f;
-    [SerializeField] private float _timeToMove = .5f;
+    [SerializeField] private float _speedZoom = 3f;
+    [SerializeField] private float _speedMove = .5f;
     private float _timer = 0f;
     private bool _isZooming = false;
     private bool _isZoomed = false;
+    private bool _isInPlayMode = false;
+    private GameObject _groupParentGO;
 
     public Camera Camera
     {
@@ -40,48 +42,85 @@ public class CameraManager : MonoBehaviour
         this._initPosition = transform.position;
     }
 
-    private void ResetCamera()
+    private void Start()
     {
-        ResetCameraZoom();
-        ResetCameraPosition();
+        //_groupParentGO = 
+        GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
+        GameManager.Instance.OnEnterPlayMode += SetCameraPlay;
     }
 
-    private void ResetCameraZoom()
+    private void SetCameraPlay(int obj)
+    {
+        _camera.orthographicSize = _zoomSizePlayMode;
+    }
+
+    private void SetCameraEdit(int obj)
     {
         _camera.orthographicSize = _initZoomSize;
-    }
-
-    private void ResetCameraPosition()
-    {
-        transform.position = _initPosition;
+        _camera.transform.position = _initPosition;
     }
 
     private void MoveCamera(Vector3 position)
     {
         
         position.z = _initPosition.z;
-        transform.DOMove(position, _timeToZoom);
-    }
-
-    private void ZoomCamera(float zoom)
-    {
-        _camera.orthographicSize = zoom;
+        transform.DOMove(position, _speedMove);
     }
 
     private void Update()
     {
-        /*if (_isZooming)
+        if (_isInPlayMode)
         {
-            _timer += Time.time;
-        }*/
-        if (MapManager.Instance.SelectedSlot != null)
-        {
-            MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
-            ZoomCamera(_zoomSizeEditMode);
+            _camera.transform.position = GameManager.Instance.GetHeroesParentGameObject().transform.position;
         }
         else
         {
-            ResetCamera();
+            if (MapManager.Instance.SelectedSlot != null)
+            {
+                MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
+                if (!_isZoomed && !_isZooming)
+                {
+                    _isZooming = true;
+                    _timer = 0;
+                }
+            }
+            else
+            {
+                MoveCamera(_initPosition);
+
+                if (_isZoomed && !_isZooming)
+                {
+                    _isZooming = true;
+                    _timer = 0;
+                }
+            }
+        }
+        
+        if (_isZooming)
+        {
+            _timer += Time.deltaTime;
+            if (!_isZoomed)
+            {
+                _camera.orthographicSize = Mathf.Lerp(_initZoomSize, _zoomSizeEditMode, (_timer * _speedZoom) / (_initZoomSize - _zoomSizeEditMode));
+                if (_timer >= _speedZoom)
+                {
+                    _camera.orthographicSize = _zoomSizeEditMode;
+                    _timer = 0;
+                    _isZooming = false;
+                    _isZoomed = true;
+                }
+            }
+            else
+            {
+                _camera.orthographicSize = Mathf.Lerp(_zoomSizeEditMode, _initZoomSize, (_timer * _speedZoom) / (_initZoomSize - _zoomSizeEditMode));
+                if (_timer >= _speedZoom)
+                {
+                    _camera.orthographicSize = _initZoomSize;
+                    _timer = 0;
+                    _isZooming = false;
+                    _isZoomed = false;
+                }
+            }
         }
     }
 }
