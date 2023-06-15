@@ -1310,6 +1310,8 @@ MonoBehaviour:
   _startButton: {fileID: 216036721}
   _durationBetweenRoom: 10
   _durationWaitInRoom: 1
+  _durationWaitBeforeDisplayLoss: 2
+  _durationWaitBeforeDisplayWin: 2
   _displayUI: {fileID: 1222718201}
   _winDisplayGO: {fileID: 855526362}
   _lossDisplayGO: {fileID: 1825076037}
@@ -1894,10 +1896,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Description
+  m_text: "q\xF9osf,jdsqfjsqfnsdjnfljsnfljdsnfjldsnfjdsnjfndsjfndsjfndjsfnjdsfdnskjfdnsjnfdsnjfdsnjfndsjfdnsjfndsnfdsnjkfdnsjfsdjknfdnsjfDescription"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bab839403500f411aa0262a80b16938d, type: 2}
-  m_sharedMaterial: {fileID: 3242041487335138126, guid: bab839403500f411aa0262a80b16938d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9c17e35804a64e14fae5326c7657a104, type: 2}
+  m_sharedMaterial: {fileID: -6608000566966523614, guid: 9c17e35804a64e14fae5326c7657a104, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3875,7 +3877,9 @@ MonoBehaviour:
       m_Calls: []
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
+  _grid: {fileID: 0}
   _slots: []
+  _grids: {fileID: 0}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
@@ -6634,7 +6638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1160062843
 RectTransform:
   m_ObjectHideFlags: 0
