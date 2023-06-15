@@ -18,6 +18,7 @@ public class DataPersistenceManager : MonoBehaviour
     [SerializeField] private string _fileName;
     [SerializeField] private bool _useEncryption;
 
+
     void Awake()
     {
         if (Instance == null)

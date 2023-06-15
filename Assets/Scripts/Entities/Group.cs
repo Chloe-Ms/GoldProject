@@ -71,4 +71,15 @@ public class Group
         }
         return i + 1;
     }
+
+    public void IsRunningInAnimator(bool isRunning)
+    {
+        foreach (Hero hero in Heroes) 
+        {
+            if (!hero.IsDead)
+            {
+                hero.IsRunningInAnimator(isRunning);
+            }
+        }
+    }
 }

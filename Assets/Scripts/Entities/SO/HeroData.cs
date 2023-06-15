@@ -1,5 +1,5 @@
 using NaughtyAttributes;
-using System;
+using UnityEditor.U2D.PSD;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Hero", menuName = "GoldProject/Create Hero", order = 1)]
@@ -10,10 +10,12 @@ public class HeroData : ScriptableObject
     public Role role;
     [ResizableTextArea]
     public string description;
-    public RuntimeAnimatorController _animator;
+    public RuntimeAnimatorController animatorController;
+    public GameObject atlas;
     public Sprite sprite;
     public Sprite headSprite;
     public Color color;
     public string _soundDamage;
     public string _soundDeath;
+    public string atlasTroncName;
 }
