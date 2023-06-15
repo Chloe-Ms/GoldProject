@@ -21,4 +21,7 @@ MonoBehaviour:
   _color: {r: 0.6745098, g: 0.13725491, b: 0.019607844, a: 1}
   _description: Deals fire damages in the room two boxes further, if it's an ice
     trap the effect is canceled.
-  _soundWhenApplied: Piege
+  _soundWhenApplied: PiegeFeu
+  _bgEffectUIImage: {fileID: 21300000, guid: c47c8fa4b0456de47951b81076c06c0e, type: 3}
+  _roomEffectImage: {fileID: 0}
+  _isRoomEffectImageBehindHeroes: 0

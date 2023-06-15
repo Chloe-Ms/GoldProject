@@ -22,4 +22,7 @@ MonoBehaviour:
   _description: If an adventurer dies in the room, the trap reactivates instantly.
     If another adventurer dies from this reactivation, the trap does not reactivate
     a second time.
-  _soundWhenApplied: 
+  _soundWhenApplied: PiegePlante
+  _bgEffectUIImage: {fileID: 21300000, guid: 55ee4818a2d9dba418be7ff82b970d19, type: 3}
+  _roomEffectImage: {fileID: 0}
+  _isRoomEffectImageBehindHeroes: 0

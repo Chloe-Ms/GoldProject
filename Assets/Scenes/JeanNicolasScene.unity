@@ -3177,6 +3177,8 @@ MonoBehaviour:
   _startButton: {fileID: 779765850}
   _durationBetweenRoom: 2
   _durationWaitInRoom: 1
+  _durationWaitBeforeDisplayLoss: 2
+  _durationWaitBeforeDisplayWin: 2
   _displayUI: {fileID: 1567681422}
   _winDisplayGO: {fileID: 2133825757}
   _lossDisplayGO: {fileID: 1830338398}
@@ -3194,7 +3196,6 @@ MonoBehaviour:
   _onHeroesAttackUnityEvent:
     m_PersistentCalls:
       m_Calls: []
-  _levelManager: {fileID: 924835233}
   _updated: 0
   _room: {fileID: 0}
   _effect: 4
@@ -4145,6 +4146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 332823235}
   - component: {fileID: 332823234}
+  - component: {fileID: 332823236}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -4169,7 +4171,9 @@ MonoBehaviour:
       m_Calls: []
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
+  _grid: {fileID: 3021073565053402859, guid: 750b1fe1780e09948af23160f0ccfcf3, type: 3}
   _slots: []
+  _grids: {fileID: 332823233}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
@@ -4189,6 +4193,28 @@ Transform:
   m_Father: {fileID: 649444024}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &332823236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332823233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2975628f2681df14db5a94f4fe6199b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listSprite:
+  - {fileID: 1638276930, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: -388675666, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: 607639003, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: 683762123, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: -1273985259, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: -1012745654, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: -760638620, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: -1712067380, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
+  - {fileID: -1529701616, guid: eaa4159a1ef14a442b0716ed404112c6, type: 3}
 --- !u!1 &334251239
 GameObject:
   m_ObjectHideFlags: 0

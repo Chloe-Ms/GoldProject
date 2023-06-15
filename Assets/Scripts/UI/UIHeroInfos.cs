@@ -20,7 +20,7 @@ public class UIHeroInfos : MonoBehaviour
     {
         HeroData heroData = _heroesData[index];
         _image.sprite = heroData.sprite;
-        _name.text = heroData.name;
+        _name.text = heroData.heroName;
         _description.text = heroData.description;
         _heroesSensibilities?.ChangeDataForHero(_heroesData[index]);
     }

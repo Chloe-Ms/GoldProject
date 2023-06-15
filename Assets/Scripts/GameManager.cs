@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
-    [SerializeField] AnimationManager _animationManager;
     [SerializeField] GameObject _startButton;
     [SerializeField] float _durationBetweenRoom = 10f;
     [SerializeField] float _durationWaitInRoom = 1f;
@@ -91,6 +90,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public event Action<int> OnEnterPlayMode;
     public event Action OnWin;
     public event Action OnLoss;
+    public event Action<Effect> OnEffectApplied;
 
     [SerializeField] private UnityEvent _onWinUnityEvent;
     [SerializeField] private UnityEvent _onLossUnityEvent;
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private void Start()
     {
         DOTween.Init();
-        StartEditMode();
+        //StartEditMode();
     }
 
     
@@ -163,6 +163,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public int GetDamageOnHero(Effect effect, Hero hero)
     {
         return _heroesManager.GetDamageOfEffectOnHero(effect, hero);
+    }
+
+    public GameObject GetHeroesParentGameObject()
+    {
+        return _heroesManager.GroupParent;
     }
 
     public void SpawnHeroesOnScreen(Room room)
@@ -193,7 +198,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 if (room.Effects.Count > 0)
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
-
+                    OnEffectApplied?.Invoke(_currentRoomEffect);
                     ApplyCurrentRoomEffect(_currentRoomEffect);
 
                     for (int j = 0; j < room.Effects.Count; j++)
@@ -265,7 +270,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         if (level < 1 && _levels.Length <= level)
         {
-            Debug.LogWarning($"Numéro de niveau invalide : le niveau doit être supérieur à 0 et inférieur à {_levels.Length + 1}");
+            Debug.LogWarning($"Numï¿½ro de niveau invalide : le niveau doit ï¿½tre supï¿½rieur ï¿½ 0 et infï¿½rieur ï¿½ {_levels.Length + 1}");
         }
         else
         {
@@ -286,6 +291,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartEditMode()
     {
         Debug.Log("NIVEAU " + _level);
+        OnEffectApplied?.Invoke(Effect.NONE);
         _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
@@ -323,6 +329,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         bool movementComplete = false;
         while (path.Count > i && !_hasWon && !isBossRoomReached)
         {
+            //Debug.Log($"{(i == 0 ? "Are at the room : " : "Move to ")} {path[i].name}");
             if (i == 0) //Waiting in entrance
             {
                 SpawnHeroesOnScreen(path[i]);
@@ -355,6 +362,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
                 }
+                OnEffectApplied?.Invoke(Effect.NONE);
             }
             i++;
         }

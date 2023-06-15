@@ -22,4 +22,7 @@ MonoBehaviour:
   _description: The trap gains an additional effect chosen by the player in addition
     to the monster effect (ice, physics, plant, lightning, poison, fire). Not combinable
     with another monster effect.
-  _soundWhenApplied: 
+  _soundWhenApplied: PiegeMonstre
+  _bgEffectUIImage: {fileID: 21300000, guid: 13b25a684d12a3c4cb113bf5341360f7, type: 3}
+  _roomEffectImage: {fileID: 0}
+  _isRoomEffectImageBehindHeroes: 0

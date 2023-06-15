@@ -1,5 +1,6 @@
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "Trap Data", menuName = "GoldProject/Trap Data", order = 3)]
 public class TrapData : ScriptableObject
@@ -13,6 +14,9 @@ public class TrapData : ScriptableObject
     [SerializeField] private Color _color;
     [ResizableTextArea,SerializeField] private string _description;
     [SerializeField] private string _soundWhenApplied;
+    [SerializeField] private Sprite _bgEffectUIImage;
+    [SerializeField] private Sprite _roomEffectImage;
+    [SerializeField] private bool _isRoomEffectImageBehindHeroes;
     public string Name
     {
         get { return _name; }
@@ -45,6 +49,15 @@ public class TrapData : ScriptableObject
     }
     public string Description { 
         get => _description;
+    }
+    public Sprite BgEffectUIImage { 
+        get => _bgEffectUIImage;
+    }
+    public Sprite RoomEffectImage { 
+        get => _roomEffectImage;
+    }
+    public bool IsRoomEffectImageBehindHeroes {
+        get => _isRoomEffectImageBehindHeroes;
     }
 }
 
