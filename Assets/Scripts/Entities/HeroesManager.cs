@@ -173,7 +173,7 @@ public class HeroesManager : MonoBehaviour
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
-                    //Debug.Log("APPLY ABILITY : " + hero.Role);
+                    Debug.Log("APPLY ABILITY : " + hero.Role);
                 }
             }
         }
