@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
-    [SerializeField] AnimationManager _animationManager;
     [SerializeField] GameObject _startButton;
     [SerializeField] float _durationBetweenRoom = 10f;
     [SerializeField] float _durationWaitInRoom = 1f;
@@ -91,6 +90,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public event Action<int> OnEnterPlayMode;
     public event Action OnWin;
     public event Action OnLoss;
+    public event Action<Effect> OnEffectApplied;
 
     [SerializeField] private UnityEvent _onWinUnityEvent;
     [SerializeField] private UnityEvent _onLossUnityEvent;
@@ -193,7 +193,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 if (room.Effects.Count > 0)
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
-
+                    OnEffectApplied?.Invoke(_currentRoomEffect);
                     ApplyCurrentRoomEffect(_currentRoomEffect);
 
                     for (int j = 0; j < room.Effects.Count; j++)
@@ -355,6 +355,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
                 }
+                OnEffectApplied?.Invoke(Effect.NONE);
             }
             i++;
         }
