@@ -126,9 +126,6 @@ public class Room : MonoBehaviour
     public void SetData(RoomData roomData)
     {
         SetColor(RoomColor.Usable);
-        // if (_roomColor != RoomColor.Selected)
-        //     RoomColor = RoomColor.Usable;
-        // _oldState = RoomColor.Usable;
         _roomData = roomData;
         //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {roomData}");
         SetSprite(_roomData.Sprite);
@@ -137,9 +134,6 @@ public class Room : MonoBehaviour
     public void SetData(TrapData trapData)
     {
         SetColor(RoomColor.Usable);
-        // if (_roomColor != RoomColor.Selected)
-        //     RoomColor = RoomColor.Usable;
-        // _oldState = RoomColor.Usable;
         _trapData = trapData;
         _listEffects.Clear();
         _listEffects.Add(trapData.Effect);
@@ -149,9 +143,6 @@ public class Room : MonoBehaviour
     public void SetData(RoomData roomData, TrapData trapData)
     {
         SetColor(RoomColor.Usable);
-        // if (_roomColor != RoomColor.Selected)
-        //     RoomColor = RoomColor.Usable;
-        // _oldState = RoomColor.Usable;
         _roomData = roomData;
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
@@ -161,9 +152,6 @@ public class Room : MonoBehaviour
     public void SetData(RoomData roomData, RoomColor roomColor = RoomColor.Unclickable)
     {
         SetColor(roomColor);
-        // if (_roomColor != RoomColor.Selected)
-        //     RoomColor = roomColor;
-        // _oldState = roomColor;
         _roomData = roomData;
         SetSprite(_roomData.Sprite);
     }
@@ -171,18 +159,12 @@ public class Room : MonoBehaviour
     public void SetData(Sprite sprite, RoomColor roomColor = RoomColor.Unclickable)
     {
         SetColor(roomColor);
-        // if (_roomColor != RoomColor.Selected)
-        //     RoomColor = roomColor;
-        // _oldState = roomColor;
         SetSprite(sprite);
     }
 
     public void SetData(RoomData roomData, TrapData trapData, RoomColor roomColor = RoomColor.NotBuyable)
     {
         SetColor(roomColor);
-        // if (_roomColor != RoomColor.Selected)
-        //     RoomColor = roomColor;
-        // _oldState = roomColor;
         _roomData = roomData;
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
@@ -191,7 +173,6 @@ public class Room : MonoBehaviour
 
     public void UndoData(TrapData trapData)
     {
-        Debug.Log($"undo Data by trapData {trapData}");
         _trapData = trapData;
         if (trapData == null) {
             RoomColor = RoomColor.NotBuyable;
@@ -207,7 +188,6 @@ public class Room : MonoBehaviour
 
     public void UndoData(RoomData roomData, TrapData trapData)
     {
-        Debug.Log($"undo Data by roomData {roomData} && trapData {trapData}");
         _roomData = roomData;
         _trapData = trapData;
         if (roomData == null || trapData == null) {
@@ -225,7 +205,6 @@ public class Room : MonoBehaviour
 
     public void UndoData(RoomData roomData, TrapData trapData, RoomColor roomColor = RoomColor.NotBuyable)
     {
-        Debug.Log($"undo Data by roomData {roomData} && trapData {trapData} && roomColor {roomColor}");
         _roomData = roomData;
         _trapData = trapData;
         RoomColor = roomColor;
@@ -280,7 +259,6 @@ public class Room : MonoBehaviour
     {
         RoomColor = _oldState;
         _upgradeIcon.gameObject.SetActive(false);
-        //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {_roomData}");
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
                 RoomColor = RoomColor.NotBuyable;
