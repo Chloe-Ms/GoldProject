@@ -19,5 +19,9 @@ MonoBehaviour:
   _nbRoomsBeforeEffect: 0
   _roomType: 2
   _color: {r: 0, g: 0, b: 0, a: 0}
-  _description: 
+  _description: The heros are forced to get the keys before going to the boss room,
+    the box does not inflict damage
   _soundWhenApplied: 
+  _bgEffectUIImage: {fileID: 0}
+  _roomEffectImage: {fileID: 0}
+  _isRoomEffectImageBehindHeroes: 0
