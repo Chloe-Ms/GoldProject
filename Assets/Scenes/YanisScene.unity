@@ -1590,10 +1590,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     _maxHealth: 
     _mapWidth: 3
-    _mapHeight: 3
+    _mapHeight: 4
     _prePlacedElements:
       _preplacedObstacle: []
-      _preplacedBoss: {x: 1, y: 3}
+      _preplacedBoss: {x: 2, y: 4}
   - name: Level 2
     _nbMovesMax: 5
     _listHeroesInLevel:
@@ -1620,10 +1620,8 @@ MonoBehaviour:
   _heroesManager: {fileID: 147781381}
   _mapManager: {fileID: 1277845744}
   _startButton: {fileID: 17827539}
-  _durationBetweenRoom: 2
+  _durationBetweenRoom: 10
   _durationWaitInRoom: 1
-  _durationWaitBeforeDisplayLoss: 2
-  _durationWaitBeforeDisplayWin: 2
   _displayUI: {fileID: 1519186617}
   _winDisplayGO: {fileID: 980297376}
   _lossDisplayGO: {fileID: 1804162192}
@@ -1658,7 +1656,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameObjectsInEditMode: []
   _gameObjectsInPlayMode: []
-  _hideOnEditMode: []
 --- !u!1 &446186743
 GameObject:
   m_ObjectHideFlags: 0
@@ -4291,7 +4288,6 @@ MonoBehaviour:
   - {fileID: 951595768}
   _gameObjectsInPlayMode:
   - {fileID: 518267757}
-  _hideOnEditMode: []
 --- !u!1 &1611098776
 GameObject:
   m_ObjectHideFlags: 0
@@ -5266,7 +5262,6 @@ GameObject:
   - component: {fileID: 1877598791}
   - component: {fileID: 1877598793}
   - component: {fileID: 1877598792}
-  - component: {fileID: 1877598795}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5329,10 +5324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01fe9b941ce5634c905d1c9243534d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _zoomSizeEditMode: 3
-  _zoomSizePlayMode: 3
-  _timeToZoom: 0.7
-  _timeToMove: 0.5
 --- !u!81 &1877598793
 AudioListener:
   m_ObjectHideFlags: 0
@@ -5356,87 +5347,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1877598795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877598790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6afb8e11e7c500f4b89717c22dc4820f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sounds:
-  - _name: PosePiege1
-    _clip: {fileID: 8300000, guid: 9439187e84c7bbf4bac3c43735140bf4, type: 3}
-    _volume: 0.4
-    _pitch: 1
-  - _name: PosePiege2
-    _clip: {fileID: 8300000, guid: 0435a587d97a0494296f122b2894230a, type: 3}
-    _volume: 0.4
-    _pitch: 1
-  - _name: Selection
-    _clip: {fileID: 8300000, guid: 30a2695a7efa0de4f824f659a7165df7, type: 3}
-    _volume: 0.35
-    _pitch: 1
-  - _name: MenuPause
-    _clip: {fileID: 8300000, guid: d7adfe15f2f424943851bc471b4f74f3, type: 3}
-    _volume: 0.4
-    _pitch: 1
-  - _name: Victory
-    _clip: {fileID: 8300000, guid: 84c68c0a7ecb55d4d9e360266893970d, type: 3}
-    _volume: 0.5
-    _pitch: 1
-  - _name: Defeat
-    _clip: {fileID: 8300000, guid: d623e4096e1d4d44e8fcda11352ffb3c, type: 3}
-    _volume: 0.35
-    _pitch: 1
-  - _name: WalkHeros1
-    _clip: {fileID: 8300000, guid: 8c4fdc18893018a4fa28141f65637d1e, type: 3}
-    _volume: 0.45
-    _pitch: 1
-  - _name: WalkHeros2
-    _clip: {fileID: 8300000, guid: 630a41e7b41a383409faba872bed9658, type: 3}
-    _volume: 0.45
-    _pitch: 1
-  - _name: WalkHeros3
-    _clip: {fileID: 8300000, guid: 960aaffd0552d754492be984b9315f24, type: 3}
-    _volume: 0.45
-    _pitch: 1
-  - _name: PiegeElectric
-    _clip: {fileID: 8300000, guid: fd5d981f95665904fb79ec084fa551b5, type: 3}
-    _volume: 0.32
-    _pitch: 1
-  - _name: PiegeFeu
-    _clip: {fileID: 8300000, guid: 8354b959d58eb2240a4bf9fc0ab4227d, type: 3}
-    _volume: 0.32
-    _pitch: 1
-  - _name: PiegePoison
-    _clip: {fileID: 8300000, guid: ebde5b6e2665d3d4887fadea9b1b1428, type: 3}
-    _volume: 0.32
-    _pitch: 1
-  - _name: PiegePhysique
-    _clip: {fileID: 8300000, guid: 3027b2cdb43dce54ea6db8e105b00855, type: 3}
-    _volume: 0.32
-    _pitch: 1
-  - _name: PiegePlante
-    _clip: {fileID: 8300000, guid: cbff29a4d19bf7d4389a64bdb3199295, type: 3}
-    _volume: 0.42
-    _pitch: 1
-  - _name: PiegeGlace
-    _clip: {fileID: 8300000, guid: e2c1acfecd94aed4e871c54d826684ad, type: 3}
-    _volume: 0.45
-    _pitch: 1
-  - _name: PiegeMonstre
-    _clip: {fileID: 8300000, guid: 9439187e84c7bbf4bac3c43735140bf4, type: 3}
-    _volume: 1
-    _pitch: 1
-  _bgSources:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &1884125359
 GameObject:
   m_ObjectHideFlags: 0

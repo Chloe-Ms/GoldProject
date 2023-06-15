@@ -285,7 +285,7 @@ public class MapManager : MonoBehaviour
 
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
-                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
             {
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
@@ -596,21 +596,19 @@ public class MapManager : MonoBehaviour
         Room lever = null;
         int lowestCount = _widthSize * _heightSize;
 
-        // bestPath.Add(_start);
-        // yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
-        //Debug.Log($"leverList.Count = {leverList.Count}");
+        bestPath.Add(_start);
+        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
         while (leverList != null && leverList.Count > 0) {
-            //Debug.Log($"leverList.Count = {leverList.Count}");
             bestPath = null;
             travelLists = null;
             travelLists = FindObjectif(leverList, actualRoom);
             if (travelLists != null || travelLists.Count > 0) {
                 lowestCount = GetLowestPathSize(travelLists);
-                //Debug.Log($"lowestCount = {lowestCount}");
+                Debug.Log($"lowestCount = {lowestCount}");
                 for (int i = 0; i < travelLists.Count; i++) {
-                    //PrintListOfRoom(travelLists[i]);
+                    PrintListOfRoom(travelLists[i]);
                     if (travelLists[i].Count > lowestCount) {
-                        //Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
+                        Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
                         travelLists.RemoveAt(i);
                         i--;
                     }
@@ -619,24 +617,21 @@ public class MapManager : MonoBehaviour
                     bestPath = MergeCommunSlot(travelLists);
                 else 
                     bestPath = travelLists[0];
-                // Debug.Log($"Actual Room : {actualRoom.name}");
-                // PrintListOfRoom(bestPath);
-                //bestPath.Insert(0, actualRoom);
-                //bestPath.RemoveAt(0);
+                bestPath.RemoveAt(0);
+                Debug.Log($"Actual Path :");
+                PrintListOfRoom(bestPath);
                 yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 //Room lever = ask the player which path he want to take
-                actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
-                    //Debug.Log($"All Path avalaible :");
-                    // foreach (List<Room> path in travelLists)
-                    //     PrintListOfRoom(path);
+                    Debug.Log($"All Path avalaible :");
+                    foreach (List<Room> path in travelLists)
+                        PrintListOfRoom(path);
                     yield return new WaitUntil(() => {
                         if (Input.GetKeyDown(KeyCode.Mouse0)) {
                             Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                             if (room != null && room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER) {
                                 List<Room> foundedPath = travelLists.Find(path => path.Contains(room));
                                 if (foundedPath != null) {
-                                    //Debug.Log($"Room {room.name} selected");
                                     lever = room;
                                     return true;
                                 } else
@@ -647,9 +642,8 @@ public class MapManager : MonoBehaviour
                             return false;
                     });
                     bestPath = travelLists.Find(path => path.Contains(lever));
-                    //Debug.Log($"Selected Path :");
-                    bestPath.Insert(0, actualRoom);
-                    //PrintListOfRoom(bestPath);
+                    Debug.Log($"Selected Path :");
+                    PrintListOfRoom(bestPath);
                     yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 }
                 leverList.Remove(bestPath[bestPath.Count - 1]);
@@ -665,7 +659,7 @@ public class MapManager : MonoBehaviour
         List<Room> newPath = new List<Room>();
         bool isIdentical = true;
 
-        //Debug.Log($"path.Count = {path.Count} have a lenght of {path[0].Count}");
+        Debug.Log($"path.Count = {path.Count} have a lenght of {path[0].Count}");
         for (int i = 0; i < path[0].Count && isIdentical;) {
             for (int j = 1; j < path.Count && isIdentical; j++) {
                 if (path[j][0] == path[0][0]) {
@@ -676,6 +670,7 @@ public class MapManager : MonoBehaviour
                 }
             }
             if (isIdentical) {
+                Debug.Log($"Added");
                 newPath.Add(path[0][0]);
                 for (int j = 0; j < path.Count; j++)
                     path[j].RemoveAt(0);

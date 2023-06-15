@@ -323,7 +323,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         bool movementComplete = false;
         while (path.Count > i && !_hasWon && !isBossRoomReached)
         {
-            //Debug.Log($"{(i == 0 ? "Are at the room : " : "Move to ")} {path[i].name}");
             if (i == 0) //Waiting in entrance
             {
                 SpawnHeroesOnScreen(path[i]);
