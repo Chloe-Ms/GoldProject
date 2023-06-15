@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
     private Vector3 _initPosition;
     private Camera _camera;
     [SerializeField] private float _speedZoom = 3f;
-    [SerializeField] private float _speedMove = .5f;
+    [SerializeField] private float _durationMove = .5f;
     private float _timer = 0f;
     private bool _isZooming = false;
     private bool _isZoomed = false;
@@ -70,7 +70,7 @@ public class CameraManager : MonoBehaviour
     private void MoveCamera(Vector3 position)
     {
         position.z = _initPosition.z;
-        transform.DOMove(position, _speedMove);
+        transform.DOMove(position, _durationMove);
     }
 
     private void FollowGroupHeroes()
@@ -91,40 +91,26 @@ public class CameraManager : MonoBehaviour
             if (MapManager.Instance.SelectedSlot != null) //Selection d'une salle
             {
                 MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
-                MoveCamera(_initPosition);
                 if (!_isZoomed && !_isZooming)
                 {
-                    Debug.Log("ZOOM");
                     _isZooming = true;
                     _isDezooming = false;
                     _timer = 0;
                     _isDezoomed = false;
                     this._startZoomSize = _camera.orthographicSize;
                 }
-                //_camera.orthographicSize = _zoomSizeEditMode;
-                /*_isZooming = true;
-                _timer = 0;*/
             }
             else //Aucune salle sélectionnée
             {
                 MoveCamera(_initPosition);
                 if (!_isDezoomed && !_isDezooming)
                 {
-                    Debug.Log("DEZOOM");
                     _isDezooming = true;
                     _isZooming = false;
                     _timer = 0;
                     _isZoomed = false;
                     this._startZoomSize = _camera.orthographicSize;
                 }
-                //_camera.orthographicSize = _initZoomSize;
-                /*if (_isZoomed && !_isZooming)
-                {
-                    Debug.Log("deZOOM");
-                    _isZooming = true;
-                    _isZoomed = false;
-                    _timer = 0;
-                }*/
             }
         }
         
@@ -154,63 +140,5 @@ public class CameraManager : MonoBehaviour
                 }
             }
         }
-
-        /*if (_isInPlayMode)
-        {
-            FollowGroupHeroes();
-        }
-        else
-        {
-            if (MapManager.Instance.SelectedSlot != null)
-            {
-                Debug.Log("SELECTED");
-                MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
-                if (!_isZoomed && !_isZooming)
-                {
-                    Debug.Log("ZOOm");
-                    _isZooming = true;
-                    _timer = 0;
-                }
-            }
-            else
-            {
-                MoveCamera(_initPosition);
-
-                if (_isZoomed && !_isZooming)
-                {
-                    Debug.Log("deZOOM");
-                    _isZooming = true;
-                    _isZoomed = false;
-                    _timer = 0;
-                }
-            }
-        }
-
-        if (_isZooming)
-        {
-            _timer += Time.deltaTime;
-            if (!_isZoomed)
-            {
-                _camera.orthographicSize = Mathf.Lerp(_initZoomSize, _zoomSizeEditMode, (_timer * _speedZoom) / (_initZoomSize - _zoomSizeEditMode));
-                if (_timer >= _speedZoom)
-                {
-                    _camera.orthographicSize = _zoomSizeEditMode;
-                    _timer = 0;
-                    _isZooming = false;
-                    _isZoomed = true;
-                }
-            }
-            else
-            {
-                _camera.orthographicSize = Mathf.Lerp(_zoomSizeEditMode, _initZoomSize, (_timer * _speedZoom) / (_initZoomSize - _zoomSizeEditMode));
-                if (_timer >= _speedZoom)
-                {
-                    _camera.orthographicSize = _initZoomSize;
-                    _timer = 0;
-                    _isZooming = false;
-                    _isZoomed = false;
-                }
-            }
-        }*/
     }
 }
