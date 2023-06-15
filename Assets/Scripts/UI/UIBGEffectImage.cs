@@ -1,11 +1,15 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIBGEffectImage : MonoBehaviour
 {
     [SerializeField] Image _spriteBgEffectUI;
-
+    [SerializeField] RectTransform _rectTransform;
     [SerializeField] GeneralData _generalData;
+    [SerializeField] Vector2 _scrollOffset = new Vector2(100,0);
+    [SerializeField] float _durationAnim = 0.5f;
+    Vector2 _endPosition;
 
     void Start()
     {
@@ -21,6 +25,9 @@ public class UIBGEffectImage : MonoBehaviour
         } else
         {
             _spriteBgEffectUI.color = new Color(1, 1, 1, 1);
+            _endPosition = _rectTransform.anchoredPosition;
+            _rectTransform.anchoredPosition = _endPosition + _scrollOffset;
+            _rectTransform.DOAnchorPos(_endPosition, _durationAnim, true);
         }
     }
 }

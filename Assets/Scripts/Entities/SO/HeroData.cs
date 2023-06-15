@@ -1,5 +1,4 @@
 using NaughtyAttributes;
-using UnityEditor.U2D.PSD;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Hero", menuName = "GoldProject/Create Hero", order = 1)]
