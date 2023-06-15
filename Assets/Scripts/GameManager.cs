@@ -288,8 +288,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         Debug.Log("NIVEAU " + _level);
         _nbMenuIn = 0;
         _roomsInList.InitList();
-        //_winDisplayGO.SetActive(false);
-        //_lossDisplayGO.SetActive(false);
+        _winDisplayGO.SetActive(false);
+        _lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
         _hasWon = false;
         OnEnterEditorMode?.Invoke(Level);
