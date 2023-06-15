@@ -165,6 +165,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         return _heroesManager.GetDamageOfEffectOnHero(effect, hero);
     }
 
+    public GameObject GetHeroesParentGameObject()
+    {
+        return _heroesManager.GroupParent;
+    }
+
     public void SpawnHeroesOnScreen(Room room)
     {
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
