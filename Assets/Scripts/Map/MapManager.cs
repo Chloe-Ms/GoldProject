@@ -780,6 +780,8 @@ public class MapManager : MonoBehaviour
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
             room.UndoData(null, null, RoomColor.NotBuyable);
+            SetUnBuyableAdjacent(_selectedSlot);
+            _selectedSlot.UnSelect();
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
             _currentRoomCount--;
