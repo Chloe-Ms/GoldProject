@@ -395,9 +395,9 @@ public class MapManager : MonoBehaviour
                 FindRoomPatern();
                 _currentRoomCount++;
             }
-            if (_selectedSlot != _start) {
+            if (_selectedSlot != _start && _selectedSlot.TrapData != data) {
                 if (mapAction.ActionType == ActionType.None)
-                    mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, data);
+                    mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, _selectedSlot.TrapData, _selectedSlot.RoomData, _selectedSlot.NbOfUpgrades);
                 if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) //si l'ancienne salle avait un upgrade on l'enlève
                 {
                     _selectedSlot.UndoUpgrade();
@@ -793,17 +793,19 @@ public class MapManager : MonoBehaviour
         MapAction mapAction = _mapActions.Count > 0 ? _mapActions.Pop() : null;
         Room room = null;
 
-        Debug.Log($"MapAction = {mapAction}");
         if (mapAction == null)
             return;
         room = FindRoom(mapAction.Index);
-        mapAction.PrintAction();
         if (mapAction.ActionType == ActionType.Add) {
             room.UndoData(null, null, RoomColor.NotBuyable);
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
             _currentRoomCount--;
         } else if (mapAction.ActionType == ActionType.Change) {
+            if (mapAction.Upgrade > 0) {
+                room.UpgradeRoom();
+                _currentRoomCount++;
+            }
             room.UndoData(mapAction.TrapData);
         } else if (mapAction.ActionType == ActionType.Upgrade) {
             room.UndoUpgrade();
@@ -827,6 +829,7 @@ public class MapAction
     private ActionType _actionType;
     private TrapData _trapData;
     private RoomData _roomData;
+    private int _upgrade;
 
     public int Index
     {
@@ -850,18 +853,24 @@ public class MapAction
         get { return _roomData; }
     }
 
+    public int Upgrade
+    {
+        get { return _upgrade; }
+    }
+
     public MapAction()
     {
         _index = -1;
         _actionType = ActionType.None;
     }
 
-    public void SetAction(int index, ActionType actionType, TrapData trapData = null, RoomData roomData = null)
+    public void SetAction(int index, ActionType actionType, TrapData trapData = null, RoomData roomData = null, int upgrade = 0)
     {
         _index = index;
         _actionType = actionType;
         _trapData = trapData;
         _roomData = roomData;
+        _upgrade = upgrade;
     }
 
     public void PrintAction()
