@@ -285,7 +285,7 @@ public class MapManager : MonoBehaviour
 
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
-                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
             {
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
