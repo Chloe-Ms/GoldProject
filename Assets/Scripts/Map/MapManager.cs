@@ -263,6 +263,7 @@ public class MapManager : MonoBehaviour
         _currentRoomCount = 0;
         _start = null;
         _boss = null;
+        DestroyImmediate(_grids);
         _mapActions = new Stack<MapAction>();
         _routineChangeRoom = null;
         Generate();

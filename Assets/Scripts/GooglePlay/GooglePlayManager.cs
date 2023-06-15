@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,21 +8,17 @@ using GooglePlayGames.BasicApi;
 
 public class GooglePlayManager : MonoBehaviour
 {
-    // private static Dictionary<string, string> _achievementID = {
-    //     {"Here comes a new challenger", "CgkIvpfI760aEAIQAA" }
-    // };
-
-    // private Dictionary<string, string> _achievementID = {
-    //     {"Enma no Champion", "CgkIvpfI760aEAIQAg"},
-    //     {"This'll tickle their feet", "CgkIvpfI760aEAIQCA"},
-    //     {"Green Day", "CgkIvpfI760aEAIQBQ"},
-    //     {"I've got balls of steel", "CgkIvpfI760aEAIQBw"},
-    //     {"Here comes a new challenger", "CgkIvpfI760aEAIQAA"},
-    //     {"It's a trap!", "CgkIvpfI760aEAIQBA"},
-    //     {"How the hell?", "CgkIvpfI760aEAIQBg"},
-    //     {"Enma no Danjon", "CgkIvpfI760aEAIQAQ"},
-    //     {"Glue you back together in hell", "CgkIvpfI760aEAIQAw"}
-    // };
+    private static Dictionary<string, string> _achievementID = new Dictionary<string, string>() {
+        {"Enma no Champion", "CgkIvpfI760aEAIQAg"},
+        {"This'll tickle their feet", "CgkIvpfI760aEAIQCA"},
+        {"Green Day", "CgkIvpfI760aEAIQBQ"},
+        {"I've got balls of steel", "CgkIvpfI760aEAIQBw"},
+        {"Here comes a new challenger", "CgkIvpfI760aEAIQAA"},
+        {"It's a trap!", "CgkIvpfI760aEAIQBA"},
+        {"How the hell?", "CgkIvpfI760aEAIQBg"},
+        {"Enma no Danjon", "CgkIvpfI760aEAIQAQ"},
+        {"Glue you back together in hell", "CgkIvpfI760aEAIQAw"}
+    };
 
     private static GooglePlayManager _instance;
 
