@@ -12,12 +12,14 @@ public class Grid : MonoBehaviour
     {
         _width = width;
         _height = height;
+        Debug.Log($"Grid Init: {_width}x{_height}");
     }
 
     public Sprite GetSprite(int x, int y)
     {
         int index = 0;
 
+        Debug.Log($"GetSprite: {x}x{y} on {_width}x{_height}");
         if (_width == 1) {
             if (y == 0)
                 index = (int)direction.down;
