@@ -789,6 +789,12 @@ public class MapManager : MonoBehaviour
         Debug.Log($"mapAction.Index {mapAction.Index}");
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
+            //Debug.Log($"Room {room} {BossIsAbove(room)} {room.RoomData.Directions}");
+            if (BossIsAbove(room)) //Remove the link to the boss room, to get the right revert direction
+            {
+                Direction initialDirection = room.RoomData.Directions - (int)Direction.Up;
+                room.SetData(FindRoomDataByDirections(initialDirection));
+            }
             direction = GetRevertDirection(room.RoomData.Directions);
             RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
             room.UndoData(null, null, RoomColor.NotBuyable);
