@@ -165,6 +165,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         return _heroesManager.GetDamageOfEffectOnHero(effect, hero);
     }
 
+    public GameObject GetHeroesParentGameObject()
+    {
+        return _heroesManager.GroupParent;
+    }
+
     public void SpawnHeroesOnScreen(Room room)
     {
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
@@ -286,6 +291,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartEditMode()
     {
         Debug.Log("NIVEAU " + _level);
+        OnEffectApplied?.Invoke(Effect.NONE);
         _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
@@ -323,6 +329,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         bool movementComplete = false;
         while (path.Count > i && !_hasWon && !isBossRoomReached)
         {
+            //Debug.Log($"{(i == 0 ? "Are at the room : " : "Move to ")} {path[i].name}");
             if (i == 0) //Waiting in entrance
             {
                 SpawnHeroesOnScreen(path[i]);
