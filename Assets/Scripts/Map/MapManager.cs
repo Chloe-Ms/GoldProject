@@ -164,21 +164,6 @@ public class MapManager : MonoBehaviour
         }
         return null;
     }
-
-    private Room FindRoom(Room room, Direction direction)
-    {
-        int index = _slots.IndexOf(room.gameObject);
-
-        if (direction == Direction.Left && index - _heightSize >= 0)
-            return _slots[index - _heightSize].GetComponent<Room>();
-        if (direction == Direction.Right && index + _heightSize < _slots.Count)
-            return _slots[index + _heightSize].GetComponent<Room>();
-        if (direction == Direction.Up && index + 1 < _slots.Count && (index + 1) % _heightSize != 0)
-            return _slots[index + 1].GetComponent<Room>();
-        if (direction == Direction.Down && index - 1 >= 0 && (index - 1) % _heightSize != _heightSize - 1)
-            return _slots[index - 1].GetComponent<Room>();
-        return null;
-    }
     #endregion
 
     private int GetIndexOfRoom(Room room)
@@ -317,7 +302,8 @@ public class MapManager : MonoBehaviour
                     SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
-            if (room != null && room == _boss) {
+            if (room != null && room == _boss)
+            {
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
                 if (_selectedSlot != null)
@@ -483,7 +469,6 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
-            Debug.Log($"direction = {direction} room.Directions = {room.Directions}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -560,10 +545,10 @@ public class MapManager : MonoBehaviour
                 leverList.Add(slot.GetComponent<Room>());
         });
         travelLists = new List<List<Room>>();
-        //Debug.Log($"leverList.Count = {leverList.Count}");
+        Debug.Log($"leverList.Count = {leverList.Count}");
         for (int i = 0; i < leverList.Count; i++) {
             travelLists.Add(new List<Room>());
-            //Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
+            Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
             FindPathTo(_start, travelLists[i], leverList[i]);
         }
         return travelLists;
@@ -576,7 +561,7 @@ public class MapManager : MonoBehaviour
         if (leverList == null || leverList.Count == 0 || actualRoom == null)
             return null;
         travelLists = new List<List<Room>>();
-        //Debug.Log($"leverList.Count = {leverList.Count}");
+        Debug.Log($"leverList.Count = {leverList.Count}");
         for (int i = 0; i < leverList.Count; i++) {
             travelLists.Add(new List<Room>());
             FindPathTo(actualRoom, travelLists[i], leverList[i]);
@@ -634,9 +619,10 @@ public class MapManager : MonoBehaviour
                     bestPath = MergeCommunSlot(travelLists);
                 else 
                     bestPath = travelLists[0];
-                bestPath.RemoveAt(0);
-                //Debug.Log($"Actual Path :");
-                PrintListOfRoom(bestPath);
+                // Debug.Log($"Actual Room : {actualRoom.name}");
+                // PrintListOfRoom(bestPath);
+                //bestPath.Insert(0, actualRoom);
+                //bestPath.RemoveAt(0);
                 yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
@@ -662,6 +648,7 @@ public class MapManager : MonoBehaviour
                     });
                     bestPath = travelLists.Find(path => path.Contains(lever));
                     //Debug.Log($"Selected Path :");
+                    bestPath.Insert(0, actualRoom);
                     //PrintListOfRoom(bestPath);
                     yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 }
@@ -689,7 +676,6 @@ public class MapManager : MonoBehaviour
                 }
             }
             if (isIdentical) {
-                //Debug.Log($"Added");
                 newPath.Add(path[0][0]);
                 for (int j = 0; j < path.Count; j++)
                     path[j].RemoveAt(0);
@@ -755,38 +741,6 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
-    public Direction GetRevertDirection(Direction direction)
-    {
-        Direction tmp = direction;
-        Direction revertDirection = Direction.None;
-
-        if (tmp >= Direction.Down) {
-            tmp -= (int)Direction.Down;
-            revertDirection = revertDirection | Direction.Up;
-        }
-        if (tmp >= Direction.Up) {
-            tmp -= (int)Direction.Up;
-            revertDirection = revertDirection | Direction.Down;
-        }
-        if (tmp >= Direction.Left) {
-            tmp -= (int)Direction.Left;
-            revertDirection = revertDirection | Direction.Right;
-        }
-        if (tmp >= Direction.Right) {
-            tmp -= (int)Direction.Right;
-            revertDirection = revertDirection | Direction.Left;
-        }
-        return revertDirection;
-    }
-
-    public void RemoveDirection(Room room, Direction direction)
-    {
-        Direction initialDirection = room.RoomData.Directions;
-
-        initialDirection -= direction;
-        room.SetData(FindRoomDataByDirections(initialDirection));
-    }
-
     public string PrintDirection(Direction direction)
     {
         string str = "{";
@@ -826,17 +780,14 @@ public class MapManager : MonoBehaviour
     public void Undo()
     {
         MapAction mapAction = _mapActions.Count > 0 ? _mapActions.Pop() : null;
-        Direction direction = Direction.None;
         Room room = null;
 
         if (mapAction == null)
             return;
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
-            direction = GetRevertDirection(room.RoomData.Directions);
-            RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
             room.UndoData(null, null, RoomColor.NotBuyable);
-            if (_selectedSlot != null) {
+            if (_selectedSlot != null){
                 SetUnBuyableAdjacent(_selectedSlot);
                 _selectedSlot.UnSelect();
             }
