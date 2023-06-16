@@ -302,8 +302,7 @@ public class MapManager : MonoBehaviour
                     SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
-            if (room != null && room == _boss)
-            {
+            if (room != null && room == _boss) {
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
                 if (_selectedSlot != null)
@@ -311,7 +310,7 @@ public class MapManager : MonoBehaviour
                     _selectedSlot.UnSelect();
                 }
                 _selectedSlot = null;
-                Debug.Log($"Selected Slot = {_selectedSlot}");
+                //Debug.Log($"Selected Slot = {_selectedSlot}");
                 _grids.SetActive(false);
                 GameManager.Instance.StartPlayMode();
                 _routineChangeRoom = StartCoroutine(ImprovePathFinding());
@@ -330,12 +329,9 @@ public class MapManager : MonoBehaviour
                     oldSelectedSlot.UnSelect();
                 }
             }
-            if (_selectedSlot != null)
-                Debug.Log($"Selected Slot = {_selectedSlot.IsUsable()}");
             if (_selectedSlot == null)
                 EditorManager.Instance.CloseEditorMenu();
             else if (_selectedSlot.IsUsable()) {
-                Debug.Log($"BuyableRoomCount = {BuyableRoomCount}");
                 if (BuyableRoomCount > 0)
                     SetBuyableAdjacent();
                 else
@@ -545,10 +541,10 @@ public class MapManager : MonoBehaviour
                 leverList.Add(slot.GetComponent<Room>());
         });
         travelLists = new List<List<Room>>();
-        Debug.Log($"leverList.Count = {leverList.Count}");
+        //Debug.Log($"leverList.Count = {leverList.Count}");
         for (int i = 0; i < leverList.Count; i++) {
             travelLists.Add(new List<Room>());
-            Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
+            //Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
             FindPathTo(_start, travelLists[i], leverList[i]);
         }
         return travelLists;
@@ -561,7 +557,7 @@ public class MapManager : MonoBehaviour
         if (leverList == null || leverList.Count == 0 || actualRoom == null)
             return null;
         travelLists = new List<List<Room>>();
-        Debug.Log($"leverList.Count = {leverList.Count}");
+        //Debug.Log($"leverList.Count = {leverList.Count}");
         for (int i = 0; i < leverList.Count; i++) {
             travelLists.Add(new List<Room>());
             FindPathTo(actualRoom, travelLists[i], leverList[i]);
@@ -619,10 +615,9 @@ public class MapManager : MonoBehaviour
                     bestPath = MergeCommunSlot(travelLists);
                 else 
                     bestPath = travelLists[0];
-                // Debug.Log($"Actual Room : {actualRoom.name}");
-                // PrintListOfRoom(bestPath);
-                //bestPath.Insert(0, actualRoom);
-                //bestPath.RemoveAt(0);
+                bestPath.RemoveAt(0);
+                //Debug.Log($"Actual Path :");
+                PrintListOfRoom(bestPath);
                 yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
@@ -648,7 +643,6 @@ public class MapManager : MonoBehaviour
                     });
                     bestPath = travelLists.Find(path => path.Contains(lever));
                     //Debug.Log($"Selected Path :");
-                    bestPath.Insert(0, actualRoom);
                     //PrintListOfRoom(bestPath);
                     yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 }
@@ -676,6 +670,7 @@ public class MapManager : MonoBehaviour
                 }
             }
             if (isIdentical) {
+                //Debug.Log($"Added");
                 newPath.Add(path[0][0]);
                 for (int j = 0; j < path.Count; j++)
                     path[j].RemoveAt(0);
