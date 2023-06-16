@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
+    [SerializeField] UIMenu _uiMenu; // peut etre nul
 
     private bool _hasWon = false;
     private int _nbMoves = 0;
@@ -149,7 +150,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         }
     }
 
-    
+    public TutorialData GetTutorialData() //peut etre nul attention
+    {
+        return _levels[_level].Tutorial;
+    }
 
     public HeroData[] GetHeroesCurrentLevel()
     {
@@ -302,6 +306,9 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
+        if (_levels[_level].Tutorial != null) { // peut etre nul
+            _uiMenu.DisplayTutorial();
+        }
     }
 
     [Button("Enter play mode")]
