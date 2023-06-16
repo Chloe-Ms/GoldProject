@@ -608,9 +608,11 @@ public class MapManager : MonoBehaviour
         Room lever = null;
         int lowestCount = _widthSize * _heightSize;
 
-        bestPath.Add(_start);
-        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        // bestPath.Add(_start);
+        // yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        //Debug.Log($"leverList.Count = {leverList.Count}");
         while (leverList != null && leverList.Count > 0) {
+            //Debug.Log($"leverList.Count = {leverList.Count}");
             bestPath = null;
             travelLists = null;
             travelLists = FindObjectif(leverList, actualRoom);
@@ -618,7 +620,7 @@ public class MapManager : MonoBehaviour
                 lowestCount = GetLowestPathSize(travelLists);
                 //Debug.Log($"lowestCount = {lowestCount}");
                 for (int i = 0; i < travelLists.Count; i++) {
-                    PrintListOfRoom(travelLists[i]);
+                    //PrintListOfRoom(travelLists[i]);
                     if (travelLists[i].Count > lowestCount) {
                         //Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
                         travelLists.RemoveAt(i);
@@ -634,6 +636,7 @@ public class MapManager : MonoBehaviour
                 PrintListOfRoom(bestPath);
                 yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 //Room lever = ask the player which path he want to take
+                actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
                     //Debug.Log($"All Path avalaible :");
                     // foreach (List<Room> path in travelLists)
@@ -644,6 +647,7 @@ public class MapManager : MonoBehaviour
                             if (room != null && room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER) {
                                 List<Room> foundedPath = travelLists.Find(path => path.Contains(room));
                                 if (foundedPath != null) {
+                                    //Debug.Log($"Room {room.name} selected");
                                     lever = room;
                                     return true;
                                 } else
