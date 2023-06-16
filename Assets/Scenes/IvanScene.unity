@@ -449,8 +449,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CategoryHash: 0
-  m_labelHash: 0
+  m_CategoryHash: 0.0000035538344
+  m_labelHash: 9.040195e-19
   m_SpriteKey: 5.7015784e-36
 --- !u!1 &30028662 stripped
 GameObject:
@@ -3322,11 +3322,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.185
+      value: 0.159
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3360,11 +3360,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2438741275294966301, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2438741275294966301, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2438741275294966301, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2438741275294966301, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2438741275294966301, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 4843985084834002234, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
 --- !u!1 &1871184212 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: -2308780015826685898, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: df78b41ff6cbfc84192f2eef5ab0a3c6, type: 3}
   m_PrefabInstance: {fileID: 1871184211}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &1871184213
