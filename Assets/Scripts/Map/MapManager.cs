@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using System.IO;
 
 public class MapManager : MonoBehaviour
 {
@@ -469,6 +470,7 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
+            //Debug.Log($"direction = {direction} room.Directions = {room.Directions}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -784,8 +786,11 @@ public class MapManager : MonoBehaviour
 
         if (mapAction == null)
             return;
+        Debug.Log($"mapAction.Index {mapAction.Index}");
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
+            direction = GetRevertDirection(room.RoomData.Directions);
+            RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
             room.UndoData(null, null, RoomColor.NotBuyable);
             if (_selectedSlot != null){
                 SetUnBuyableAdjacent(_selectedSlot);
