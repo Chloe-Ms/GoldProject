@@ -12,7 +12,7 @@ public class Room : MonoBehaviour
     [SerializeField] private UIUpgradeButton _upgradeIcon;
     [SerializeField] private SpriteRenderer _borderRenderer;
     private GameObject _icon;
-
+    [SerializeField] float _iconScale = 1f;
     public RoomData RoomData
     {
         get { return _roomData; }
@@ -121,13 +121,14 @@ public class Room : MonoBehaviour
         _icon.transform.localPosition = new Vector3(0, 0, -offsetZ);
         _icon.AddComponent<SpriteRenderer>();
         _icon.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
+        _icon.transform.localScale = new Vector2(_iconScale, _iconScale);
     }
 
     public void SetData(RoomData roomData)
     {
         SetColor(RoomColor.Usable);
         _roomData = roomData;
-        //Debug.Log($"RoomName = {transform.name} Selected = {MapManager.Instance.SelectedSlot} data = {roomData}");
+        //Debug.Log($"RoomName = {transform.name} data = {roomData}");
         SetSprite(_roomData.Sprite);
     }
 
