@@ -296,6 +296,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         Debug.Log("NIVEAU " + _level);
         OnEffectApplied?.Invoke(Effect.NONE);
+        SetPlayMode(false);
         _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
