@@ -5,6 +5,7 @@ public class UIMenu : MonoBehaviour
 {
     [SerializeField] UIHeroInfos _menuCharacter;
     [SerializeField] UIRoomInfos _menuRoom;
+    [SerializeField] UITutoInfos _menuTuto; // peut etre nul
     HeroData[] _heroesData;
 
     public void LoadScene(string sceneName)
@@ -22,5 +23,23 @@ public class UIMenu : MonoBehaviour
     {
         _menuRoom.gameObject.SetActive(true);
         _menuRoom.Init(trapData);
+    }
+
+    public void DisplayTutorial() //peut etre nul
+    {
+        _menuTuto.gameObject.SetActive(true);
+        _menuTuto.BeginReadingTutoData();
+    }
+
+    public void ChangeTutorialPage() // ça aussi
+    {
+        if (_menuTuto.CanChangeTutoData())
+        {
+            _menuTuto.ChangeTutoData();
+        }
+        else
+        {
+            _menuTuto.gameObject.SetActive(false);
+        }
     }
 }
