@@ -16,13 +16,18 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float _zoomSizeEditMode = 3f;
     [SerializeField] private float _zoomSizePlayMode = 3f;
     private float _initZoomSize;
+    private float _startZoomSize;
     private Vector3 _initPosition;
     private Camera _camera;
-    [SerializeField] private float _timeToZoom = .7f;
-    [SerializeField] private float _timeToMove = .5f;
+    [SerializeField] private float _speedZoom = 3f;
+    [SerializeField] private float _durationMove = .5f;
     private float _timer = 0f;
     private bool _isZooming = false;
     private bool _isZoomed = false;
+    private bool _isDezoomed = true;
+    private bool _isInPlayMode = false;
+    private bool _isDezooming = false;
+    private GameObject _groupParentGO;
 
     public Camera Camera
     {
@@ -38,50 +43,102 @@ public class CameraManager : MonoBehaviour
         this._camera = GetComponent<Camera>();
         this._initZoomSize = _camera.orthographicSize;
         this._initPosition = transform.position;
+        this._startZoomSize = this._initZoomSize;
     }
 
-    private void ResetCamera()
+    private void Start()
     {
-        ResetCameraZoom();
-        ResetCameraPosition();
+        _groupParentGO = GameManager.Instance.GetHeroesParentGameObject();
+        GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
+        GameManager.Instance.OnEnterPlayMode += SetCameraPlay;
     }
 
-    private void ResetCameraZoom()
+    private void SetCameraPlay(int obj)
     {
+        _isInPlayMode = true;
+        _camera.orthographicSize = _zoomSizePlayMode;
+        FollowGroupHeroes();
+    }
+
+    private void SetCameraEdit(int obj)
+    {
+        _isInPlayMode = false;
         _camera.orthographicSize = _initZoomSize;
-    }
-
-    private void ResetCameraPosition()
-    {
-        transform.position = _initPosition;
+        _camera.transform.position = _initPosition;
     }
 
     private void MoveCamera(Vector3 position)
     {
-        
         position.z = _initPosition.z;
-        transform.DOMove(position, _timeToZoom);
+        transform.DOMove(position, _durationMove);
     }
 
-    private void ZoomCamera(float zoom)
+    private void FollowGroupHeroes()
     {
-        _camera.orthographicSize = zoom;
+        Vector3 position = _groupParentGO.transform.position;
+        position.z = _initPosition.z;
+        _camera.transform.position = position;
     }
 
     private void Update()
     {
-        /*if (_isZooming)
+        if (_isInPlayMode)
         {
-            _timer += Time.time;
-        }*/
-        if (MapManager.Instance.SelectedSlot != null)
-        {
-            MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
-            ZoomCamera(_zoomSizeEditMode);
+            FollowGroupHeroes();
         }
         else
         {
-            ResetCamera();
+            if (MapManager.Instance.SelectedSlot != null) //Selection d'une salle
+            {
+                MoveCamera(MapManager.Instance.SelectedSlot.transform.position);
+                if (!_isZoomed && !_isZooming)
+                {
+                    _isZooming = true;
+                    _isDezooming = false;
+                    _timer = 0;
+                    _isDezoomed = false;
+                    this._startZoomSize = _camera.orthographicSize;
+                }
+            }
+            else //Aucune salle sélectionnée
+            {
+                MoveCamera(_initPosition);
+                if (!_isDezoomed && !_isDezooming)
+                {
+                    _isDezooming = true;
+                    _isZooming = false;
+                    _timer = 0;
+                    _isZoomed = false;
+                    this._startZoomSize = _camera.orthographicSize;
+                }
+            }
+        }
+        
+        if (_isZooming || _isDezooming)
+        {
+            _timer += Time.deltaTime;
+            if (_isZooming) //De l'init au normal
+            {
+                _camera.orthographicSize = Mathf.Lerp(this._startZoomSize, _zoomSizeEditMode, (_timer * _speedZoom) / Mathf.Abs(this._startZoomSize - _zoomSizeEditMode));
+                if (_timer >= Mathf.Abs(this._startZoomSize - _zoomSizeEditMode)/ _speedZoom)
+                {
+                    _camera.orthographicSize = _zoomSizeEditMode;
+                    _timer = 0;
+                    _isZooming = false;
+                    _isZoomed = true;
+                }
+            }
+            if (_isDezooming)
+            {
+                _camera.orthographicSize = Mathf.Lerp(this._startZoomSize, _initZoomSize, (_timer * _speedZoom) / Mathf.Abs(_initZoomSize - this._startZoomSize));
+                if (_timer >= Mathf.Abs(_initZoomSize - this._startZoomSize) / _speedZoom)
+                {
+                    _camera.orthographicSize = _initZoomSize;
+                    _timer = 0;
+                    _isDezooming = false;
+                    _isDezoomed = true;
+                }
+            }
         }
     }
 }

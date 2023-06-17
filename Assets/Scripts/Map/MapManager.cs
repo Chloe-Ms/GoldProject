@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using System.IO;
 
 public class MapManager : MonoBehaviour
 {
@@ -164,6 +165,21 @@ public class MapManager : MonoBehaviour
         }
         return null;
     }
+
+    private Room FindRoom(Room room, Direction direction)
+    {
+        int index = _slots.IndexOf(room.gameObject);
+
+        if (direction == Direction.Left && index - _heightSize >= 0)
+            return _slots[index - _heightSize].GetComponent<Room>();
+        if (direction == Direction.Right && index + _heightSize < _slots.Count)
+            return _slots[index + _heightSize].GetComponent<Room>();
+        if (direction == Direction.Up && index + 1 < _slots.Count && (index + 1) % _heightSize != 0)
+            return _slots[index + 1].GetComponent<Room>();
+        if (direction == Direction.Down && index - 1 >= 0 && (index - 1) % _heightSize != _heightSize - 1)
+            return _slots[index - 1].GetComponent<Room>();
+        return null;
+    }
     #endregion
 
     private int GetIndexOfRoom(Room room)
@@ -175,67 +191,43 @@ public class MapManager : MonoBehaviour
     {
         int index = _slots.IndexOf(_selectedSlot.gameObject);
 
-        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor == RoomColor.NotBuyable) {
-            //_slots[index - 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
             _slots[index - 1].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
-        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor == RoomColor.NotBuyable) {
-            //_slots[index + 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
             _slots[index + 1].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
-        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor == RoomColor.NotBuyable) {
-            //_slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
             _slots[index - _heightSize].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
-        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor == RoomColor.NotBuyable) {
-            //_slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().RoomColor == RoomColor.NotBuyable)
             _slots[index + _heightSize].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
     }
 
     private void SetBuyableAdjacent(Room indexedRoom)
     {
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
-        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsBuyable()) {
-            _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsBuyable())
             _slots[index - 1].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
-        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().IsBuyable()) {
-            _slots[index + 1].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().IsBuyable())
             _slots[index + 1].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
-        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().IsBuyable()) {
-            _slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().IsBuyable())
             _slots[index - _heightSize].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
-        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().IsBuyable()) {
-            _slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.Buyable);
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().IsBuyable())
             _slots[index + _heightSize].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.RoomList.RoomData[17], RoomColor.Buyable);
-        }
     }
 
     private void SetUnBuyableAdjacent(Room indexedRoom)
     {
+        //Debug.Log($"Room unbuy {indexedRoom}");
         int index = _slots.IndexOf(indexedRoom.gameObject);
 
-        Debug.Log("SetUnBuyableAdjacent");
-        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsNotBuy()) {
-            _slots[index - 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index - 1 >= 0 && (index - 1) % _heightSize == (index % _heightSize) - 1 && _slots[index - 1].GetComponent<Room>().IsNotBuy())
             _slots[index - 1].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.Square, RoomColor.NotBuyable);
-        }
-        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().IsNotBuy()) {
-            _slots[index + 1].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index + 1 < _slots.Count &&  (index + 1) % _heightSize == (index % _heightSize) + 1 && _slots[index + 1].GetComponent<Room>().IsNotBuy())
             _slots[index + 1].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.Square, RoomColor.NotBuyable);
-        }
-        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().IsNotBuy()) {
-            _slots[index - _heightSize].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index - _heightSize >= 0 && _slots[index - _heightSize].GetComponent<Room>().IsNotBuy())
             _slots[index - _heightSize].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.Square, RoomColor.NotBuyable);
-        }
-        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().IsNotBuy()) {
-            _slots[index + _heightSize].GetComponent<Room>().SetColor(RoomColor.NotBuyable);
+        if (index + _heightSize < _slots.Count && _slots[index + _heightSize].GetComponent<Room>().IsNotBuy())
             _slots[index + _heightSize].GetComponent<Room>().SetData(GameManager.Instance.GeneralData.Square, RoomColor.NotBuyable);
-        }
     }
 
     private void Awake()
@@ -309,22 +301,21 @@ public class MapManager : MonoBehaviour
 
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
-                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos))
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
             {
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
                 _mapActions.Push(mapAction);
-                if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE)
-                {
+                if (_selectedSlot.TrapData != null && _selectedSlot.TrapData.Effect == Effect.MONSTRE) {
                     GameManager.Instance.NbMenuIn++;
                     _effectRoomMonster = Effect.NONE;
                     _routineRoomMonster = StartCoroutine(RoutineMonsterRoom());
                 } else
-                {
                     _selectedSlot.UpgradeRoom();
-                }
                 _currentRoomCount++;
                 UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
+                if (BuyableRoomCount <= 0)
+                    SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
             if (room != null && room == _boss)
@@ -336,7 +327,7 @@ public class MapManager : MonoBehaviour
                     _selectedSlot.UnSelect();
                 }
                 _selectedSlot = null;
-                Debug.Log($"Selected Slot = {_selectedSlot}");
+                //Debug.Log($"Selected Slot = {_selectedSlot}");
                 _grids.SetActive(false);
                 GameManager.Instance.StartPlayMode();
                 _routineChangeRoom = StartCoroutine(ImprovePathFinding());
@@ -355,10 +346,16 @@ public class MapManager : MonoBehaviour
                     oldSelectedSlot.UnSelect();
                 }
             }
+            /*if (_selectedSlot != null)
+                Debug.Log($"Selected Slot = {_selectedSlot.IsUsable()}");*/
             if (_selectedSlot == null)
                 EditorManager.Instance.CloseEditorMenu();
             else if (_selectedSlot.IsUsable()) {
-                SetBuyableAdjacent();
+                //Debug.Log($"BuyableRoomCount = {BuyableRoomCount}");
+                if (BuyableRoomCount > 0)
+                    SetBuyableAdjacent();
+                else
+                    SetUnBuyableAdjacent(_selectedSlot);
             }
         }
     }
@@ -395,40 +392,48 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
+                _selectedSlot.SetData(data);
                 _currentRoomCount++;
             }
-            if (_selectedSlot != _start && _selectedSlot.TrapData != data) {
+            if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, _selectedSlot.TrapData, _selectedSlot.RoomData, _selectedSlot.NbOfUpgrades);
-                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) //si l'ancienne salle avait un upgrade on l'enlève
-                {
+                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) { //si l'ancienne salle avait un upgrade on l'enlève
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
                 _selectedSlot.SetData(data);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
-            SetBuyableAdjacent(_selectedSlot);
-            _selectedSlot.EnableUpgrade();
+            if (BuyableRoomCount > 0) {
+                SetBuyableAdjacent(_selectedSlot);
+                _selectedSlot.EnableUpgrade();
+            }
             UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
             if (BossIsAbove() && mapAction.ActionType == ActionType.Add)
             {
                 FindRoomPatern(_selectedSlot, _boss);
-            } 
+                GameManager.Instance.SetPlayMode(true);
+            }
+                
         }
-        //mapAction.PrintAction();
         _mapActions.Push(mapAction);
-        if (IsEditComplete())
-        {
-            GameManager.Instance.SetPlayMode(true);
-        }
     }
 
     private bool BossIsAbove()
     {
         int index = _slots.IndexOf(_selectedSlot.gameObject);
 
-        if (_slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
+        if (index + 1 < _slots.Count && _slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
+            return true;
+        return false;
+    }
+
+    private bool BossIsAbove(Room room)
+    {
+        int index = _slots.IndexOf(room.gameObject);
+
+        if (index + 1 < _slots.Count && _slots[index + 1] != null && _slots[index + 1] == _boss.gameObject)
             return true;
         return false;
     }
@@ -480,6 +485,7 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
+            //Debug.Log($"direction = {direction} room.Directions = {room.Directions}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -506,8 +512,6 @@ public class MapManager : MonoBehaviour
         travelList.Add(room);
         actualDirection = room.RoomData.Directions;
 
-        //Debug.Log($"Room = {room.name} actualDirection = {PrintDirection(actualDirection)}");
-        //pathfinding with recursion with using actualdirection
         if (HaveDirection(ref actualDirection, Direction.Left) && !travelList.Contains(FindRoom(GetIndexOfRoom(room) - _heightSize))) {
             GetRoom(FindRoom(GetIndexOfRoom(room) - _heightSize), travelList);
             travelList.Add(room);
@@ -533,8 +537,6 @@ public class MapManager : MonoBehaviour
 
         pathTo.Add(actualRoom);
         actualDirection = actualRoom.RoomData.Directions;
-        // Debug.Log($"Room = {actualRoom.name} actualDirection = {PrintDirection(actualDirection)}");
-        // pathfinding with recursion with using actualdirection
         if (actualRoom == roomToFind)
             return true;
         if (HaveDirection(ref actualDirection, Direction.Left) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) - _heightSize)) && !find)
@@ -545,10 +547,8 @@ public class MapManager : MonoBehaviour
             find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) + 1), pathTo, roomToFind);
         if (HaveDirection(ref actualDirection, Direction.Down) && !pathTo.Contains(FindRoom(GetIndexOfRoom(actualRoom) - 1)) && !find)
             find = FindPathTo(FindRoom(GetIndexOfRoom(actualRoom) - 1), pathTo, roomToFind);
-        if (find == false) {
+        if (find == false)
             pathTo.Remove(actualRoom);
-            //Debug.Log($"Remove {actualRoom.name}");
-        }
         return find;
     }
 
@@ -613,19 +613,21 @@ public class MapManager : MonoBehaviour
         Room lever = null;
         int lowestCount = _widthSize * _heightSize;
 
-        bestPath.Add(_start);
-        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        // bestPath.Add(_start);
+        // yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        //Debug.Log($"leverList.Count = {leverList.Count}");
         while (leverList != null && leverList.Count > 0) {
+            //Debug.Log($"leverList.Count = {leverList.Count}");
             bestPath = null;
             travelLists = null;
             travelLists = FindObjectif(leverList, actualRoom);
             if (travelLists != null || travelLists.Count > 0) {
                 lowestCount = GetLowestPathSize(travelLists);
-                Debug.Log($"lowestCount = {lowestCount}");
+                //Debug.Log($"lowestCount = {lowestCount}");
                 for (int i = 0; i < travelLists.Count; i++) {
-                    PrintListOfRoom(travelLists[i]);
+                    //PrintListOfRoom(travelLists[i]);
                     if (travelLists[i].Count > lowestCount) {
-                        Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
+                        //Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
                         travelLists.RemoveAt(i);
                         i--;
                     }
@@ -634,21 +636,24 @@ public class MapManager : MonoBehaviour
                     bestPath = MergeCommunSlot(travelLists);
                 else 
                     bestPath = travelLists[0];
-                bestPath.RemoveAt(0);
-                Debug.Log($"Actual Path :");
-                PrintListOfRoom(bestPath);
+                // Debug.Log($"Actual Room : {actualRoom.name}");
+                // PrintListOfRoom(bestPath);
+                //bestPath.Insert(0, actualRoom);
+                //bestPath.RemoveAt(0);
                 yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 //Room lever = ask the player which path he want to take
+                actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
-                    Debug.Log($"All Path avalaible :");
-                    foreach (List<Room> path in travelLists)
-                        PrintListOfRoom(path);
+                    //Debug.Log($"All Path avalaible :");
+                    // foreach (List<Room> path in travelLists)
+                    //     PrintListOfRoom(path);
                     yield return new WaitUntil(() => {
                         if (Input.GetKeyDown(KeyCode.Mouse0)) {
                             Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                             if (room != null && room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER) {
                                 List<Room> foundedPath = travelLists.Find(path => path.Contains(room));
                                 if (foundedPath != null) {
+                                    //Debug.Log($"Room {room.name} selected");
                                     lever = room;
                                     return true;
                                 } else
@@ -659,8 +664,9 @@ public class MapManager : MonoBehaviour
                             return false;
                     });
                     bestPath = travelLists.Find(path => path.Contains(lever));
-                    Debug.Log($"Selected Path :");
-                    PrintListOfRoom(bestPath);
+                    //Debug.Log($"Selected Path :");
+                    bestPath.Insert(0, actualRoom);
+                    //PrintListOfRoom(bestPath);
                     yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
                 }
                 leverList.Remove(bestPath[bestPath.Count - 1]);
@@ -676,7 +682,7 @@ public class MapManager : MonoBehaviour
         List<Room> newPath = new List<Room>();
         bool isIdentical = true;
 
-        Debug.Log($"path.Count = {path.Count} have a lenght of {path[0].Count}");
+        //Debug.Log($"path.Count = {path.Count} have a lenght of {path[0].Count}");
         for (int i = 0; i < path[0].Count && isIdentical;) {
             for (int j = 1; j < path.Count && isIdentical; j++) {
                 if (path[j][0] == path[0][0]) {
@@ -687,7 +693,6 @@ public class MapManager : MonoBehaviour
                 }
             }
             if (isIdentical) {
-                Debug.Log($"Added");
                 newPath.Add(path[0][0]);
                 for (int j = 0; j < path.Count; j++)
                     path[j].RemoveAt(0);
@@ -722,7 +727,6 @@ public class MapManager : MonoBehaviour
     {
         Direction tmp = direction;
 
-        //Debug.Log($"{direction} & {directionToCheck}");
         if (tmp >= Direction.Down) {
             tmp -= Direction.Down;
             if (directionToCheck == Direction.Down) {
@@ -752,6 +756,42 @@ public class MapManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public Direction GetRevertDirection(Direction direction)
+    {
+        Direction tmp = direction;
+        Direction revertDirection = Direction.None;
+
+        if (tmp >= Direction.Down)
+        {
+            tmp -= (int)Direction.Down;
+            revertDirection = revertDirection | Direction.Up;
+        }
+        if (tmp >= Direction.Up)
+        {
+            tmp -= (int)Direction.Up;
+            revertDirection = revertDirection | Direction.Down;
+        }
+        if (tmp >= Direction.Left)
+        {
+            tmp -= (int)Direction.Left;
+            revertDirection = revertDirection | Direction.Right;
+        }
+        if (tmp >= Direction.Right)
+        {
+            tmp -= (int)Direction.Right;
+            revertDirection = revertDirection | Direction.Left;
+        }
+        return revertDirection;
+    }
+
+    public void RemoveDirection(Room room, Direction direction)
+    {
+        Direction initialDirection = room.RoomData.Directions;
+
+        initialDirection -= direction;
+        room.SetData(FindRoomDataByDirections(initialDirection));
     }
 
     public string PrintDirection(Direction direction)
@@ -793,16 +833,35 @@ public class MapManager : MonoBehaviour
     public void Undo()
     {
         MapAction mapAction = _mapActions.Count > 0 ? _mapActions.Pop() : null;
+        Direction direction = Direction.None;
         Room room = null;
 
         if (mapAction == null)
             return;
+        Debug.Log($"mapAction.Index {mapAction.Index}");
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
+            //Debug.Log($"Room {room} {BossIsAbove(room)} {room.RoomData.Directions}");
+            if (BossIsAbove(room)) //Remove the link to the boss room, to get the right revert direction
+            {
+                Direction initialDirection = room.RoomData.Directions - (int)Direction.Up;
+                room.SetData(FindRoomDataByDirections(initialDirection));
+            }
+            direction = GetRevertDirection(room.RoomData.Directions);
+            RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
             room.UndoData(null, null, RoomColor.NotBuyable);
+            if (_selectedSlot != null) {
+                SetUnBuyableAdjacent(_selectedSlot);
+                _selectedSlot.UnSelect();
+            }
             _selectedSlot = null;
             SetUnBuyableAdjacent(room);
             _currentRoomCount--;
+            if (BossIsAbove(room))
+            {
+                _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
+                GameManager.Instance.SetPlayMode(false);
+            }
         } else if (mapAction.ActionType == ActionType.Change) {
             if (mapAction.Upgrade > 0) {
                 room.UpgradeRoom();
@@ -813,6 +872,9 @@ public class MapManager : MonoBehaviour
             room.UndoUpgrade();
             _currentRoomCount--;
         }
+        if (_selectedSlot != null && BuyableRoomCount > 0)
+            SetBuyableAdjacent();
+        
         UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
     }
 }
