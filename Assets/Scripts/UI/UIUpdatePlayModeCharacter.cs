@@ -11,6 +11,12 @@ public class UIUpdatePlayModeCharacter : MonoBehaviour
     [SerializeField] TextMeshProUGUI _feedbackPV;
     [SerializeField] float _offsetYDamage = 0.5f;
     [SerializeField, Min(0.1f)] float _durationMovementDamage = 1f;
+
+    [SerializeField] Color _healColor;
+    [SerializeField] Color _noDamageColor;
+    [SerializeField] Color _damageColor;
+
+
     float _startPosY;
 
     private void Start()
@@ -36,6 +42,27 @@ public class UIUpdatePlayModeCharacter : MonoBehaviour
     public void StartFeedBack(int damageTaken)
     {
         _feedbackPV.gameObject.SetActive(true);
+        
+        if (damageTaken < 0)
+        {
+            _feedbackPV.fontSize = 30;
+            _feedbackPV.color = _damageColor;
+            Debug.Log(damageTaken);
+        }
+        if (damageTaken <= -2)
+        {
+            _feedbackPV.fontSize = 45;
+        }
+        if (damageTaken == 0)
+        {
+            _feedbackPV.fontSize = 30;
+            _feedbackPV.color = _noDamageColor;
+        }
+        if (damageTaken > 0)
+        {
+            _feedbackPV.fontSize = 30;
+            _feedbackPV.color = _healColor;
+        }
         _feedbackPV.text = damageTaken.ToString();
         _feedbackPV.transform.DOMoveY(_startPosY+ _offsetYDamage,_durationMovementDamage)
             .OnComplete(() =>
