@@ -58,6 +58,9 @@ public class MapManager : MonoBehaviour
     public Room BossRoom { 
         get => _boss;
     }
+    public float SlotSize { 
+        get => _slotSize; 
+    }
     #endregion
 
     #region Events
@@ -72,6 +75,7 @@ public class MapManager : MonoBehaviour
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
+    private float _slotSize;
 
     private Room _start = null;
     private Room _boss = null;
@@ -237,6 +241,10 @@ public class MapManager : MonoBehaviour
         }
         else
             _instance = this;
+        if (_slot != null)
+        {
+            _slotSize = _slot.GetComponent<SpriteRenderer>().size.x;
+        }
     }
 
     #region Init

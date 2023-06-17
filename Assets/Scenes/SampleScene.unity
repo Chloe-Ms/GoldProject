@@ -5309,7 +5309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbf315f10c63314db16b4308592968a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomWidth: 0
   _heroPrefab: {fileID: 2783475497506347363, guid: 474fd352c7b6a7b42a13b23d75380756, type: 3}
   _groupGO: {fileID: 1237067342}
   _heroesSensibilities: {fileID: 11400000, guid: 45548c6c67b1a95469b95f103389b25f, type: 2}
@@ -5847,6 +5846,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 471357460}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _gameObject
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _mapManager
       value: 
       objectReference: {fileID: 1780699299}
@@ -5875,6 +5878,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _objectTestDotween.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._mapHeight
       value: 3
       objectReference: {fileID: 0}
@@ -5889,6 +5896,14 @@ PrefabInstance:
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[8]._mapHeight
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _objectTestDotween.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _objectTestDotween.Array.data[1]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[0]._nbMovesMax
