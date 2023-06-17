@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private Room _currentRoom = null;
     private static GameManager _instance;
     private int _nbMenuIn = 0;
-    private Coroutine _routineWaitInRoom;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -102,6 +101,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] private UnityEvent _onLossUnityEvent;
     [SerializeField] private UnityEvent _onHeroesMovementUnityEvent;
     [SerializeField] private UnityEvent _onHeroesAttackUnityEvent;
+    [SerializeField] private UnityEvent _onStartEditorMode;
+    [SerializeField] private UnityEvent _onStartPlayMode;
     #endregion
 
     void Awake()
@@ -163,7 +164,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     }
     public void MoveHeroesOnScreen(Room room)
     {
-        _onHeroesMovementUnityEvent.Invoke();
         MoveHeroesToRoom(room);
     }
 
@@ -278,6 +278,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartEditMode()
     {
         Debug.Log("NIVEAU " + _level);
+        _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
         SetPlayMode(false);
         _nbMenuIn = 0;
@@ -300,11 +301,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartPlayMode()
     {
         //Enter Play Mode
+        _onStartPlayMode.Invoke();
+        OnEnterPlayMode?.Invoke(Level);
         if (_mapManager.IsEditComplete())
         {
             _displayUI.EnterPlayMode();
             _startButton.SetActive(false);
-            OnEnterPlayMode?.Invoke(Level);
             // List<Room> path = _mapManager.Pathfinding();
             // if (path != null)
             // {
@@ -385,7 +387,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
                 }
-                OnEffectApplied?.Invoke(Effect.NONE);
             }
             i++;
         }

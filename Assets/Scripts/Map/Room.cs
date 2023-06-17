@@ -121,7 +121,6 @@ public class Room : MonoBehaviour
         _icon.transform.localPosition = new Vector3(0, 0, -offsetZ);
         _icon.AddComponent<SpriteRenderer>();
         _icon.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
-        _icon.transform.localScale = new Vector2(_iconScale, _iconScale);
     }
 
     public void SetData(RoomData roomData)
@@ -170,6 +169,16 @@ public class Room : MonoBehaviour
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
         SetSprite(_roomData.Sprite);
+    }
+
+    public void ClearIcon()
+    {
+        /*if (_trapData != null && (_trapData.RoomType == RoomType.NORMAL || _trapData.RoomType == RoomType.LEVER))
+        {
+            _icon.transform.localScale = new Vector2(_iconScale, _iconScale);
+            _icon.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+            _icon.GetComponent<SpriteRenderer>().sprite = sprite;
+        }*/
     }
 
     public void UndoData(TrapData trapData)
@@ -224,6 +233,10 @@ public class Room : MonoBehaviour
     {
         _icon.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
         _icon.GetComponent<SpriteRenderer>().sprite = sprite;
+        if (_trapData != null && (_trapData.RoomType == RoomType.NORMAL || _trapData.RoomType == RoomType.LEVER))
+        {
+            _icon.transform.localScale = new Vector2(_iconScale, _iconScale);
+        }
     }
 
     public void SetColor(RoomColor color)
