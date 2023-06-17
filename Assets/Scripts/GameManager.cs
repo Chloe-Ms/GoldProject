@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
     [SerializeField] float _durationBetweenRoom = 10f;
+    [SerializeField] float _durationMergeHeroes = 2f;
     [SerializeField] float _durationWaitInRoom = 1f;
     [SerializeField] float _durationWaitBeforeDisplayLoss = 2f;
     [SerializeField] float _durationWaitBeforeDisplayWin = 2f;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] GameObject _winDisplayGO;
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
+    [SerializeField] UIMenu _uiMenu; // peut etre nul
 
     private bool _hasWon = false;
     private int _nbMoves = 0;
@@ -83,6 +85,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         get => _nbMenuIn; 
         set => _nbMenuIn = value; 
     }
+    public float SlotSize
+    {
+        get => _mapManager.SlotSize;
+    }
     #endregion Properties
 
     #region Events
@@ -96,28 +102,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] private UnityEvent _onLossUnityEvent;
     [SerializeField] private UnityEvent _onHeroesMovementUnityEvent;
     [SerializeField] private UnityEvent _onHeroesAttackUnityEvent;
-    #endregion
-
-    #region Test
-    [SerializeField] private bool _updated;
-    [SerializeField] private Room _room;
-    [SerializeField] private Effect _effect;
-    [Button]
-    private void RoomTest()
-    {
-        GameObject room = Instantiate(_room.gameObject);
-        Room t = room.GetComponent<Room>();
-        if (_updated)
-        {
-            t.NbOfUpgrades = 1;
-        }
-        else
-        {
-            t.NbOfUpgrades = 0;
-        }
-        t.Effects.Add(_effect);
-        MoveHeroesToRoom(t);
-    }
     #endregion
 
     void Awake()
@@ -149,7 +133,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         }
     }
 
-    
+    public TutorialData GetTutorialData() //peut etre nul attention
+    {
+        return _levels[_level].Tutorial;
+    }
 
     public HeroData[] GetHeroesCurrentLevel()
     {
@@ -292,6 +279,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         Debug.Log("NIVEAU " + _level);
         OnEffectApplied?.Invoke(Effect.NONE);
+        SetPlayMode(false);
         _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
@@ -302,6 +290,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
+        if (_levels[_level].Tutorial != null) { // peut etre nul
+            _uiMenu.DisplayTutorial();
+            ChangeNbMenuIn(1);
+        }
     }
 
     [Button("Enter play mode")]
@@ -333,13 +325,44 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             if (i == 0) //Waiting in entrance
             {
                 SpawnHeroesOnScreen(path[i]);
+                yield return new WaitForSeconds(0.5f);
             } else
             {
                 //Move avec dotween puis onended
                 _onHeroesMovementUnityEvent.Invoke();
                 movementComplete = false;
                 _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(true);
-                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom).OnComplete(() =>
+                Sequence sequence = DOTween.Sequence();
+                for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
+                {
+                    if (i == 0)
+                    {
+                        sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(0, _durationMergeHeroes));
+                    }
+                    else
+                    {
+                        sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(0, _durationMergeHeroes));
+                    }
+
+                }
+                sequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
+                for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
+                {
+                    float posOffset = ((j + 1) * (GameManager.Instance.SlotSize / (_heroesManager.HeroesInCurrentLevel.Heroes.Count + 1))) - 0.5f;
+                    if (j == 0)
+                    {
+                        sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(posOffset, _durationMergeHeroes));
+                    }
+                    else
+                    {
+                        sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(posOffset, _durationMergeHeroes));
+                    }
+                }
+                sequence.OnComplete(() =>
                 {
                     _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
                     if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
