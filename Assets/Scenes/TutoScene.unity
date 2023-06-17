@@ -5895,6 +5895,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _levels.Array.data[5]._tutorial
+      value: 
+      objectReference: {fileID: 11400000, guid: 6d59a70aa7bfdc943b83bd8d5b0b482f, type: 2}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[1]._mapHeight
       value: 3
       objectReference: {fileID: 0}
@@ -5908,7 +5912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._mapHeight
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._mapHeight
@@ -5944,7 +5948,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._nbMovesMax
-      value: 4
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._nbMovesMax
@@ -5972,7 +5976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._maxHealth.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._maxHealth.Array.size
@@ -6012,11 +6016,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._maxHealth.Array.data[0]
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._maxHealth.Array.data[1]
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._maxHealth.Array.data[2]
@@ -6076,7 +6080,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._listHeroesInLevel.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._listHeroesInLevel.Array.size
@@ -6118,6 +6122,10 @@ PrefabInstance:
       propertyPath: _levels.Array.data[4]._listHeroesInLevel.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _levels.Array.data[4]._listHeroesInLevel.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._listHeroesInLevel.Array.data[2]
       value: 
@@ -6192,11 +6200,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedBoss.x
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedBoss.y
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._prePlacedElements._preplacedBoss.x
@@ -6244,7 +6252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._prePlacedElements._preplacedObstacle.Array.size
@@ -6360,7 +6368,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.data[1].x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.data[1].y
@@ -6368,11 +6376,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.data[2].x
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.data[2].y
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.data[3].x
@@ -6380,7 +6388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._prePlacedElements._preplacedObstacle.Array.data[3].y
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[5]._prePlacedElements._preplacedObstacle.Array.data[0].x
