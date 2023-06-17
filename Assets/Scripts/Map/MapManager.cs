@@ -318,8 +318,7 @@ public class MapManager : MonoBehaviour
                     SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
-            if (room != null && room == _boss)
-            {
+            if (room != null && room == _boss) {
                 _editorState = EditorState.Play;
                 SetUnBuyableAdjacent(room);
                 if (_selectedSlot != null)
@@ -562,10 +561,10 @@ public class MapManager : MonoBehaviour
                 leverList.Add(slot.GetComponent<Room>());
         });
         travelLists = new List<List<Room>>();
-        Debug.Log($"leverList.Count = {leverList.Count}");
+        //Debug.Log($"leverList.Count = {leverList.Count}");
         for (int i = 0; i < leverList.Count; i++) {
             travelLists.Add(new List<Room>());
-            Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
+            //Debug.Log($"start = {_start.name} lever = {leverList[i].name} --------------------------------------------------------------------------------------");
             FindPathTo(_start, travelLists[i], leverList[i]);
         }
         return travelLists;
@@ -578,7 +577,7 @@ public class MapManager : MonoBehaviour
         if (leverList == null || leverList.Count == 0 || actualRoom == null)
             return null;
         travelLists = new List<List<Room>>();
-        Debug.Log($"leverList.Count = {leverList.Count}");
+        //Debug.Log($"leverList.Count = {leverList.Count}");
         for (int i = 0; i < leverList.Count; i++) {
             travelLists.Add(new List<Room>());
             FindPathTo(actualRoom, travelLists[i], leverList[i]);
