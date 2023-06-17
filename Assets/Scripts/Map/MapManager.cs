@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using System.IO;
 
 public class MapManager : MonoBehaviour
 {
@@ -162,6 +163,21 @@ public class MapManager : MonoBehaviour
             if (slot.GetComponent<Room>().IsInBound(pos))
                 return slot.GetComponent<Room>();
         }
+        return null;
+    }
+
+    private Room FindRoom(Room room, Direction direction)
+    {
+        int index = _slots.IndexOf(room.gameObject);
+
+        if (direction == Direction.Left && index - _heightSize >= 0)
+            return _slots[index - _heightSize].GetComponent<Room>();
+        if (direction == Direction.Right && index + _heightSize < _slots.Count)
+            return _slots[index + _heightSize].GetComponent<Room>();
+        if (direction == Direction.Up && index + 1 < _slots.Count && (index + 1) % _heightSize != 0)
+            return _slots[index + 1].GetComponent<Room>();
+        if (direction == Direction.Down && index - 1 >= 0 && (index - 1) % _heightSize != _heightSize - 1)
+            return _slots[index - 1].GetComponent<Room>();
         return null;
     }
     #endregion
@@ -469,6 +485,7 @@ public class MapManager : MonoBehaviour
     private RoomData FindRoomDataByDirections(Direction direction)
     {
         foreach (RoomData room in GameManager.Instance.GeneralData.RoomList.RoomData) {
+            //Debug.Log($"direction = {direction} room.Directions = {room.Directions}");
             if ((int)room.Directions == -1 && (int)direction == 15)
                 return room;
             if (room.Directions == direction)
@@ -741,6 +758,42 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
+    public Direction GetRevertDirection(Direction direction)
+    {
+        Direction tmp = direction;
+        Direction revertDirection = Direction.None;
+
+        if (tmp >= Direction.Down)
+        {
+            tmp -= (int)Direction.Down;
+            revertDirection = revertDirection | Direction.Up;
+        }
+        if (tmp >= Direction.Up)
+        {
+            tmp -= (int)Direction.Up;
+            revertDirection = revertDirection | Direction.Down;
+        }
+        if (tmp >= Direction.Left)
+        {
+            tmp -= (int)Direction.Left;
+            revertDirection = revertDirection | Direction.Right;
+        }
+        if (tmp >= Direction.Right)
+        {
+            tmp -= (int)Direction.Right;
+            revertDirection = revertDirection | Direction.Left;
+        }
+        return revertDirection;
+    }
+
+    public void RemoveDirection(Room room, Direction direction)
+    {
+        Direction initialDirection = room.RoomData.Directions;
+
+        initialDirection -= direction;
+        room.SetData(FindRoomDataByDirections(initialDirection));
+    }
+
     public string PrintDirection(Direction direction)
     {
         string str = "{";
@@ -780,14 +833,24 @@ public class MapManager : MonoBehaviour
     public void Undo()
     {
         MapAction mapAction = _mapActions.Count > 0 ? _mapActions.Pop() : null;
+        Direction direction = Direction.None;
         Room room = null;
 
         if (mapAction == null)
             return;
+        Debug.Log($"mapAction.Index {mapAction.Index}");
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
+            //Debug.Log($"Room {room} {BossIsAbove(room)} {room.RoomData.Directions}");
+            if (BossIsAbove(room)) //Remove the link to the boss room, to get the right revert direction
+            {
+                Direction initialDirection = room.RoomData.Directions - (int)Direction.Up;
+                room.SetData(FindRoomDataByDirections(initialDirection));
+            }
+            direction = GetRevertDirection(room.RoomData.Directions);
+            RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
             room.UndoData(null, null, RoomColor.NotBuyable);
-            if (_selectedSlot != null){
+            if (_selectedSlot != null) {
                 SetUnBuyableAdjacent(_selectedSlot);
                 _selectedSlot.UnSelect();
             }
