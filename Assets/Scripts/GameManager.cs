@@ -309,6 +309,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
         if (_levels[_level].Tutorial != null) { // peut etre nul
             _uiMenu.DisplayTutorial();
+            ChangeNbMenuIn(1);
         }
     }
 

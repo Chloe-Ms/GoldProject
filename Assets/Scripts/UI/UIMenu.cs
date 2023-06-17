@@ -40,6 +40,7 @@ public class UIMenu : MonoBehaviour
         else
         {
             _menuTuto.gameObject.SetActive(false);
+            GameManager.Instance.ChangeNbMenuIn(-1);
         }
     }
 }
