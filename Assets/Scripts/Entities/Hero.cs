@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hero : MonoBehaviour 
 {
     [SerializeField] SpriteRenderer _renderer;
+    [SerializeField] float _durationBeforeHideOnDeath = 0.5f;
     Animator _animator;
     private HeroData _heroData;
     private int _health;
@@ -129,6 +131,14 @@ public class Hero : MonoBehaviour
                 Debug.LogWarning($"{_heroData.atlasTroncName} not found");
             }
         }
+    }
+
+    private IEnumerator HideHero()
+    {
+        yield return new WaitForSeconds(_durationBeforeHideOnDeath);
+        _renderer.enabled = false;
+        _animator.enabled = false;
+        
     }
 
     public void IsRunningInAnimator(bool isRunning)
