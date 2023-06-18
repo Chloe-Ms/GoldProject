@@ -755,7 +755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &27279158
 RectTransform:
   m_ObjectHideFlags: 0
@@ -791,7 +791,7 @@ MonoBehaviour:
   _spriteBgEffectUI: {fileID: 27279160}
   _rectTransform: {fileID: 27279158}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
-  _scrollOffset: {x: -100, y: 0}
+  _direction: -1
   _durationAnim: 0.5
   _interval: 0.5
 --- !u!114 &27279160
@@ -13234,7 +13234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _zoomSizeEditMode: 3
-  _zoomSizePlayMode: 3
+  _zoomSizePlayMode: 2
   _speedZoom: 8
   _durationMove: 0.3
 --- !u!81 &765153957
@@ -21405,7 +21405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1317403627
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21441,7 +21441,7 @@ MonoBehaviour:
   _spriteBgEffectUI: {fileID: 1317403629}
   _rectTransform: {fileID: 1317403627}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
-  _scrollOffset: {x: 100, y: 0}
+  _direction: 1
   _durationAnim: 0.5
   _interval: 0.5
 --- !u!114 &1317403629
