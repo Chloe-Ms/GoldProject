@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] MapManager _mapManager;
     [SerializeField] GameObject _startButton;
     [SerializeField] float _durationBetweenRoom = 10f;
+    [SerializeField] float _durationMergeHeroes = 2f;
     [SerializeField] float _durationWaitInRoom = 1f;
     [SerializeField] float _durationWaitBeforeDisplayLoss = 2f;
     [SerializeField] float _durationWaitBeforeDisplayWin = 2f;
@@ -29,7 +30,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private Room _currentRoom = null;
     private static GameManager _instance;
     private int _nbMenuIn = 0;
-    private Coroutine _routineWaitInRoom;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -84,6 +84,15 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         get => _nbMenuIn; 
         set => _nbMenuIn = value; 
     }
+    public float SlotSize
+    {
+        get => _mapManager.SlotSize;
+    }
+
+    public bool IsPlayModeActive
+    {
+        get => _startButton.activeInHierarchy;
+    }
     #endregion Properties
 
     #region Events
@@ -97,28 +106,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] private UnityEvent _onLossUnityEvent;
     [SerializeField] private UnityEvent _onHeroesMovementUnityEvent;
     [SerializeField] private UnityEvent _onHeroesAttackUnityEvent;
-    #endregion
-
-    #region Test
-    [SerializeField] private bool _updated;
-    [SerializeField] private Room _room;
-    [SerializeField] private Effect _effect;
-    [Button]
-    private void RoomTest()
-    {
-        GameObject room = Instantiate(_room.gameObject);
-        Room t = room.GetComponent<Room>();
-        if (_updated)
-        {
-            t.NbOfUpgrades = 1;
-        }
-        else
-        {
-            t.NbOfUpgrades = 0;
-        }
-        t.Effects.Add(_effect);
-        MoveHeroesToRoom(t);
-    }
+    [SerializeField] private UnityEvent _onStartEditorMode;
+    [SerializeField] private UnityEvent _onStartPlayMode;
     #endregion
 
     void Awake()
@@ -180,17 +169,13 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     }
     public void MoveHeroesOnScreen(Room room)
     {
-        _onHeroesMovementUnityEvent.Invoke();
         MoveHeroesToRoom(room);
     }
 
     public void MoveHeroesToRoom(Room room)
     {
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enleve l'effet de la room des plantes
-        if (room.TrapData.SoundWhenApplied != "")
-        {
-            AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
-        }
+        
         if (room != null)
         {
             _currentRoom = room;
@@ -198,6 +183,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
             {
+                room.SetIconEffect();
+                if (room.TrapData.SoundWhenApplied != "")
+                {
+                    AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
+                }
                 room.IsActive = false;
                 if (room.Effects.Count > 0)
                 {
@@ -295,6 +285,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartEditMode()
     {
         Debug.Log("NIVEAU " + _level);
+        _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
         SetPlayMode(false);
         _nbMenuIn = 0;
@@ -317,17 +308,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartPlayMode()
     {
         //Enter Play Mode
-        if (_mapManager.IsEditComplete())
-        {
-            _displayUI.EnterPlayMode();
-            _startButton.SetActive(false);
-            OnEnterPlayMode?.Invoke(Level);
-            // List<Room> path = _mapManager.Pathfinding();
-            // if (path != null)
-            // {
-            //     _routineChangeRoom = StartCoroutine(ChangeRoomFromPath(path));
-            // }
-        }
+        _mapManager.UpdateMapIconPlayMode();
+        _onStartPlayMode.Invoke();
+        OnEnterPlayMode?.Invoke(Level);
+        _displayUI.EnterPlayMode();
+        _startButton.SetActive(false);
     }
     #endregion
 
@@ -342,13 +327,57 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             if (i == 0) //Waiting in entrance
             {
                 SpawnHeroesOnScreen(path[i]);
+                yield return new WaitForSeconds(0.5f);
             } else
             {
                 //Move avec dotween puis onended
                 _onHeroesMovementUnityEvent.Invoke();
                 movementComplete = false;
                 _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(true);
-                _heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom).OnComplete(() =>
+                Sequence sequence = DOTween.Sequence();
+                for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
+                {
+                    if (i == 0)
+                    {
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
+                        {
+                            sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(0, _durationMergeHeroes));
+                        }
+                        
+                    }
+                    else
+                    {
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
+                        {
+                            sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(0, _durationMergeHeroes));
+                        }
+                    }
+
+                }
+                sequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
+                for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
+                {
+                    float posOffset = ((j + 1) * (GameManager.Instance.SlotSize / (_heroesManager.HeroesInCurrentLevel.Heroes.Count + 1))) - 0.5f;
+                    if (j == 0)
+                    {
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
+                        {
+                            sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(posOffset, _durationMergeHeroes));
+                        }
+                    }
+                    else
+                    {
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
+                        {
+                            sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            DOLocalMoveX(posOffset, _durationMergeHeroes));
+                        }
+                    }
+                }
+                sequence.OnComplete(() =>
                 {
                     _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
                     if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
@@ -367,11 +396,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                 {
                     yield return new WaitForSeconds(_durationWaitInRoom);
+                    path[i].ClearIcon();
                 } else
                 {
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
                 }
-                OnEffectApplied?.Invoke(Effect.NONE);
             }
             i++;
         }

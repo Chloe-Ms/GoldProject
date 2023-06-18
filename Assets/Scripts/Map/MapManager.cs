@@ -58,6 +58,9 @@ public class MapManager : MonoBehaviour
     public Room BossRoom { 
         get => _boss;
     }
+    public float SlotSize { 
+        get => _slotSize; 
+    }
     #endregion
 
     #region Events
@@ -72,6 +75,7 @@ public class MapManager : MonoBehaviour
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
+    private float _slotSize;
 
     private Room _start = null;
     private Room _boss = null;
@@ -237,6 +241,10 @@ public class MapManager : MonoBehaviour
         }
         else
             _instance = this;
+        if (_slot != null)
+        {
+            _slotSize = _slot.GetComponent<SpriteRenderer>().size.x;
+        }
     }
 
     #region Init
@@ -299,6 +307,7 @@ public class MapManager : MonoBehaviour
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
+            //UPGRADE BUTTON
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
                 _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
@@ -318,22 +327,13 @@ public class MapManager : MonoBehaviour
                     SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
-            if (room != null && room == _boss)
+            //START PLAY MODE (tap boss room)
+            if (room != null && room == _boss && GameManager.Instance.IsPlayModeActive)
             {
-                _editorState = EditorState.Play;
-                SetUnBuyableAdjacent(room);
-                if (_selectedSlot != null)
-                {
-                    _selectedSlot.UnSelect();
-                }
-                _selectedSlot = null;
-                //Debug.Log($"Selected Slot = {_selectedSlot}");
-                _grids.SetActive(false);
-                GameManager.Instance.StartPlayMode();
-                _routineChangeRoom = StartCoroutine(ImprovePathFinding());
-                return;
+                StartPlayMode(room);
             }
-            if (room != null && room.IsClickable()) {
+            //NORMAL ROOM
+            if (room != null && room.IsClickable() && room != _boss) {
                 _selectedSlot = room != _selectedSlot ? room : null;
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
@@ -392,6 +392,7 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
+                _selectedSlot.PlayParticles();
                 _selectedSlot.SetData(data);
                 _currentRoomCount++;
             }
@@ -492,6 +493,20 @@ public class MapManager : MonoBehaviour
                 return room;
         }
         return null;
+    }
+    public void StartPlayMode(Room room)
+    {
+        _editorState = EditorState.Play;
+        SetUnBuyableAdjacent(room);
+        if (_selectedSlot != null)
+        {
+            _selectedSlot.UnSelect();
+        }
+        _selectedSlot = null;
+        //Debug.Log($"Selected Slot = {_selectedSlot}");
+        _grids.SetActive(false);
+        GameManager.Instance.StartPlayMode();
+        _routineChangeRoom = StartCoroutine(ImprovePathFinding());
     }
 
     #region Pathfinding
@@ -722,7 +737,22 @@ public class MapManager : MonoBehaviour
     }
 
     #endregion
-
+    public void UpdateMapIconPlayMode()
+    {
+        foreach (GameObject slot in _slots)
+        {
+            Room room = slot.GetComponent<Room>();
+            if (room != null)
+            {
+                if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS && room.TrapData.RoomType != RoomType.ENTRANCE)
+                    room.ClearIcon();
+                if (room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER)
+                {
+                    room.SetIconEffect();
+                }
+            }
+        }
+    }
     private bool HaveDirection(ref Direction direction , Direction directionToCheck)
     {
         Direction tmp = direction;
