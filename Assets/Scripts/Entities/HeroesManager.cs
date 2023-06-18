@@ -89,7 +89,11 @@ public class HeroesManager : MonoBehaviour
             StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
-            ApplyDamageToEachHero(Effect.PLANTE);
+            if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
+            {
+                GameManager.Instance.CurrentRoom.NbOfUsage ++;
+                ApplyDamageToEachHero(Effect.PLANTE);
+            }
         }
     }
 

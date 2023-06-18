@@ -183,6 +183,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
             {
+                room.NbOfUsage = 1;
                 room.SetIconEffect();
                 if (room.TrapData.SoundWhenApplied != "")
                 {
@@ -193,8 +194,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                     OnEffectApplied?.Invoke(_currentRoomEffect);
-                    ApplyCurrentRoomEffect(_currentRoomEffect);
-
+                    if (room.NbOfUpgrades > 0)
+                    {
+                        ApplyCurrentRoomEffect(_currentRoomEffect);
+                    }
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
                         _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
@@ -344,7 +347,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                             sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
                         }
-                        
                     }
                     else
                     {

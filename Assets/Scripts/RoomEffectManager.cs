@@ -34,7 +34,7 @@ public class RoomEffectManager
             Effect.PLANTE,
             new UpdatedRoomEffect(
                 (Room trap,Group group) => {
-                    group.AffectedByPlants = true;
+                    //group.AffectedByPlants = true;
                 }
             )
         },
