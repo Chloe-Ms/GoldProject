@@ -88,6 +88,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         get => _mapManager.SlotSize;
     }
+
+    public bool IsPlayModeActive
+    {
+        get => _startButton.activeInHierarchy;
+    }
     #endregion Properties
 
     #region Events
