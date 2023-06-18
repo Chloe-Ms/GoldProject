@@ -34,7 +34,7 @@ public class ElementList : MonoBehaviour
     [Button("Clear Elements")]
     private void ClearElements()
     {
-        Debug.Log(_elements.Count);
+        //Debug.Log(_elements.Count);
         if (_elements.Count > 0)
         {
             foreach (var element in _elements)
@@ -42,7 +42,7 @@ public class ElementList : MonoBehaviour
                 DestroyImmediate(element);
             }
             _elements.Clear();
-            Debug.Log("ClearElements");
+            //Debug.Log("ClearElements");
         }
     }
 

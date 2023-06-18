@@ -6,7 +6,6 @@ using UnityEngine;
 public class Hero : MonoBehaviour 
 {
     [SerializeField] SpriteRenderer _renderer;
-    [SerializeField] float _durationBeforeHideOnDeath = 0.5f;
     Animator _animator;
     private HeroData _heroData;
     private int _health;
@@ -15,7 +14,7 @@ public class Hero : MonoBehaviour
     private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit ou le mettre :/
     private bool _hasDamageReduction = false;
 
-    public bool canMove;
+    private bool _canMove;
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
@@ -62,6 +61,7 @@ public class Hero : MonoBehaviour
         get => _hasDamageReduction;
         set => _hasDamageReduction = value;
     }
+    public bool CanMove { get => _canMove; set => _canMove = value; }
     #endregion
     public void TestDamage()
     {
@@ -90,7 +90,7 @@ public class Hero : MonoBehaviour
         if (_health <= 0)
         {
             _isDead = true;
-            canMove = false;
+            _canMove = false;
             if (_heroData._soundDeath != "")
             {
                 AudioManager.Instance.Play(_heroData._soundDeath);
@@ -135,14 +135,6 @@ public class Hero : MonoBehaviour
                 Debug.LogWarning($"{_heroData.atlasTroncName} not found");
             }
         }
-    }
-
-    private IEnumerator HideHero()
-    {
-        yield return new WaitForSeconds(_durationBeforeHideOnDeath);
-        _renderer.enabled = false;
-        _animator.enabled = false;
-        
     }
 
     public void IsRunningInAnimator(bool isRunning)
