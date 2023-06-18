@@ -5312,7 +5312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _heroPrefab: {fileID: 2783475497506347363, guid: 474fd352c7b6a7b42a13b23d75380756, type: 3}
   _groupGO: {fileID: 1237067342}
-  _heroesSensibilities: {fileID: 11400000, guid: 47c0046378eb04843a3fac4a119253f3, type: 2}
+  _heroesSensibilities: {fileID: 11400000, guid: 45548c6c67b1a95469b95f103389b25f, type: 2}
   _poisonDamageMultiplier: 2
 --- !u!1 &242978579
 GameObject:
@@ -5936,7 +5936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._maxHealth.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[3]._maxHealth.Array.size
@@ -5944,11 +5944,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._maxHealth.Array.data[0]
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._maxHealth.Array.data[1]
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._maxHealth.Array.data[2]
@@ -6020,7 +6020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._listHeroesInLevel.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[3]._listHeroesInLevel.Array.size
@@ -6029,7 +6029,7 @@ PrefabInstance:
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._listHeroesInLevel.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+      objectReference: {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._listHeroesInLevel.Array.data[1]
       value: 
@@ -6108,7 +6108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedBoss.x
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedBoss.y
@@ -6164,7 +6164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedObstacle.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[3]._prePlacedElements._preplacedObstacle.Array.size
@@ -6192,7 +6192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedObstacle.Array.data[0].x
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedObstacle.Array.data[0].y

@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 
 public class HeroesManager : MonoBehaviour
@@ -124,15 +125,9 @@ public class HeroesManager : MonoBehaviour
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
                     int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
+                    Debug.Log($"Damage {effect} {heroAttacked.Role} {damage}");
                     heroAttacked.UpdateHealth(damage);
                 }
-            }
-        } else
-        {
-            Hero hero = _heroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
-            if (hero != null && hero.HasDamageReduction)
-            {
-                hero.HasDamageReduction = false;
             }
         }
     }
@@ -151,15 +146,15 @@ public class HeroesManager : MonoBehaviour
         }
         if (hero.HasDamageReduction)
         {
-            if (damage > 0)
-            {
-                damage -= 1;
-            }
-            else if (damage < 0)
+            Debug.Log("DAMAGE REDUCTION");
+            if (damage < 0)
             {
                 damage += 1;
             }
-            hero.HasDamageReduction = false;
+        }
+        if (hero.IsInvulnerable || _heroesInCurrentLevel.IsInvulnerable || IsDodging(hero.Role))
+        {
+            damage = 0;
         }
         return damage;
     }
@@ -190,9 +185,23 @@ public class HeroesManager : MonoBehaviour
         {
             if (!hero.IsDead)
             {
-                if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+                if (AbilityManager.DeactivateAbilities.ContainsKey(hero.Role))
                 {
                     AbilityManager.DeactivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel);
+                }
+            }
+        }
+    }
+
+    public void ApplyAfterRoomAbilities(Room room)
+    {
+        foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                if (AbilityManager.ActivateAfterRoomAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.ActivateAfterRoomAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
                 }
             }
         }
