@@ -15,6 +15,8 @@ public class Hero : MonoBehaviour
     private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit ou le mettre :/
     private bool _hasDamageReduction = false;
 
+    public bool canMove;
+
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
     
@@ -88,6 +90,7 @@ public class Hero : MonoBehaviour
         if (_health <= 0)
         {
             _isDead = true;
+            canMove = false;
             if (_heroData._soundDeath != "")
             {
                 AudioManager.Instance.Play(_heroData._soundDeath);
@@ -97,6 +100,7 @@ public class Hero : MonoBehaviour
                 _animator.SetTrigger("IsDead");
             }
             OnHeroDeath?.Invoke(this);
+            this.transform.parent = null;
         } else
         {
             if (_heroData._soundDamage != "")

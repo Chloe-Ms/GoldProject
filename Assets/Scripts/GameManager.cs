@@ -334,13 +334,20 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     if (i == 0)
                     {
-                        sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        {
+                            sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
+                        }
+                        
                     }
                     else
                     {
-                        sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        {
+                            sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
+                        }
                     }
 
                 }
@@ -350,13 +357,19 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     float posOffset = ((j + 1) * (GameManager.Instance.SlotSize / (_heroesManager.HeroesInCurrentLevel.Heroes.Count + 1))) - 0.5f;
                     if (j == 0)
                     {
-                        sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        {
+                            sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(posOffset, _durationMergeHeroes));
+                        }
                     }
                     else
                     {
-                        sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        {
+                            sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(posOffset, _durationMergeHeroes));
+                        }
                     }
                 }
                 sequence.OnComplete(() =>
