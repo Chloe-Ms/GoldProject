@@ -400,6 +400,7 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
+                _selectedSlot.PlayParticles();
                 _selectedSlot.SetData(data);
                 _currentRoomCount++;
             }
@@ -737,7 +738,7 @@ public class MapManager : MonoBehaviour
             Room room = slot.GetComponent<Room>();
             if (room != null)
             {
-                if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS)
+                if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS && room.TrapData.RoomType != RoomType.ENTRANCE)
                     room.ClearIcon();
                 if (room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER)
                 {
