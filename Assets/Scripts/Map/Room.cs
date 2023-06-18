@@ -104,6 +104,9 @@ public class Room : MonoBehaviour
         get => _nbOfUsage; 
         set => _nbOfUsage = value; 
     }
+    public float IconScale { 
+        get => _iconScale;
+    }
 
     public void Init()
     {
@@ -353,6 +356,8 @@ public class Room : MonoBehaviour
         if (_trapData.Effect == Effect.MONSTRE && _listEffects.Count > 1)
         {
             _listEffects.RemoveAt(_listEffects.Count - 1);
+            GameObject childSpriteUpgrade = gameObject.transform.Find("SpriteUpgrade").gameObject;
+            Destroy(childSpriteUpgrade);
         }
         EnableUpgrade();
     }
