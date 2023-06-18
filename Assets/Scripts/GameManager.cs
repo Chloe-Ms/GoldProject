@@ -88,6 +88,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         get => _mapManager.SlotSize;
     }
+
+    public bool IsPlayModeActive
+    {
+        get => _startButton.activeInHierarchy;
+    }
     #endregion Properties
 
     #region Events
@@ -334,7 +339,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     if (i == 0)
                     {
-                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
                             sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
@@ -343,7 +348,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     }
                     else
                     {
-                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
                             sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
@@ -357,7 +362,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     float posOffset = ((j + 1) * (GameManager.Instance.SlotSize / (_heroesManager.HeroesInCurrentLevel.Heroes.Count + 1))) - 0.5f;
                     if (j == 0)
                     {
-                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
                             sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(posOffset, _durationMergeHeroes));
@@ -365,7 +370,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     }
                     else
                     {
-                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].canMove)
+                        if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
                             sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(posOffset, _durationMergeHeroes));

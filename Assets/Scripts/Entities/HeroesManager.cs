@@ -63,7 +63,7 @@ public class HeroesManager : MonoBehaviour
         {
             GameObject go = Instantiate(_heroPrefab);
             float posOffset = ((i + 1) * (GameManager.Instance.SlotSize / (_heroesDataInCurrentLevel.Length + 1))) - 0.5f;
-            Debug.Log($"POS {i} {posOffset} {_heroesDataInCurrentLevel.Length} {i < _heroesDataInCurrentLevel.Length / 2} {i < (_heroesDataInCurrentLevel.Length / 2)}");
+            //Debug.Log($"POS {i} {posOffset} {_heroesDataInCurrentLevel.Length} {i < _heroesDataInCurrentLevel.Length / 2} {i < (_heroesDataInCurrentLevel.Length / 2)}");
             go.transform.position = new Vector3(posOffset, 0, 0);
             go.transform.parent = _groupGO.transform;
             Hero hero = go?.GetComponent<Hero>();
