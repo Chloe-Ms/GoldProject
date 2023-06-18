@@ -73,6 +73,7 @@ public class Room : MonoBehaviour
 
     List<Effect> _listEffects = new List<Effect>();
     bool _isActive = true;
+    int _nbOfUsage = 0;
     int _nbOfUpgrades = 0;
 
     public bool IsActive
@@ -98,6 +99,10 @@ public class Room : MonoBehaviour
     }
     public UIUpgradeButton UpgradeIcon { 
         get => _upgradeIcon;
+    }
+    public int NbOfUsage { 
+        get => _nbOfUsage; 
+        set => _nbOfUsage = value; 
     }
 
     public void Init()
