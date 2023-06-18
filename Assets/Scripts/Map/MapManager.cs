@@ -307,6 +307,7 @@ public class MapManager : MonoBehaviour
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
+            //UPGRADE BUTTON
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
                 _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
@@ -326,22 +327,13 @@ public class MapManager : MonoBehaviour
                     SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
-            if (room != null && room == _boss)
+            //START PLAY MODE (tap boss room)
+            if (room != null && room == _boss && GameManager.Instance.IsPlayModeActive)
             {
-                _editorState = EditorState.Play;
-                SetUnBuyableAdjacent(room);
-                if (_selectedSlot != null)
-                {
-                    _selectedSlot.UnSelect();
-                }
-                _selectedSlot = null;
-                //Debug.Log($"Selected Slot = {_selectedSlot}");
-                _grids.SetActive(false);
-                GameManager.Instance.StartPlayMode();
-                _routineChangeRoom = StartCoroutine(ImprovePathFinding());
-                return;
+                StartPlayMode(room);
             }
-            if (room != null && room.IsClickable()) {
+            //NORMAL ROOM
+            if (room != null && room.IsClickable() && room != _boss) {
                 _selectedSlot = room != _selectedSlot ? room : null;
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
@@ -501,6 +493,20 @@ public class MapManager : MonoBehaviour
                 return room;
         }
         return null;
+    }
+    public void StartPlayMode(Room room)
+    {
+        _editorState = EditorState.Play;
+        SetUnBuyableAdjacent(room);
+        if (_selectedSlot != null)
+        {
+            _selectedSlot.UnSelect();
+        }
+        _selectedSlot = null;
+        //Debug.Log($"Selected Slot = {_selectedSlot}");
+        _grids.SetActive(false);
+        GameManager.Instance.StartPlayMode();
+        _routineChangeRoom = StartCoroutine(ImprovePathFinding());
     }
 
     #region Pathfinding
