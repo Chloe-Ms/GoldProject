@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using DG.Tweening;
 
 [System.Serializable]
 public class Room : MonoBehaviour
@@ -11,6 +12,8 @@ public class Room : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private UIUpgradeButton _upgradeIcon;
     [SerializeField] private SpriteRenderer _borderRenderer;
+    [SerializeField] private ParticleSystem _particleSystemSpawn;
+    private SpriteRenderer _iconRenderer;
     private GameObject _icon;
     [SerializeField] float _iconScale = 1f;
     public RoomData RoomData
@@ -119,9 +122,9 @@ public class Room : MonoBehaviour
         _icon.name = transform.name + "_Icon";
         _icon.transform.parent = transform;
         _icon.transform.localPosition = new Vector3(0, 0, -offsetZ);
-        _icon.AddComponent<SpriteRenderer>();
-        _icon.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
-        _icon.transform.localScale = new Vector2(_iconScale, _iconScale);
+        _iconRenderer = _icon.AddComponent<SpriteRenderer>();
+        _iconRenderer.color = new Color(0, 0, 0, 0);
+        _iconRenderer.sortingOrder = 3;
     }
 
     public void SetData(RoomData roomData)
@@ -170,6 +173,48 @@ public class Room : MonoBehaviour
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
         SetSprite(_roomData.Sprite);
+    }
+
+    public void ClearIcon()
+    {
+        if (_iconRenderer == null)
+        {
+            _iconRenderer = _icon.GetComponent<SpriteRenderer>();
+        }
+        if (_trapData != null && (_trapData.RoomType != RoomType.ENTRANCE))
+        {
+            _iconRenderer.color = new Color(255, 255, 255, 0);
+            _iconRenderer.sprite = null;
+            _icon.transform.localScale = Vector2.one;
+        }
+    }
+
+    public void SetIconEffect()
+    {
+        if (_iconRenderer == null)
+        {
+            _iconRenderer = _icon.GetComponent<SpriteRenderer>();
+        }
+        if (_trapData != null)
+        {
+            _iconRenderer.color = new Color(255, 255, 255, 255);
+            _iconRenderer.sprite = _trapData.RoomEffectImage;
+            Debug.Log("NFIZ");
+            if (!_trapData.IsRoomEffectImageBehindHeroes)
+            {
+                Debug.Log("dzaji");
+                _iconRenderer.sortingOrder = 41;
+            }
+        }
+    }
+
+    public void SetIconEffectAnimated()
+    {
+        if (_trapData != null)
+        {
+            _icon.GetComponent<SpriteRenderer>().DOFade(1, 1f);
+            _icon.GetComponent<SpriteRenderer>().sprite = _trapData.RoomEffectImage;
+        }
     }
 
     public void UndoData(TrapData trapData)
@@ -224,6 +269,10 @@ public class Room : MonoBehaviour
     {
         _icon.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 255);
         _icon.GetComponent<SpriteRenderer>().sprite = sprite;
+        if (_trapData != null && (_trapData.RoomType == RoomType.NORMAL || _trapData.RoomType == RoomType.LEVER))
+        {
+            _icon.transform.localScale = new Vector2(_iconScale, _iconScale);
+        }
     }
 
     public void SetColor(RoomColor color)
@@ -278,6 +327,10 @@ public class Room : MonoBehaviour
         }
     }
 
+    public void PlayParticles()
+    {
+        _particleSystemSpawn.Play();
+    }
     public void UpgradeRoom()
     {
         _nbOfUpgrades++;
