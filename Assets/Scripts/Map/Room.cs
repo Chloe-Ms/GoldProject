@@ -12,6 +12,7 @@ public class Room : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private UIUpgradeButton _upgradeIcon;
     [SerializeField] private SpriteRenderer _borderRenderer;
+    [SerializeField] private ParticleSystem _particleSystemSpawn;
     private SpriteRenderer _iconRenderer;
     private GameObject _icon;
     [SerializeField] float _iconScale = 1f;
@@ -123,6 +124,7 @@ public class Room : MonoBehaviour
         _icon.transform.localPosition = new Vector3(0, 0, -offsetZ);
         _iconRenderer = _icon.AddComponent<SpriteRenderer>();
         _iconRenderer.color = new Color(0, 0, 0, 0);
+        _iconRenderer.sortingOrder = 3;
     }
 
     public void SetData(RoomData roomData)
@@ -324,6 +326,10 @@ public class Room : MonoBehaviour
         }
     }
 
+    public void PlayParticles()
+    {
+        _particleSystemSpawn.Play();
+    }
     public void UpgradeRoom()
     {
         _nbOfUpgrades++;
