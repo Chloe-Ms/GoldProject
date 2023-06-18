@@ -7,7 +7,8 @@ public class UIBGEffectImage : MonoBehaviour
     [SerializeField] Image _spriteBgEffectUI;
     [SerializeField] RectTransform _rectTransform;
     [SerializeField] GeneralData _generalData;
-    [SerializeField] Vector2 _scrollOffset = new Vector2(100,0);
+    [SerializeField] int _direction;
+    Vector2 _scrollOffset;
     [SerializeField] float _durationAnim = 0.5f;
     [SerializeField] float _interval = 0.2f;
     Vector2 _endPosition;
@@ -15,6 +16,7 @@ public class UIBGEffectImage : MonoBehaviour
     void Start()
     {
         GameManager.Instance.OnEffectApplied += OnEffectApplied;
+        _scrollOffset = new Vector2(Screen.width / 2,0);
     }
 
     private void OnEffectApplied(Effect obj)
@@ -27,13 +29,16 @@ public class UIBGEffectImage : MonoBehaviour
         {
             _spriteBgEffectUI.color = new Color(1, 1, 1, 1);
             _endPosition = _rectTransform.anchoredPosition;
-            _rectTransform.anchoredPosition = _endPosition + _scrollOffset;
+            _rectTransform.anchoredPosition = _endPosition + (_direction * _scrollOffset);
             //_rectTransform.DOAnchorPos(_endPosition, _durationAnim);
-            /*Sequence sequence = DOTween.Sequence();
+            Sequence sequence = DOTween.Sequence();
             sequence.Append(_rectTransform.DOAnchorPos(_endPosition, _durationAnim)).
                 AppendInterval(_interval).
-                Append(_rectTransform.DOAnchorPos(_endPosition + _scrollOffset, _durationAnim)).
-                OnComplete(() => { _spriteBgEffectUI.color = new Color(1, 1, 1, 0); });*/
+                Append(_rectTransform.DOAnchorPos(_endPosition + (_direction * _scrollOffset), _durationAnim)).
+                OnComplete(() => { 
+                    _spriteBgEffectUI.color = new Color(1, 1, 1, 0);
+                    _rectTransform.anchoredPosition = _endPosition;
+                });
         }
     }
 }

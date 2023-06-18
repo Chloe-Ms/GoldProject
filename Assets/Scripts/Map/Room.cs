@@ -199,9 +199,10 @@ public class Room : MonoBehaviour
         {
             _iconRenderer.color = new Color(255, 255, 255, 255);
             _iconRenderer.sprite = _trapData.RoomEffectImage;
-
+            Debug.Log("NFIZ");
             if (!_trapData.IsRoomEffectImageBehindHeroes)
             {
+                Debug.Log("dzaji");
                 _iconRenderer.sortingOrder = 41;
             }
         }

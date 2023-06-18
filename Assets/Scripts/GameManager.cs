@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
             {
-                room.SetIconEffectAnimated();
+                room.SetIconEffect();
                 if (room.TrapData.SoundWhenApplied != "")
                 {
                     AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
