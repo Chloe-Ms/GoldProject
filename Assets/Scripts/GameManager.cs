@@ -183,13 +183,13 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
             {
+                room.IsActive = false;
                 room.NbOfUsage = 1;
                 room.SetIconEffect();
                 if (room.TrapData.SoundWhenApplied != "")
                 {
                     AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
                 }
-                room.IsActive = false;
                 if (room.Effects.Count > 0)
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
@@ -210,10 +210,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                             RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                         }
                     }
-                    if (_currentRoomEffect == Effect.MONSTRE)
-                    {
-                        ApplyDamageReduction();
-                    }
                 }
                 if (room.TrapData.RoomType == RoomType.LEVER)
                 {
@@ -221,6 +217,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 }
             }
             _heroesManager.RemoveAbilities(room);
+            _heroesManager.ApplyAfterRoomAbilities(room);
+
             if (room.TrapData.RoomType == RoomType.NORMAL)
             {
                 _onHeroesAttackUnityEvent.Invoke();
@@ -238,14 +236,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (effect == Effect.PLANTE)
         {
             _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
-        }
-    }
-    public void ApplyDamageReduction()
-    {
-        Hero hero = _heroesManager.HeroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
-        if (hero != null)
-        {
-            hero.HasDamageReduction = true;
         }
     }
 

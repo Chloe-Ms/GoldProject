@@ -77,7 +77,7 @@ public class Hero : MonoBehaviour
         int realPV = pv;
         if (pv < 0) //DAMAGE
         {
-            realPV = Mathf.Min(_health, realPV);
+            realPV = Mathf.Max(-_health, realPV);
             if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
             {
                 _nbDamageOnElementaryRoom++;
