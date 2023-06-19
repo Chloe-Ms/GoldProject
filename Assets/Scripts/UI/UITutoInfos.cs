@@ -13,8 +13,8 @@ public class UITutoInfos : MonoBehaviour
     {
         _page = 0;
         _tutoData = GameManager.Instance.GetTutorialData();
-        _name.text = _tutoData.Name;
-        _description.text = _tutoData.Description[_page];
+        _name.text = _tutoData.Name.GetStringInLanguage(GameManager.Instance.LanguageChosen);
+        _description.text = _tutoData.Description[_page].GetStringInLanguage(GameManager.Instance.LanguageChosen);
     }
 
     public bool CanChangeTutoData()
@@ -29,6 +29,6 @@ public class UITutoInfos : MonoBehaviour
     public void ChangeTutoData()
     {
         _page++;
-        _description.text = _tutoData.Description[_page];
+        _description.text = _tutoData.Description[_page].GetStringInLanguage(GameManager.Instance.LanguageChosen);
     }
 }
