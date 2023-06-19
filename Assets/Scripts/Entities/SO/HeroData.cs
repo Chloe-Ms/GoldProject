@@ -7,8 +7,8 @@ public class HeroData : ScriptableObject
     public int maxHealth;
     public string heroName;
     public Role role;
-    [ResizableTextArea]
-    public string description;
+    [SerializeField]
+    public TextLanguage description;
     public RuntimeAnimatorController animatorController;
     public GameObject atlas;
     public Sprite sprite;
