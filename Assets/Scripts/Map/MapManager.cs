@@ -681,6 +681,7 @@ public class MapManager : MonoBehaviour
                     //Debug.Log($"All Path avalaible :");
                     // foreach (List<Room> path in travelLists)
                     //     PrintListOfRoom(path);
+                    // ici pour afficher l'ui travelLists liste desl istes avec dernier elements => les leviers 
                     yield return new WaitUntil(() => {
                         if (Input.GetKeyDown(KeyCode.Mouse0)) {
                             Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -697,6 +698,7 @@ public class MapManager : MonoBehaviour
                         } else
                             return false;
                     });
+                    // ici pour désafficher l'ui
                     bestPath = travelLists.Find(path => path.Contains(lever));
                     //Debug.Log($"Selected Path :");
                     bestPath.Insert(0, actualRoom);
