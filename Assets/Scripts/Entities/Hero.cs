@@ -125,10 +125,10 @@ public class Hero : MonoBehaviour
         if (_heroData.atlas != null)
         {
             atlas = Instantiate(_heroData.atlas, this.transform);
-            Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
-            if (atlasTronc != null)
+            //Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
+            if (atlas != null)
             {
-                _animator = atlasTronc.AddComponent<Animator>();
+                _animator = atlas.AddComponent<Animator>();
                 _animator.runtimeAnimatorController = _heroData.animatorController;
             } else
             {
