@@ -21,6 +21,10 @@ public class TrapData : ScriptableObject
         get { return _name; }
     }
 
+    public string EnglishName
+    {
+        get { return _name.GetStringInLanguage(Language.EN); }
+    }
     public Sprite Sprite
     {
         get { return _sprite; }
