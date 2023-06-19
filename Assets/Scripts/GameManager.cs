@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private static GameManager _instance;
     private int _nbMenuIn = 0;
     private Sequence _movementHeroesSequence;
-    [SerializeField] private Language _languageChosen = Language.EN;
+    [SerializeField] private Language _languageChosen = Language.FR;
 
     [SerializeField] private GeneralData _generalData;
     
