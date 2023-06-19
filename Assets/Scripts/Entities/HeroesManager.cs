@@ -51,6 +51,7 @@ public class HeroesManager : MonoBehaviour
 
     private void StartEditMode(int level)
     {
+        _roomTurn = 0;
         _groupGO.transform.position = Vector3.zero;
         RemoveHeroesGameObjects();
         _heroesInCurrentLevel.Init();

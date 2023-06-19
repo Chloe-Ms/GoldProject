@@ -11,7 +11,7 @@ public class UIRoomInfos : MonoBehaviour
     public void Init(TrapData data)
     {
         _image.sprite = data.SpriteUI;
-        _name.text = data.Name;
-        _description.text = data.Description;
+        _name.text = data.Name.GetStringInLanguage(GameManager.Instance.LanguageChosen);
+        _description.text = data.Description.GetStringInLanguage(GameManager.Instance.LanguageChosen);
     }
 }
