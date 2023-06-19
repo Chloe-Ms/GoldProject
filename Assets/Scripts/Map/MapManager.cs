@@ -422,6 +422,7 @@ public class MapManager : MonoBehaviour
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, 1);
                 _selectedSlot.SetData(data);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
@@ -814,7 +815,6 @@ public class MapManager : MonoBehaviour
         Direction tmp = direction;
         Direction revertDirection = Direction.None;
 
-<<<<<<< HEAD
         if (tmp >= Direction.Down) {
             tmp -= (int)Direction.Down;
             revertDirection = revertDirection | Direction.Up;
@@ -828,25 +828,6 @@ public class MapManager : MonoBehaviour
             revertDirection = revertDirection | Direction.Right;
         }
         if (tmp >= Direction.Right) {
-=======
-        if (tmp >= Direction.Down)
-        {
-            tmp -= (int)Direction.Down;
-            revertDirection = revertDirection | Direction.Up;
-        }
-        if (tmp >= Direction.Up)
-        {
-            tmp -= (int)Direction.Up;
-            revertDirection = revertDirection | Direction.Down;
-        }
-        if (tmp >= Direction.Left)
-        {
-            tmp -= (int)Direction.Left;
-            revertDirection = revertDirection | Direction.Right;
-        }
-        if (tmp >= Direction.Right)
-        {
->>>>>>> Dev
             tmp -= (int)Direction.Right;
             revertDirection = revertDirection | Direction.Left;
         }
@@ -905,7 +886,6 @@ public class MapManager : MonoBehaviour
 
         if (mapAction == null)
             return;
-        Debug.Log($"mapAction.Index {mapAction.Index}");
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
             //Debug.Log($"Room {room} {BossIsAbove(room)} {room.RoomData.Directions}");
@@ -916,6 +896,7 @@ public class MapManager : MonoBehaviour
             }
             direction = GetRevertDirection(room.RoomData.Directions);
             RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
+            ElementList.Instance.ChangeUIElementValue(room.TrapData, 1);
             room.UndoData(null, null, RoomColor.NotBuyable);
             if (_selectedSlot != null) {
                 SetUnBuyableAdjacent(_selectedSlot);
@@ -934,7 +915,9 @@ public class MapManager : MonoBehaviour
                 room.UpgradeRoom();
                 _currentRoomCount++;
             }
+            ElementList.Instance.ChangeUIElementValue(room.TrapData, 1);
             room.UndoData(mapAction.TrapData);
+            ElementList.Instance.ChangeUIElementValue(room.TrapData, -1);
         } else if (mapAction.ActionType == ActionType.Upgrade) {
             room.UndoUpgrade();
             _currentRoomCount--;
