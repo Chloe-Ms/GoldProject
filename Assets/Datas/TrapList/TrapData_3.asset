@@ -23,7 +23,13 @@ MonoBehaviour:
   _roomType: 0
   _color: {r: 0.027450982, g: 0.5921569, b: 0.08627451, a: 1}
   _description:
-    _strings: []
+    _strings:
+    - If an adventurer dies in the room, the trap reactivates instantly. If another
+      adventurer dies from this reactivation, the trap does not reactivate a second
+      time.
+    - "Si un aventurier meurt dans la salle, le pi\xE8ge se r\xE9active instantan\xE9ment.
+      Si un autre aventurier meurt de cette r\xE9activation,  le pi\xE8ge ne se r\xE9active
+      pas une deuxi\xE9me fois."
   _soundWhenApplied: PiegePlante
   _bgEffectUIImage: {fileID: 21300000, guid: 55ee4818a2d9dba418be7ff82b970d19, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: d40f593e34c7bac4bbf6e73e9016ee66, type: 3}

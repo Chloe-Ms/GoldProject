@@ -15,8 +15,12 @@ MonoBehaviour:
   maxHealth: 5
   heroName: Healer
   role: 0
-  description: "Restore a health point from every adventurers in all rooms that are
-    harmless \n(rooms already used + lever)"
+  description:
+    _strings:
+    - Restore a health point from every adventurers in all rooms that are harmless
+      (rooms already used + lever)
+    - "Soigne de un point de vie tout les heros dans toutes les salles qui sont innofensives
+      (cases d\xE9j\xE0 utilis\xE9es + levier)"
   animatorController: {fileID: 9100000, guid: b4f91ae177b49384886e28fcaf0f5817, type: 2}
   atlas: {fileID: -8653719598885068355, guid: 8b0551cc96c3cdc4195a288eedab6d68, type: 3}
   sprite: {fileID: 21300000, guid: 14e8560c95272144283cb9fcbbf500f6, type: 3}

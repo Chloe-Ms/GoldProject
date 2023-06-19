@@ -34,6 +34,9 @@ public class UIUpdateEditMode : MonoBehaviour
     }
     public void Init(int nbActions)
     {
+        DOTween.KillAll();
+        _nbActionsLeft.color = _ActionsLeftTextBaseColor;
+        _nbActionsLeft.fontSize = 100;
         _nbActionsTotal.text = nbActions.ToString();
         _nbActionsLeft.text = nbActions.ToString();
         for (int i = 0;i < _heroesUIEditMode.Length;i++)
