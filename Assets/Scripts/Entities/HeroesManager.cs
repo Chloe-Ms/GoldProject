@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 
 public class HeroesManager : MonoBehaviour
@@ -5,7 +6,6 @@ public class HeroesManager : MonoBehaviour
     HeroData[] _heroesDataInCurrentLevel;
     Group _heroesInCurrentLevel = new Group();
 
-    [SerializeField] float _roomWidth;
     [SerializeField] GameObject _heroPrefab;
     [SerializeField] GameObject _groupGO;
     [SerializeField] HeroesSensibility _heroesSensibilities;
@@ -51,6 +51,7 @@ public class HeroesManager : MonoBehaviour
 
     private void StartEditMode(int level)
     {
+        _roomTurn = 0;
         _groupGO.transform.position = Vector3.zero;
         RemoveHeroesGameObjects();
         _heroesInCurrentLevel.Init();
@@ -63,7 +64,9 @@ public class HeroesManager : MonoBehaviour
         for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
             GameObject go = Instantiate(_heroPrefab);
-            go.transform.position = new Vector3((i + 1) * (_roomWidth / (_heroesDataInCurrentLevel.Length + 1)), 0, 0);
+            float posOffset = ((i + 1) * (GameManager.Instance.SlotSize / (_heroesDataInCurrentLevel.Length + 1))) - 0.5f;
+            //Debug.Log($"POS {i} {posOffset} {_heroesDataInCurrentLevel.Length} {i < _heroesDataInCurrentLevel.Length / 2} {i < (_heroesDataInCurrentLevel.Length / 2)}");
+            go.transform.position = new Vector3(posOffset, 0, 0);
             go.transform.parent = _groupGO.transform;
             Hero hero = go?.GetComponent<Hero>();
             hero?.LoadHeroData(_heroesDataInCurrentLevel[i]);
@@ -88,7 +91,11 @@ public class HeroesManager : MonoBehaviour
             StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
-            ApplyDamageToEachHero(Effect.PLANTE);
+            if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
+            {
+                GameManager.Instance.CurrentRoom.NbOfUsage ++;
+                ApplyDamageToEachHero(Effect.PLANTE);
+            }
         }
     }
 
@@ -119,15 +126,9 @@ public class HeroesManager : MonoBehaviour
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
                     int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
+                    Debug.Log($"Damage {effect} {heroAttacked.Role} {damage}");
                     heroAttacked.UpdateHealth(damage);
                 }
-            }
-        } else
-        {
-            Hero hero = _heroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
-            if (hero != null && hero.HasDamageReduction)
-            {
-                hero.HasDamageReduction = false;
             }
         }
     }
@@ -146,15 +147,15 @@ public class HeroesManager : MonoBehaviour
         }
         if (hero.HasDamageReduction)
         {
-            if (damage > 0)
-            {
-                damage -= 1;
-            }
-            else if (damage < 0)
+            Debug.Log("DAMAGE REDUCTION");
+            if (damage < 0)
             {
                 damage += 1;
             }
-            hero.HasDamageReduction = false;
+        }
+        if (hero.IsInvulnerable || _heroesInCurrentLevel.IsInvulnerable || IsDodging(hero.Role))
+        {
+            damage = 0;
         }
         return damage;
     }
@@ -172,8 +173,10 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
+                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
                     //Debug.Log("APPLY ABILITY : " + hero.Role);
+                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
                 }
             }
         }
@@ -185,9 +188,23 @@ public class HeroesManager : MonoBehaviour
         {
             if (!hero.IsDead)
             {
-                if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+                if (AbilityManager.DeactivateAbilities.ContainsKey(hero.Role))
                 {
                     AbilityManager.DeactivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel);
+                }
+            }
+        }
+    }
+
+    public void ApplyAfterRoomAbilities(Room room)
+    {
+        foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                if (AbilityManager.ActivateAfterRoomAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.ActivateAfterRoomAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
                 }
             }
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ public class Hero : MonoBehaviour
     private bool _isinvulnerable = false;
     private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit ou le mettre :/
     private bool _hasDamageReduction = false;
+
+    private bool _canMove;
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
@@ -58,6 +61,7 @@ public class Hero : MonoBehaviour
         get => _hasDamageReduction;
         set => _hasDamageReduction = value;
     }
+    public bool CanMove { get => _canMove; set => _canMove = value; }
     #endregion
     public void TestDamage()
     {
@@ -73,7 +77,7 @@ public class Hero : MonoBehaviour
         int realPV = pv;
         if (pv < 0) //DAMAGE
         {
-            realPV = Mathf.Min(_health, realPV);
+            realPV = Mathf.Max(-_health, realPV);
             if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
             {
                 _nbDamageOnElementaryRoom++;
@@ -86,6 +90,7 @@ public class Hero : MonoBehaviour
         if (_health <= 0)
         {
             _isDead = true;
+            _canMove = false;
             if (_heroData._soundDeath != "")
             {
                 AudioManager.Instance.Play(_heroData._soundDeath);
@@ -95,6 +100,7 @@ public class Hero : MonoBehaviour
                 _animator.SetTrigger("IsDead");
             }
             OnHeroDeath?.Invoke(this);
+            this.transform.parent = null;
         } else
         {
             if (_heroData._soundDamage != "")
@@ -119,10 +125,10 @@ public class Hero : MonoBehaviour
         if (_heroData.atlas != null)
         {
             atlas = Instantiate(_heroData.atlas, this.transform);
-            Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
-            if (atlasTronc != null)
+            //Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
+            if (atlas != null)
             {
-                _animator = atlasTronc.AddComponent<Animator>();
+                _animator = atlas.AddComponent<Animator>();
                 _animator.runtimeAnimatorController = _heroData.animatorController;
             } else
             {
