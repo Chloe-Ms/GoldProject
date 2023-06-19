@@ -1,5 +1,7 @@
 using NaughtyAttributes;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -13,6 +15,7 @@ public class LevelData
     [SerializeField, MinValue(2)] int _mapHeight;
     [SerializeField] PrePlacedElement _prePlacedElements;
     [SerializeField] TutorialData _tutorial; //peut etre nul attention
+    [SerializeField] int[] _trapList;
 
     public HeroData[] ListHeroesInGroup {
         get => _listHeroesInLevel;
@@ -38,5 +41,9 @@ public class LevelData
     public TutorialData Tutorial //peut etre nul attention
     {
         get => _tutorial;
+    }
+
+    public int[] TrapList { 
+        get => _trapList;
     }
 }

@@ -294,7 +294,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _movementHeroesSequence = null;
         }
         _nbMenuIn = 0;
-        _roomsInList.InitList();
+        _roomsInList.InitList(_levels[Level].TrapList);
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
