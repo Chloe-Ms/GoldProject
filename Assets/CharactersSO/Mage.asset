@@ -17,14 +17,8 @@ MonoBehaviour:
   role: 4
   description:
     _strings:
-    - " Pi\xE8ges / H\xE9ros Pi\xE8ges / H\xE9ros 50% 11 E6  Lorsqu'il subit des
-      d\xE9g\xE2ts de 3 salles de type feu, glace ou foudre, il Immunise l'\xE9quipe
-      contre la prochaine case de ces types.      \t Lorsqu'il subit des d\xE9g\xE2ts
-      de 3 salles de type feu, glace ou foudre, il Immunise l'\xE9quipe contre la
-      prochaine case de ces types. Activer la compatibilit\xE9 du lecteur d'\xE9cran  
-      Pour activer la compatibilit\xE9 avec le lecteur d'\xE9cran, appuyez sur Ctrl+Alt+Z
-      Pour conna\xEEtre les raccourcis clavier, appuyez sur Ctrl+barre obliqueCastor
-      anonyme a rejoint le document."
+    - "Lorsqu'il subit des d\xE9g\xE2ts de 3 salles de type feu, glace ou foudre,
+      il Immunise l'\xE9quipe contre la prochaine case de ces types."
     - When he takes the damages from 3 traps of fire, ice, lightning, all aventurers
       are immune on the next trap of the same type.
   animatorController: {fileID: 9100000, guid: db0394ce21bfcf4469ee40907a3d9419, type: 2}
