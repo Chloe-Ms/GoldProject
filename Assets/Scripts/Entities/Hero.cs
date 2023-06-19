@@ -1,11 +1,14 @@
+using DG.Tweening;
 using System;
-using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hero : MonoBehaviour 
 {
     [SerializeField] SpriteRenderer _renderer;
+    [SerializeField] Canvas _canvas;
+    [SerializeField] GameObject _damageTextMesh;
     Animator _animator;
     private HeroData _heroData;
     private int _health;
@@ -113,6 +116,7 @@ public class Hero : MonoBehaviour
             }
             OnDamageTaken?.Invoke(realPV);
         }
+        //InstantiateDamage(realPV);
         UIUpdatePlayMode.Instance.UpdateHero(this,realPV);
     }
 
@@ -142,6 +146,34 @@ public class Hero : MonoBehaviour
         if (_animator != null)
         {
             _animator.SetBool("IsRunning", isRunning);
+        }
+    }
+
+    public void InstantiateDamage(int realPV)
+    {
+        if (_canvas != null)
+        {
+            GameObject go = Instantiate(_damageTextMesh, _canvas.transform);
+            go.transform.parent = _canvas.transform;
+            go.transform.localPosition = Vector3.zero;
+            TextMeshProUGUI textMesh = go.GetComponent<TextMeshProUGUI>();
+            if (textMesh != null)
+            {
+                textMesh.text = realPV.ToString();
+                Vector3 pos = Camera.main.ScreenToViewportPoint(textMesh.transform.position);
+                textMesh.transform.position = pos;
+                textMesh.transform.DOMoveY(pos.y+10,1f).OnComplete(() => Destroy(textMesh.gameObject));
+            }
+            /*//then you calculate the position of the UI element
+//0,0 for the canvas is at the center of the screen, whereas WorldToViewPortPoint treats the lower left corner as 0,0. Because of this, you need to subtract the height / width of the canvas * 0.5 to get the correct position.
+
+Vector2 ViewportPosition=Cam.WorldToViewportPoint(WorldObject.transform.position);
+Vector2 WorldObject_ScreenPosition=new Vector2(
+((ViewportPosition.x*CanvasRect.sizeDelta.x)-(CanvasRect.sizeDelta.x*0.5f)),
+((ViewportPosition.y*CanvasRect.sizeDelta.y)-(CanvasRect.sizeDelta.y*0.5f)));
+
+//now you can set the position of the ui element
+UI_Element.anchoredPosition=WorldObject_ScreenPosition;*/
         }
     }
 }
