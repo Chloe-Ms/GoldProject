@@ -257,6 +257,16 @@ public class MapManager : MonoBehaviour
     public void InitLevel(LevelData data)
     {
         Clear();
+        if (_routineChangeRoom != null)
+        {
+            StopCoroutine(_routineChangeRoom);
+            _routineChangeRoom = null;
+        }
+        if (_routineRoomMonster != null)
+        {
+            StopCoroutine( _routineRoomMonster);
+            _routineRoomMonster = null;
+        }
         _editorState = EditorState.Select;
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
@@ -367,6 +377,15 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
+        //Create sprite on top (depending on color of effect chosen)
+        GameObject spriteGO = new GameObject();
+        spriteGO.name = "SpriteUpgrade";
+        SpriteRenderer spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = 2;
+        spriteRenderer.sprite = GameManager.Instance.GeneralData.SpriteMonsterUpgrade;
+        spriteRenderer.color = GameManager.Instance.GeneralData.TrapList.GetColorFromEffect(_effectRoomMonster);
+        spriteGO.transform.parent = _selectedSlot.gameObject.transform;
+        spriteGO.transform.localScale = new Vector2(_selectedSlot.IconScale,_selectedSlot.IconScale);
         _selectedSlot.UpgradeRoom();
         GameManager.Instance.NbMenuIn--;
     }

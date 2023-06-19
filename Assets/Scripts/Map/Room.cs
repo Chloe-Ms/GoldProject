@@ -73,6 +73,7 @@ public class Room : MonoBehaviour
 
     List<Effect> _listEffects = new List<Effect>();
     bool _isActive = true;
+    int _nbOfUsage = 0;
     int _nbOfUpgrades = 0;
 
     public bool IsActive
@@ -98,6 +99,13 @@ public class Room : MonoBehaviour
     }
     public UIUpgradeButton UpgradeIcon { 
         get => _upgradeIcon;
+    }
+    public int NbOfUsage { 
+        get => _nbOfUsage; 
+        set => _nbOfUsage = value; 
+    }
+    public float IconScale { 
+        get => _iconScale;
     }
 
     public void Init()
@@ -348,6 +356,8 @@ public class Room : MonoBehaviour
         if (_trapData.Effect == Effect.MONSTRE && _listEffects.Count > 1)
         {
             _listEffects.RemoveAt(_listEffects.Count - 1);
+            GameObject childSpriteUpgrade = gameObject.transform.Find("SpriteUpgrade").gameObject;
+            Destroy(childSpriteUpgrade);
         }
         EnableUpgrade();
     }

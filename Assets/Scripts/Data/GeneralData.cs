@@ -8,6 +8,7 @@ public class GeneralData : ScriptableObject
     [SerializeField] private RoomList _roomList;
     [SerializeField] private TrapList _trapList;
     [SerializeField] private Sprite _square;
+    [SerializeField] private Sprite _spriteMonsterUpgrade;
 
     public RoomList RoomList
     {
@@ -22,5 +23,9 @@ public class GeneralData : ScriptableObject
     public Sprite Square
     {
         get { return _square; }
+    }
+
+    public Sprite SpriteMonsterUpgrade {
+        get => _spriteMonsterUpgrade;
     }
 }
