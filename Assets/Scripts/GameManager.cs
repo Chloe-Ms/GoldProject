@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private Room _currentRoom = null;
     private static GameManager _instance;
     private int _nbMenuIn = 0;
+    private Sequence _movementHeroesSequence;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -183,18 +184,21 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
             {
+                room.IsActive = false;
+                room.NbOfUsage = 1;
                 room.SetIconEffect();
                 if (room.TrapData.SoundWhenApplied != "")
                 {
                     AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
                 }
-                room.IsActive = false;
                 if (room.Effects.Count > 0)
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                     OnEffectApplied?.Invoke(_currentRoomEffect);
-                    ApplyCurrentRoomEffect(_currentRoomEffect);
-
+                    if (room.NbOfUpgrades > 0)
+                    {
+                        ApplyCurrentRoomEffect(_currentRoomEffect);
+                    }
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
                         _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
@@ -207,10 +211,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                             RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                         }
                     }
-                    if (_currentRoomEffect == Effect.MONSTRE)
-                    {
-                        ApplyDamageReduction();
-                    }
                 }
                 if (room.TrapData.RoomType == RoomType.LEVER)
                 {
@@ -218,6 +218,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 }
             }
             _heroesManager.RemoveAbilities(room);
+            _heroesManager.ApplyAfterRoomAbilities(room);
+
             if (room.TrapData.RoomType == RoomType.NORMAL)
             {
                 _onHeroesAttackUnityEvent.Invoke();
@@ -235,14 +237,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (effect == Effect.PLANTE)
         {
             _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
-        }
-    }
-    public void ApplyDamageReduction()
-    {
-        Hero hero = _heroesManager.HeroesInCurrentLevel.GetHeroWithRole(Role.CHEVALIER);
-        if (hero != null)
-        {
-            hero.HasDamageReduction = true;
         }
     }
 
@@ -288,6 +282,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
         SetPlayMode(false);
+        if (_movementHeroesSequence != null)
+        {
+            _movementHeroesSequence.Kill();
+            _movementHeroesSequence = null;
+        }
         _nbMenuIn = 0;
         _roomsInList.InitList();
         _winDisplayGO.SetActive(false);
@@ -334,29 +333,28 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 _onHeroesMovementUnityEvent.Invoke();
                 movementComplete = false;
                 _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(true);
-                Sequence sequence = DOTween.Sequence();
+                _movementHeroesSequence = DOTween.Sequence();
                 for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
                 {
                     if (i == 0)
                     {
                         if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
-                            sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            _movementHeroesSequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
                         }
-                        
                     }
                     else
                     {
                         if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
-                            sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            _movementHeroesSequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(0, _durationMergeHeroes));
                         }
                     }
 
                 }
-                sequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
+                _movementHeroesSequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
                 for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
                 {
                     float posOffset = ((j + 1) * (GameManager.Instance.SlotSize / (_heroesManager.HeroesInCurrentLevel.Heroes.Count + 1))) - 0.5f;
@@ -364,7 +362,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     {
                         if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
-                            sequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            _movementHeroesSequence.Append(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(posOffset, _durationMergeHeroes));
                         }
                     }
@@ -372,12 +370,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     {
                         if (_heroesManager.HeroesInCurrentLevel.Heroes[j].CanMove)
                         {
-                            sequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
+                            _movementHeroesSequence.Join(_heroesManager.HeroesInCurrentLevel.Heroes[j].transform.
                             DOLocalMoveX(posOffset, _durationMergeHeroes));
                         }
                     }
                 }
-                sequence.OnComplete(() =>
+                _movementHeroesSequence.OnComplete(() =>
                 {
                     _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
                     if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
@@ -391,6 +389,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                         isBossRoomReached = true;
                     }
                     movementComplete = true;
+                    _movementHeroesSequence = null;
                 });
                 yield return new WaitUntil(() => movementComplete);
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room

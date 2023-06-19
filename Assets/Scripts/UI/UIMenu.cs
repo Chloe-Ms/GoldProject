@@ -8,6 +8,14 @@ public class UIMenu : MonoBehaviour
     [SerializeField] UITutoInfos _menuTuto; // peut etre nul
     HeroData[] _heroesData;
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _menuTuto.gameObject.activeSelf == true)
+        {
+            ChangeTutorialPage();
+        }
+    }
+
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
