@@ -58,7 +58,25 @@ public class AbilityManager
         }
 
     };
-
+    private static Dictionary<Role, Action<Group, Room>> _activateAfterRoomAbilities = new Dictionary<Role, Action<Group, Room>>() 
+    {
+        {
+            Role.CHEVALIER,
+            (Group group, Room room) =>
+            {
+                if (room.Effects[0] == Effect.MONSTRE)
+                {
+                    for (int i = 0; i < group.Heroes.Count; i++)
+                    {
+                        if (!group.Heroes[i].IsDead)
+                        {
+                            group.Heroes[i].HasDamageReduction = true;
+                        }
+                    }
+                }
+            }
+        }
+    };
     private static Dictionary<Role, Action<Group>> _deactivateAbilities = new Dictionary<Role, Action<Group>>()
     {
         {
@@ -86,8 +104,20 @@ public class AbilityManager
             Role.MAGE,
             (Group group) =>
             {
-
                 group.IsInvulnerable = false;
+            }
+        },
+        {
+            Role.CHEVALIER,
+            (Group group) =>
+            {
+                for (int i = 0; i < group.Heroes.Count; i++)
+                {
+                    if (group.Heroes[i].HasDamageReduction)
+                    {
+                        group.Heroes[i].HasDamageReduction = false;
+                    }
+                }
             }
         }
 
@@ -98,5 +128,8 @@ public class AbilityManager
     }
     public static Dictionary<Role, Action<Group>> DeactivateAbilities { 
         get => _deactivateAbilities; 
+    }
+    public static Dictionary<Role, Action<Group, Room>> ActivateAfterRoomAbilities { 
+        get => _activateAfterRoomAbilities;
     }
 }

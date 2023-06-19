@@ -1,27 +1,30 @@
 using UnityEngine;
 using NaughtyAttributes;
-using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "Trap Data", menuName = "GoldProject/Trap Data", order = 3)]
 public class TrapData : ScriptableObject
 {
-    [SerializeField] private string _name;
+    [SerializeField] private TextLanguage _name;
     [SerializeField] private Sprite _sprite;
     [SerializeField] private Sprite _spriteUI;
     [SerializeField] private Effect _effect;
     [SerializeField] private int _nbRoomsBeforeEffect;
     [SerializeField] private RoomType _roomType;
     [SerializeField] private Color _color;
-    [ResizableTextArea,SerializeField] private string _description;
+    [ResizableTextArea,SerializeField] private TextLanguage _description;
     [SerializeField] private string _soundWhenApplied;
     [SerializeField] private Sprite _bgEffectUIImage;
     [SerializeField] private Sprite _roomEffectImage;
     [SerializeField] private bool _isRoomEffectImageBehindHeroes;
-    public string Name
+    public TextLanguage Name
     {
         get { return _name; }
     }
 
+    public string EnglishName
+    {
+        get { return _name.GetStringInLanguage(Language.EN); }
+    }
     public Sprite Sprite
     {
         get { return _sprite; }
@@ -47,7 +50,7 @@ public class TrapData : ScriptableObject
     public string SoundWhenApplied { 
         get => _soundWhenApplied;
     }
-    public string Description { 
+    public TextLanguage Description { 
         get => _description;
     }
     public Sprite BgEffectUIImage { 

@@ -5,16 +5,16 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "Tutorial Data", menuName = "GoldProject/Tutorial Data", order = 5)]
 public class TutorialData : ScriptableObject
 {
-    [SerializeField] private string _name;
-    [ResizableTextArea, SerializeField] private string[] _description;
+    [SerializeField] private TextLanguage _name;
+    [SerializeField] private TextLanguage[] _description;
 
-    public string Name
+    public TextLanguage Name
     {
         get { return _name; }
     }
 
 
-    public string[] Description
+    public TextLanguage[] Description
     {
         get => _description;
     }

@@ -34,7 +34,7 @@ public class ElementList : MonoBehaviour
     [Button("Clear Elements")]
     private void ClearElements()
     {
-        Debug.Log(_elements.Count);
+        //Debug.Log(_elements.Count);
         if (_elements.Count > 0)
         {
             foreach (var element in _elements)
@@ -42,7 +42,7 @@ public class ElementList : MonoBehaviour
                 DestroyImmediate(element);
             }
             _elements.Clear();
-            Debug.Log("ClearElements");
+            //Debug.Log("ClearElements");
         }
     }
 
@@ -118,7 +118,7 @@ public class ElementList : MonoBehaviour
         ClearElements();
         foreach (TrapData trap in listOfTrap.TrapData)
         {
-            if (trap.Name == "Entrance" || trap.Name == "Boss Room")
+            if (trap.EnglishName == "Entrance" || trap.EnglishName == "Boss Room")
                 continue;
             instanciateBackground = Instantiate(_background);
             instanciateBackground.name = "Room_" + _elements.Count;

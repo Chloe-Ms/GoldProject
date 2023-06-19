@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DataPersistenceManager : MonoBehaviour
@@ -69,7 +70,26 @@ public class DataPersistenceManager : MonoBehaviour
 
         _dataHandler.Save(_gameData);
     }
+    #if UNITY_ANDROID
+/*    private void OnApplicationFocus(bool focus)
+    {
+        if (!focus)
+        {
+            Debug.Log("LOSE FOCUS");
+            SaveGame();
 
+        }   
+    }*/
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            Debug.Log("PAUSE");
+            SaveGame();
+        }
+    }
+    #endif
     private void OnApplicationQuit()
     {
         SaveGame();
