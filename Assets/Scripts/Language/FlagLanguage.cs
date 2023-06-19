@@ -7,7 +7,7 @@ public class FlagLanguage : MonoBehaviour
     Language _language = Language.FR;
     void Start()
     {
-        _languageText.text = "EN";
+        _languageText.text = "FR";
         PlayerPrefs.SetInt("language", (int)_language);
     }
 
@@ -17,10 +17,10 @@ public class FlagLanguage : MonoBehaviour
         PlayerPrefs.SetInt("language", (int)_language);
         if ((int)_language == 0)
         {
-            _languageText.text = "EN";
+            _languageText.text = "FR";
         } else
         {
-            _languageText.text = "FR";
+            _languageText.text = "EN";
         }
     }
 }
