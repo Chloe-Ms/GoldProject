@@ -14,7 +14,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
         if (_keys.Count != _values.Count)
         {
             Debug.LogError("Tried to deserialize a SerializableDictionary with an amount of keys ("
-                +_keys.Count+") and of values("+_values.Count+") different.");
+                + _keys.Count + ") and of values(" + _values.Count + ") different.");
         }
 
         for (int i = 0 ; i < _keys.Count; i++)

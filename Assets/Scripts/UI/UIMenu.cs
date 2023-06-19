@@ -10,7 +10,7 @@ public class UIMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _menuTuto.gameObject.activeSelf == true)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _menuTuto != null && _menuTuto.gameObject.activeSelf == true)
         {
             ChangeTutorialPage();
         }

@@ -9,11 +9,6 @@ public class TextUILanguage : MonoBehaviour
     void Start()
     {
         _text.text = _traduction.GetStringInLanguage(GameManager.Instance.LanguageChosen);
-
-    }
-    void OnEnable()
-    {
-        _text.text = _traduction.GetStringInLanguage(GameManager.Instance.LanguageChosen);
     }
 }
 

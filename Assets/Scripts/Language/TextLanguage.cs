@@ -11,11 +11,11 @@ public enum Language
 [Serializable]
 public class TextLanguage
 {
-    [SerializeField]
-    SerializableDictionary<Language, string> _strings;
+    [SerializeField] List<string> _strings;
 
     public string GetStringInLanguage(Language language)
     {
-        return _strings[language];
+        return _strings[(int)language];
     }
 }
+
