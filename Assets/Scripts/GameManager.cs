@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private static GameManager _instance;
     private int _nbMenuIn = 0;
     private Sequence _movementHeroesSequence;
+    [SerializeField] private Language _languageChosen = Language.EN;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -94,6 +95,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         get => _startButton.activeInHierarchy;
     }
+    public Language LanguageChosen { 
+        get => _languageChosen; 
+        private set => _languageChosen = value; 
+    }
     #endregion Properties
 
     #region Events
@@ -123,6 +128,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             Destroy(gameObject);
         }
         GameManager.Instance.SetPlayMode(false);
+        _languageChosen = (Language)PlayerPrefs.GetInt("language");
     }
 
     private void Start()
@@ -352,7 +358,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                             DOLocalMoveX(0, _durationMergeHeroes));
                         }
                     }
-
                 }
                 _movementHeroesSequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
                 for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
