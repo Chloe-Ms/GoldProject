@@ -9,6 +9,7 @@ public class Group
     private bool _isPoisoned = false;
     private bool _affectedByPlants = false;
     private bool _isInvulnerable = false;
+    private bool _hasDamageReductionBeenApplied = false;
     public List<Hero> Heroes {
         get => _heroes;
         set => _heroes = value; 
@@ -33,6 +34,10 @@ public class Group
         get => _isInvulnerable; 
         set => _isInvulnerable = value; 
     }
+    public bool HasDamageReductionBeenApplied { 
+        get => _hasDamageReductionBeenApplied; 
+        set => _hasDamageReductionBeenApplied = value; 
+    }
 
     public void Init()
     {
@@ -40,6 +45,7 @@ public class Group
         _affectedByPlants = false;
         _isInvulnerable = false;
         _nbKeysTaken = 0;
+        _hasDamageReductionBeenApplied = false;
     }
 
     public Hero GetHeroWithRole(Role role)

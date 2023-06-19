@@ -29,8 +29,9 @@ public class AbilityManager
             Role.PALADIN,
             (Group group, Room room) =>
             {
-                if (room.Effects.Count > 0)
+                if (room.Effects.Count > 0 && room.IsActive && !group.HasDamageReductionBeenApplied)
                 {
+                    bool hasReductedDamage = false;
                     Effect roomEffect = room.Effects[0];
                     //Search hero with fatal attack
                     for (int i = 0; i < group.Heroes.Count; i++)
@@ -39,7 +40,12 @@ public class AbilityManager
                         if (group.Heroes[i].Health + damage <= 0 && group.Heroes[i].Role != Role.PALADIN)
                         {
                             group.Heroes[i].IsInvulnerable = true;
+                            hasReductedDamage = true;
                         }
+                    }
+                    if (hasReductedDamage) 
+                    {
+                        group.HasDamageReductionBeenApplied = true;
                     }
                 }
             }
@@ -49,7 +55,7 @@ public class AbilityManager
             (Group group, Room room) =>
             {
                 Hero hero = group.GetHeroWithRole(Role.MAGE);
-                if (hero.NbDamageOnElementaryRoom == 3 && room.IsElementary)
+                if (hero.NbDamageOnElementaryRoom == 3 && room.IsActive && room.IsElementary)
                 {
                     hero.NbDamageOnElementaryRoom = 0;
                     group.IsInvulnerable = true;
