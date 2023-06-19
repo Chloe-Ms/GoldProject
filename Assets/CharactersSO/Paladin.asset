@@ -17,12 +17,12 @@ MonoBehaviour:
   role: 2
   description:
     _strings:
-    - 'When an adventurer is about to die from a trap, the paladin will take blows
-      from that trap instead of the adventurer (if more than one adventurer is about
-      to die, the paladin will take blows for all of them). '
     - "Si un aventurier n'a plus qu'un point de vie, le paladin encaisse l'attaque
       qui est sens\xE9 tuer cet aventurier ( si 2 personnage meurt le paladin encaisse
       les 2 attaques )"
+    - 'When an adventurer is about to die from a trap, the paladin will take blows
+      from that trap instead of the adventurer (if more than one adventurer is about
+      to die, the paladin will take blows for all of them). '
   animatorController: {fileID: 9100000, guid: 8431636584451e74280ce42969d1b905, type: 2}
   atlas: {fileID: -8653719598885068355, guid: 9e99e94dd3b03bd49b7ea8f3b47d9b1a, type: 3}
   sprite: {fileID: 21300000, guid: 2b085ac74965bf24ca450a0f3b10fb88, type: 3}
