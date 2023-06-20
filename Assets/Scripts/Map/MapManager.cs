@@ -439,9 +439,9 @@ public class MapManager : MonoBehaviour
                 FindRoomPatern(_selectedSlot, _boss);
                 GameManager.Instance.SetPlayMode(true);
             }
-                
         }
-        _mapActions.Push(mapAction);
+        if (mapAction.ActionType != ActionType.None)
+            _mapActions.Push(mapAction);
     }
 
     private bool BossIsAbove()
@@ -954,6 +954,7 @@ public enum EditorState
     Edit = 1,
     Play = 2,
 }
+
 
 public class MapAction
 {
