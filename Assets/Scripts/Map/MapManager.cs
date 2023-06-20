@@ -14,7 +14,6 @@ public class MapManager : MonoBehaviour
     private EditorState _editorState = EditorState.Select;
     private int _buyableRoomCount = 5;
     private int _currentRoomCount = 0;
-    private bool _isUpgradable = false;
     private Coroutine _routineChangeRoom;
 
     #region Properties
@@ -31,11 +30,6 @@ public class MapManager : MonoBehaviour
     public int BuyableRoomCount
     {
         get { return _buyableRoomCount - _currentRoomCount; }
-    }
-
-    public bool IsUpgradable
-    {
-        get { return _isUpgradable; }
     }
 
     public Coroutine RoutineChangeRoom
@@ -273,7 +267,6 @@ public class MapManager : MonoBehaviour
             StopCoroutine( _routineRoomMonster);
             _routineRoomMonster = null;
         }
-        _isUpgradable = data.IsUpgradable;
         _editorState = EditorState.Select;
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
@@ -327,8 +320,7 @@ public class MapManager : MonoBehaviour
             //UPGRADE BUTTON
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
-                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0 &&
-                _isUpgradable)
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
             {
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
