@@ -68,7 +68,6 @@ public class InputRoom : MonoBehaviour
     {
         if (MapManager.Instance.SelectedSlot != null && _elementList != null && _uiElement.Nb > 0)
         {
-            _elementList.ChangeUIElementValue(_trapdata, -1);
             _elementList.SetDataOnSelectedTrap(_trapdata);
         }
     }

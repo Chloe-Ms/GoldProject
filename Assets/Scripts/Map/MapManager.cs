@@ -413,6 +413,7 @@ public class MapManager : MonoBehaviour
                 FindRoomPatern();
                 _selectedSlot.PlayParticles();
                 _selectedSlot.SetData(data);
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _currentRoomCount++;
             }
             if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
@@ -424,6 +425,7 @@ public class MapManager : MonoBehaviour
                 }
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, 1);
                 _selectedSlot.SetData(data);
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
             if (BuyableRoomCount > 0) {

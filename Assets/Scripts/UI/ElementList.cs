@@ -177,6 +177,7 @@ public class ElementList : MonoBehaviour
         {
             if (element.TrapData == trap)
             {
+                Debug.Log($"actual data = {element.TrapData.Name} value = {trap}");
                 Debug.Log($"element nb = {element.Nb} value = {value}");
                 element.Nb += value;
                 if (element.Nb == 0)
