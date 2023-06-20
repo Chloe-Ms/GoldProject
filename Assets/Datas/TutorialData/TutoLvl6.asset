@@ -12,10 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d46110c574aa6dd4ab65fa88998cd238, type: 3}
   m_Name: TutoLvl6
   m_EditorClassIdentifier: 
-  _name: Les capacites des heros
+  _name:
+    _strings:
+    - Les capacites des heros
+    - Heroes abilities
   _description:
-  - "Chaque h\xE9ro a sa propre capacit\xE9 qu'il pourra utiliser en donjon."
-  - "Pour voir les capacit\xE9s des h\xE9ros, clique sur le petit 'i' en haut de
-    l'\xE9cran."
-  - "Fais bien attention \xE0 ce que peut faire un h\xE9ros, certaines capacit\xE9s
-    sont redoutables !"
+  - _strings:
+    - "Chaque h\xE9ros a sa propre capacit\xE9. Pour d\xE9fendre ton donjon, tu devras
+      prendre en compte ce dont ils sont capables !"
+    - Each heroe has his own ability. If you want your dungeon to be efficient, you
+      must take these in consideration.
+  - _strings:
+    - "Les capacit\xE9s des h\xE9ros sont accessibles en appuyant sur l'icone 'i'
+      en dessous de leurs points de vie."
+    - You can see what ability a heroe has by clicking the 'i' icon below their health
+      points.
