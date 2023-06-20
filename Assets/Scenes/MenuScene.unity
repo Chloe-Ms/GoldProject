@@ -3088,6 +3088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvaScaler: {fileID: 1565478277}
+  _levelManager: {fileID: 0}
   _transitionTime: 1
 --- !u!1 &560157061
 GameObject:
@@ -4048,6 +4049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvaScaler: {fileID: 1565478277}
+  _levelManager: {fileID: 0}
   _transitionTime: 1
 --- !u!1 &768023739
 GameObject:
@@ -4663,7 +4665,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 763413708}
         m_TargetAssemblyTypeName: SwitchingSceneTransition, Assembly-CSharp
-        m_MethodName: CloseClouds
+        m_MethodName: CloseCloudsAndLoadScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4675,7 +4677,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 536983393}
         m_TargetAssemblyTypeName: SwitchingSceneTransition, Assembly-CSharp
-        m_MethodName: CloseClouds
+        m_MethodName: CloseCloudsAndLoadScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
