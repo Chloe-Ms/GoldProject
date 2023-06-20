@@ -95,6 +95,10 @@ public class HeroesManager : MonoBehaviour
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
                 ApplyDamageToEachHero(Effect.PLANTE);
+                if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
+                {
+                    GooglePlayManager.Instance.HandleAchievement("Green Day");
+                }
             }
         }
     }
@@ -126,7 +130,6 @@ public class HeroesManager : MonoBehaviour
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
                     int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
-                    Debug.Log($"Damage {effect} {heroAttacked.Role} {damage}");
                     heroAttacked.UpdateHealth(damage);
                 }
             }
@@ -147,7 +150,6 @@ public class HeroesManager : MonoBehaviour
         }
         if (hero.HasDamageReduction)
         {
-            Debug.Log("DAMAGE REDUCTION");
             if (damage < 0)
             {
                 damage += 1;
@@ -173,10 +175,10 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
+                    Debug.Log($"BEFORE {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
                     //Debug.Log("APPLY ABILITY : " + hero.Role);
-                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
+                    Debug.Log($" {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                 }
             }
         }
