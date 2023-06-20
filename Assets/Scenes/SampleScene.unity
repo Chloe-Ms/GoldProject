@@ -35897,6 +35897,7 @@ GameObject:
   - component: {fileID: 1780699300}
   - component: {fileID: 1780699299}
   - component: {fileID: 1780699298}
+  - component: {fileID: 1780699301}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -35954,10 +35955,10 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
+  _background: {fileID: 2697669600920303982, guid: 5f574105416a77e428f684765a03c4bd, type: 3}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _grid: {fileID: 3021073565053402859, guid: 750b1fe1780e09948af23160f0ccfcf3, type: 3}
   _slots: []
-  _grids: {fileID: 0}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
@@ -35977,6 +35978,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1780699301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780699297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53dbe15f7005bd34fb3636955b449183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 21300000, guid: fd502a19b00296749a3f8d72fcf2cbe0, type: 3}
 --- !u!1 &1784262278
 GameObject:
   m_ObjectHideFlags: 0
