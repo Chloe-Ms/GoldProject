@@ -95,6 +95,10 @@ public class HeroesManager : MonoBehaviour
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
                 ApplyDamageToEachHero(Effect.PLANTE);
+                if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
+                {
+                    GooglePlayManager.Instance.HandleAchievement("Green Day");
+                }
             }
         }
     }
