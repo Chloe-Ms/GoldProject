@@ -16,6 +16,11 @@ public class Room : MonoBehaviour
     private SpriteRenderer _iconRenderer;
     private GameObject _icon;
     [SerializeField] float _iconScale = 1f;
+    [HorizontalLine]
+    [SerializeField] private GameObject _layerSelection;
+    private Tween _layerSelectionTween;
+    [SerializeField] private float _offsetMovementLayerSelection = 5f;
+    [SerializeField] private float _timeMovementLayerSelection = 0.5f;
     public RoomData RoomData
     {
         get { return _roomData; }
@@ -107,12 +112,17 @@ public class Room : MonoBehaviour
     public float IconScale { 
         get => _iconScale;
     }
+    public GameObject LayerSelection { 
+        get => _layerSelection; 
+        set => _layerSelection = value; 
+    }
 
     public void Init()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         RoomColor = RoomColor.NotBuyable;
         _oldState = _roomColor;
+        //_layerSelection.SetActive(false);
     }
 
     private void Awake()
@@ -380,6 +390,22 @@ public class Room : MonoBehaviour
     public bool IsUsable()
     {
         return _roomColor == RoomColor.Usable || _oldState == RoomColor.Usable;
+    }
+
+    public void StartLayerSelectionAnimation()
+    {
+        _layerSelection.SetActive(true);
+        _layerSelectionTween = _layerSelection.transform.DOMoveY(_layerSelection.transform.position.y + _offsetMovementLayerSelection,
+            _timeMovementLayerSelection).SetLoops(-1,LoopType.Yoyo);
+    }
+
+    public void StopLayerSelectionAnimation()
+    {
+        if (_layerSelectionTween != null)
+        {
+            _layerSelectionTween.Kill();
+            _layerSelectionTween = null;
+        }
     }
 }
 
