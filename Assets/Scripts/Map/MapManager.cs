@@ -313,7 +313,7 @@ public class MapManager : MonoBehaviour
         MapAction mapAction;
         float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0 && !GameManager.Instance.IsInPlayMode) {
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -684,13 +684,13 @@ public class MapManager : MonoBehaviour
                     // foreach (List<Room> path in travelLists)
                     //     PrintListOfRoom(path);
                     //Change l'affichage pour les salles de clé
-                    List<Room> keyRooms = travelLists.Find(path => {
+                    List<List<Room>> keyRooms = travelLists.FindAll(path => {
                         Room lastRoom = path[path.Count - 1];
                         return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;
                     });
-                    foreach(Room room in keyRooms)
+                    foreach(List<Room> path in keyRooms)
                     {
-                        room.StartLayerSelectionAnimation();
+                        path[path.Count - 1].StartLayerSelectionAnimation();
                     }
                     CameraManager.Instance.DezoomPlayMode();
                     yield return new WaitUntil(() => {
@@ -710,9 +710,9 @@ public class MapManager : MonoBehaviour
                             return false;
                     });
                     //Enleve l'affichage des salles de clés
-                    foreach (Room room in keyRooms)
+                    foreach (List<Room> path in keyRooms)
                     {
-                        room.StopLayerSelectionAnimation();
+                        path[path.Count - 1].StopLayerSelectionAnimation();
                     }
                     CameraManager.Instance.Zoom();
                     // ici pour désafficher l'ui
