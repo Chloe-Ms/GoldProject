@@ -334,7 +334,7 @@ public class Room : MonoBehaviour
 
     public void EnableUpgrade()
     {
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.BuyableRoomCount > 0)
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable)
         {
             _upgradeIcon.gameObject.SetActive(true);
         } else
