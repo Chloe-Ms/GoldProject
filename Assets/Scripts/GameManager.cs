@@ -131,12 +131,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             Debug.LogError("Multiple instances of Game Manager in the scene.");
             Destroy(gameObject);
         }
-        GameManager.Instance.SetPlayMode(false);
         _languageChosen = (Language)PlayerPrefs.GetInt("language");
     }
 
     private void Start()
     {
+        GameManager.Instance.SetPlayMode(false);
         DOTween.Init();
         //StartEditMode();
     }
@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
-        if (_levels[_level].Tutorial != null) { // peut etre nul
+        if (_uiMenu != null && _levels[_level].Tutorial != null) { // peut etre nul
             _uiMenu.DisplayTutorial();
             ChangeNbMenuIn(1);
         }

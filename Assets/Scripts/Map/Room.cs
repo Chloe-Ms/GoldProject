@@ -21,6 +21,7 @@ public class Room : MonoBehaviour
     private Tween _layerSelectionTween;
     [SerializeField] private float _offsetMovementLayerSelection = 5f;
     [SerializeField] private float _timeMovementLayerSelection = 0.5f;
+    [SerializeField] private GeneralData _generalData;
     public RoomData RoomData
     {
         get { return _roomData; }
@@ -216,7 +217,13 @@ public class Room : MonoBehaviour
         if (_trapData != null)
         {
             _iconRenderer.color = new Color(255, 255, 255, 255);
-            _iconRenderer.sprite = _trapData.RoomEffectImage;
+            if (_trapData.Effect != Effect.MONSTRE || _nbOfUpgrades == 0)
+            {
+                _iconRenderer.sprite = _trapData.RoomEffectImage;
+            } else
+            {
+                _iconRenderer.sprite = _generalData.TrapList.GetSpriteMonsterFromEffect(_listEffects[1]);
+            }
             if (!_trapData.IsRoomEffectImageBehindHeroes)
             {
                 _iconRenderer.sortingOrder = 41;

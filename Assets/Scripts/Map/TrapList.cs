@@ -57,4 +57,19 @@ public class TrapList : ScriptableObject
         }
         return bgImage;
     }
+
+    public Sprite GetSpriteMonsterFromEffect(Effect effect)
+    {
+        int i = 0;
+        Sprite sprite = null;
+        while (i < _trapData.Count && sprite == null)
+        {
+            if (_trapData[i].Effect == Effect.MONSTRE)
+            {
+                sprite = _trapData[i].RoomMonsterImages[(int)effect];
+            }
+            i++;
+        }
+        return sprite;
+    }
 }
