@@ -313,7 +313,7 @@ public class MapManager : MonoBehaviour
         MapAction mapAction;
         float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0 && !GameManager.Instance.IsInPlayMode) {
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
@@ -413,6 +413,7 @@ public class MapManager : MonoBehaviour
                 FindRoomPatern();
                 _selectedSlot.PlayParticles();
                 _selectedSlot.SetData(data);
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _currentRoomCount++;
             }
             if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
@@ -422,8 +423,10 @@ public class MapManager : MonoBehaviour
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
+                _selectedSlot.PlayParticles();
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, 1);
                 _selectedSlot.SetData(data);
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
             if (BuyableRoomCount > 0) {
@@ -682,7 +685,16 @@ public class MapManager : MonoBehaviour
                     //Debug.Log($"All Path avalaible :");
                     // foreach (List<Room> path in travelLists)
                     //     PrintListOfRoom(path);
-                    // ici pour afficher l'ui travelLists liste desl istes avec dernier elements => les leviers 
+                    //Change l'affichage pour les salles de clé
+                    List<List<Room>> keyRooms = travelLists.FindAll(path => {
+                        Room lastRoom = path[path.Count - 1];
+                        return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;
+                    });
+                    foreach(List<Room> path in keyRooms)
+                    {
+                        path[path.Count - 1].StartLayerSelectionAnimation();
+                    }
+                    CameraManager.Instance.DezoomPlayMode();
                     yield return new WaitUntil(() => {
                         if (Input.GetKeyDown(KeyCode.Mouse0)) {
                             Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -699,6 +711,12 @@ public class MapManager : MonoBehaviour
                         } else
                             return false;
                     });
+                    //Enleve l'affichage des salles de clés
+                    foreach (List<Room> path in keyRooms)
+                    {
+                        path[path.Count - 1].StopLayerSelectionAnimation();
+                    }
+                    CameraManager.Instance.Zoom();
                     // ici pour désafficher l'ui
                     bestPath = travelLists.Find(path => path.Contains(lever));
                     //Debug.Log($"Selected Path :");

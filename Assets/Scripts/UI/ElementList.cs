@@ -71,7 +71,7 @@ public class ElementList : MonoBehaviour
         Vector2 position = Vector2.zero;
         int index = 0;
 
-        ClearElements();
+        ClearUIElements();
         foreach (TrapData trap in listOfTrap.TrapData)
         {
             if (trap.EnglishName == "Entrance" || trap.EnglishName == "Boss Room")
@@ -88,7 +88,7 @@ public class ElementList : MonoBehaviour
             instanciateBackground.AddComponent<InputRoom>();
             instanciateBackground.transform.SetParent(_parent.transform);
             instanciateElement = new GameObject();
-            instanciateElement.name = "Element_" + _elements.Count;
+            instanciateElement.name = "Element_" + _uiElements.Count;
             instanciateElement.AddComponent<RectTransform>();
             //instanciateElement.GetComponent<RectTransform>().localPosition = new Vector2(_startPosition.transform.position.x + _margin * _elements.Count, _startPosition.transform.position.y);
             instanciateElement.GetComponent<RectTransform>().localPosition = new Vector2(position.x, position.y);
@@ -112,7 +112,7 @@ public class ElementList : MonoBehaviour
             instanciateText.GetComponent<RectTransform>().localPosition = new Vector2(position.x + 70f, position.y + 60f);
             instanciateText.transform.SetParent(instanciateElement.transform);
             _uiElements.Add(new UIElement(instanciateBackground, instanciateText, trap, nbOfTrap[index]));
-            _elements.Add(instanciateBackground);
+            //_elements.Add(instanciateBackground);
             instanciateBackground.GetComponent<InputRoom>().Init(this, trap, _uiMenu, _uiElements[_uiElements.Count - 1]);
             instanciateBackground.GetComponent<RectTransform>().localScale = _scale;
             index++;
@@ -177,6 +177,7 @@ public class ElementList : MonoBehaviour
         {
             if (element.TrapData == trap)
             {
+                Debug.Log($"actual data = {element.TrapData.Name} value = {trap}");
                 Debug.Log($"element nb = {element.Nb} value = {value}");
                 element.Nb += value;
                 if (element.Nb == 0)

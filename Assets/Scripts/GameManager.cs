@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
     [SerializeField] UIMenu _uiMenu; // peut etre nul
+    [SerializeField] bool _isInPlayMode = false;
 
     private bool _hasWon = false;
     private int _nbMoves = 0;
@@ -98,6 +99,9 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public Language LanguageChosen { 
         get => _languageChosen; 
         private set => _languageChosen = value; 
+    }
+    public bool IsInPlayMode { 
+        get => _isInPlayMode;
     }
     #endregion Properties
 
@@ -287,6 +291,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         Debug.Log("NIVEAU " + _level);
         _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
+        _isInPlayMode = false;
         SetPlayMode(false);
         if (_movementHeroesSequence != null)
         {
@@ -313,6 +318,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartPlayMode()
     {
         //Enter Play Mode
+        _isInPlayMode = true;
         _mapManager.UpdateMapIconPlayMode();
         _onStartPlayMode.Invoke();
         OnEnterPlayMode?.Invoke(Level);
