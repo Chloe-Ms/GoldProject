@@ -63,9 +63,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
     public bool IsCurrentRoomElementary
     {
-        get => _currentRoomEffect == Effect.FOUDRE || 
-            _currentRoomEffect == Effect.FEU || 
-            _currentRoomEffect == Effect.GLACE;
+        get {
+            return _currentRoom.Effects.Count > 0 &&
+                (_currentRoom.Effects[0] == Effect.FOUDRE ||
+            _currentRoom.Effects[0] == Effect.FEU ||
+            _currentRoom.Effects[0] == Effect.GLACE);
+        }
     }
     public int CurrentLevelWidth
     {
@@ -223,6 +226,9 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                             RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                         }
                     }
+                } else
+                {
+                    _currentRoomEffect = Effect.NONE;
                 }
                 if (room.TrapData.RoomType == RoomType.LEVER)
                 {

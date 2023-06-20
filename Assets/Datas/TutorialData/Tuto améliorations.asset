@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46110c574aa6dd4ab65fa88998cd238, type: 3}
+  m_Name: "Tuto am\xE9liorations"
+  m_EditorClassIdentifier: 
+  _name:
+    _strings:
+    - Ameliorer ses pieges
+    - Upgrading traps
+  _description:
+  - _strings:
+    - "Les pi\xE8ges peuvent maintenant \xEAtre am\xE9lior\xE9s afin de gagner un
+      effet particulier !"
+    - Traps can now be upgraded to gain a special effect !
+  - _strings:
+    - "Les effets des am\xE9liorations sont accessibles en restant appuy\xE9 sur
+      l'icone de pi\xE8ge."
+    - The upgrade effects are accesssible by holding down on the trap icon.
+  - _strings:
+    - "Pour am\xE9liorer un pi\xE8ge d\xE9j\xE0 pos\xE9, il suffit de le s\xE9lectionner
+      et de cliquer sur la fl\xE8che qui apparait."
+    - To upgrade a trap that has been placed, you just have to select it and press
+      the arrow that appeared.

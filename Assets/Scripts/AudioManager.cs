@@ -41,7 +41,10 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == _startBackgroundMusic);
-        s?.Source.Play();
+        if (s != null && s.Source != null)
+        {
+            s.Source.Play();
+        }
         _currentBackgroundMusic = s;
     }
 

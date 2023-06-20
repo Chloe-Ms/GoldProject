@@ -73,19 +73,24 @@ public class Hero : MonoBehaviour
     }
     public void UpdateHealth(int pv)
     {
-        if (IsDead || IsInvulnerable)
+        if (IsDead)
         {
             return;
         }
 
+        if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
+        {
+            _nbDamageOnElementaryRoom++;
+
+        }
+        if (IsInvulnerable)
+        {
+            return;
+        }
         int realPV = pv;
         if (pv < 0) //DAMAGE
         {
             realPV = Mathf.Max(-_health, realPV);
-            if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
-            {
-                _nbDamageOnElementaryRoom++;
-            }
         } else { //HEAL
             realPV = Mathf.Min(MaxHealth - _health, realPV);
         }
