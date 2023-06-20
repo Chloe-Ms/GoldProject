@@ -544,6 +544,7 @@ public class MapManager : MonoBehaviour
         SetUnBuyableAdjacent(room);
         if (_selectedSlot != null)
         {
+            SetUnBuyableAdjacent(_selectedSlot);
             _selectedSlot.UnSelect();
         }
         _selectedSlot = null;
