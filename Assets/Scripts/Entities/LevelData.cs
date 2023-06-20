@@ -15,6 +15,7 @@ public class LevelData
     [SerializeField, MinValue(2)] int _mapHeight;
     [SerializeField] PrePlacedElement _prePlacedElements;
     [SerializeField] TutorialData _tutorial; //peut etre nul attention
+    [SerializeField] bool _isUpgradable;
     [SerializeField] int[] _trapList;
 
     public HeroData[] ListHeroesInGroup {
@@ -36,6 +37,10 @@ public class LevelData
 
     public PrePlacedElement PrePlacedElements { 
         get => _prePlacedElements;
+    }
+
+    public bool IsUpgradable {
+        get => _isUpgradable;
     }
 
     public TutorialData Tutorial //peut etre nul attention
