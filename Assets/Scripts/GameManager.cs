@@ -131,12 +131,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             Debug.LogError("Multiple instances of Game Manager in the scene.");
             Destroy(gameObject);
         }
-        GameManager.Instance.SetPlayMode(false);
         _languageChosen = (Language)PlayerPrefs.GetInt("language");
     }
 
     private void Start()
     {
+        GameManager.Instance.SetPlayMode(false);
         DOTween.Init();
         //StartEditMode();
     }
