@@ -422,6 +422,7 @@ public class MapManager : MonoBehaviour
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
+                _selectedSlot.PlayParticles();
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, 1);
                 _selectedSlot.SetData(data);
                 _onSetEffectOnRoomUnityEvent.Invoke();
@@ -682,7 +683,16 @@ public class MapManager : MonoBehaviour
                     //Debug.Log($"All Path avalaible :");
                     // foreach (List<Room> path in travelLists)
                     //     PrintListOfRoom(path);
-                    // ici pour afficher l'ui travelLists liste desl istes avec dernier elements => les leviers 
+                    //Change l'affichage pour les salles de clé
+                    List<Room> keyRooms = travelLists.Find(path => {
+                        Room lastRoom = path[path.Count - 1];
+                        return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;
+                    });
+                    foreach(Room room in keyRooms)
+                    {
+                        room.StartLayerSelectionAnimation();
+                    }
+                    CameraManager.Instance.DezoomPlayMode();
                     yield return new WaitUntil(() => {
                         if (Input.GetKeyDown(KeyCode.Mouse0)) {
                             Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -699,6 +709,12 @@ public class MapManager : MonoBehaviour
                         } else
                             return false;
                     });
+                    //Enleve l'affichage des salles de clés
+                    foreach (Room room in keyRooms)
+                    {
+                        room.StopLayerSelectionAnimation();
+                    }
+                    CameraManager.Instance.Zoom();
                     // ici pour désafficher l'ui
                     bestPath = travelLists.Find(path => path.Contains(lever));
                     //Debug.Log($"Selected Path :");
