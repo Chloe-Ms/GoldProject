@@ -18,23 +18,28 @@ MonoBehaviour:
     - Heroes sensibilities
   _description:
   - _strings:
-    - "Chaque aventurier a ses propres forces et faiblesses. Vous pouvez voir en
-      haut de l'\xE9cran quels types de pi\xE8ges vont etre efficaces ou inefficaces
-      contre lui."
+    - "Chaque aventurier a ses propres forces et faiblesses. Tu peux voir en haut
+      de l'\xE9cran quels types de pi\xE8ges vont etre efficaces ou inefficaces contre
+      lui."
     - Each adventurer has his own strengths and weaknesses. Check on top of your
-      screen to see which type of trap will or won't be effective against him !
+      screen to see which type of trap will or won't be effective against him.
   - _strings:
-    - "Les pi\xE8ges inflige tous \xE0 la base 1 point de d\xE9gat. Cependant, les
-      sensibilit\xE9s des h\xE9ros vont incluencer cette valeur. Un pi\xE8ge va peut
-      etre infliger 2 point de d\xE9gat \xE0 un aventurier mais 0 \xE0 un autre."
-    - Each trap has a basic power of 1 damage point.
+    - "Les pi\xE8ges infligent tous \xE0 la base 1 point de d\xE9gat. Cependant,
+      les sensibilit\xE9s des h\xE9ros vont incluencer cette valeur. Un m\xEAme pi\xE8ge
+      va peut etre infliger 2 point de d\xE9gat \xE0 un aventurier mais 0 \xE0 un
+      autre."
+    - Each trap has a basic power of 1 damage point.  However, the heroe sensibility
+      are going to influence this value. A same trap could deal 2 damage to a heroe
+      and not affect another.
   - _strings:
-    - "Les tableaux de sensibilit\xE9 sont propre \xE0 chaque type de h\xE9ros. Ils
-      r\xE9pertorient dans la colonne rouge les pi\xE8ges qui feront 2 points de
-      d\xE9gat au lieu d'un, les pi\xE8ges qui seront inefficaces dans la colonne
-      grise, et les pi\xE8ge qui vont redonner un point de vie au h\xE9ro dans la
-      colonne verte."
+    - "Les tableaux de sensibilit\xE9s sont propre \xE0 chaque type de h\xE9ros.
+      La colonne rouge montre les pi\xE8ges qui infligeront 2 points de d\xE9gat
+      au lieu d'un seul."
     - The sensibility sheets are unique to each type of adventurer. The red column
-      shows the traps that will deal 2 damages to the heroe instead of 1, the grey
-      one will show ineffective traps and the green one shows traps that will heal
-      1HP to the heroe.
+      shows the traps that will deal 2 damage to the heroe instead of 1.
+  - _strings:
+    - "Attention ! La colonne grise montre les pi\xE8ges qui seront inefficaces,
+      et la colonne verte correspond aux pi\xE8ges qui vont redonner un point de
+      vie au h\xE9ros !"
+    - But be careful ! The grey one shows ineffective traps and the green one shows
+      traps that will heal 1HP to the heroe!
