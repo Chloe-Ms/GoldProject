@@ -37,7 +37,7 @@ public class EditorManager : MonoBehaviour
     {
         MapManager.Instance.EditorState = EditorState.Select;
         if (_editorMenu.transform.position.magnitude == _menuPosition.magnitude) {
-            _editorMenu.transform.position += -_vectorOffset;
+            _editorMenu.transform.position = new Vector3(_menuPosition.x, _menuPosition.y - _menuPosition.y, _menuPosition.z);
         }
     }
 
