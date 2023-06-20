@@ -32,5 +32,14 @@ MonoBehaviour:
       with another monster effect.
   _soundWhenApplied: PiegeMonstre
   _bgEffectUIImage: {fileID: 21300000, guid: 13b25a684d12a3c4cb113bf5341360f7, type: 3}
-  _roomEffectImage: {fileID: 0}
+  _roomEffectImage: {fileID: 21300000, guid: 38536eeb560bb964da9c978d228d4322, type: 3}
+  _roomMonsterUpgradeImages:
+  - {fileID: 21300000, guid: 04205efdc665d7b44823526efaed48be, type: 3}
+  - {fileID: 21300000, guid: 38536eeb560bb964da9c978d228d4322, type: 3}
+  - {fileID: 21300000, guid: e66acff0558062c458dfa4118026cb40, type: 3}
+  - {fileID: 21300000, guid: b209fe2d009b9e643a6e7e3e3ad0513a, type: 3}
+  - {fileID: 21300000, guid: 7119f18c69bf7d34f830d90cf78ce438, type: 3}
+  - {fileID: 21300000, guid: 0befb35397800f84a9677b7123b4ec4f, type: 3}
+  - {fileID: 21300000, guid: 95268d678396c4d429498859076b3d08, type: 3}
+  - {fileID: 21300000, guid: 38536eeb560bb964da9c978d228d4322, type: 3}
   _isRoomEffectImageBehindHeroes: 0

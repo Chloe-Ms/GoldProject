@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +9,11 @@ public class FlagLanguage : MonoBehaviour
     Language _language = Language.FR;
     void Start()
     {
+        if (PlayerPrefs.HasKey("language"))
+        {
+            _language = (Language)PlayerPrefs.GetInt("language");
+            _languageImage.sprite = _sprites[(int)_language];
+        }
         PlayerPrefs.SetInt("language", (int)_language);
         _languageImage.sprite = _sprites[(int)_language];
     }
