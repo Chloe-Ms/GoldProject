@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] Sound[] _sounds;
     [SerializeField] BackgroundSound[] _bgSources;
+    [SerializeField] string _startBackgroundMusic;
     BackgroundSound _currentBackgroundMusic = null;
 
     private static AudioManager instance;
@@ -35,6 +36,13 @@ public class AudioManager : MonoBehaviour
             sound.Source.volume = sound.Volume;
             sound.Source.pitch = sound.Pitch;
         }
+    }
+
+    private void Start()
+    {
+        BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == _startBackgroundMusic);
+        s?.Source.Play();
+        _currentBackgroundMusic = s;
     }
 
     public void Play(string name)
@@ -130,10 +138,7 @@ public class AudioManager : MonoBehaviour
     public void PlayBackgroundMusic(string name)
     {
         BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == name);
-        if (_currentBackgroundMusic != null)
-        {
-            _currentBackgroundMusic.Source.Stop();
-        }
+        _currentBackgroundMusic?.Source.Stop();
         _currentBackgroundMusic = s;
         s.Source.Play();
     }
