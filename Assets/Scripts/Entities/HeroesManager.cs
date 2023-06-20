@@ -177,10 +177,10 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
+                    //Debug.Log($"{hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {_heroesInCurrentLevel.}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
                     //Debug.Log("APPLY ABILITY : " + hero.Role);
-                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
+                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.IsInvulnerable}");
                 }
             }
         }
