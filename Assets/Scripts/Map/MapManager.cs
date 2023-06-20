@@ -74,14 +74,16 @@ public class MapManager : MonoBehaviour
     #endregion
 
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
+    [SerializeField, Required("Background required GameObject")] private GameObject _background;
     [SerializeField, Required("Slot required GameObject")] private GameObject _slot;
     [SerializeField, Required("Grid required GameObject")] private GameObject _grid;
     [SerializeField] private List<GameObject> _slots = new List<GameObject>();
-    [SerializeField] private GameObject _grids;
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
     private float _slotSize;
+    private GameObject _grids;
+    private GameObject _backgrounds;
 
     private Room _start = null;
     private Room _boss = null;
@@ -96,6 +98,8 @@ public class MapManager : MonoBehaviour
     {
         if (_slots.Count > 0)
         {
+            DestroyImmediate(_backgrounds);
+            DestroyImmediate(_grids);
             foreach (var slot in _slots)
             {
                 DestroyImmediate(slot);
@@ -107,11 +111,13 @@ public class MapManager : MonoBehaviour
     [Button("Generate Map")]
     private void Generate()
     {
+        GameObject instantiateBackground = null;
         GameObject instantiateObject = null;
         GameObject instantiateGrid = null;
 
         if (_slots.Count > 0)
         {
+            DestroyImmediate(_backgrounds);
             DestroyImmediate(_grids);
             foreach (var slot in _slots)
             {
@@ -123,16 +129,23 @@ public class MapManager : MonoBehaviour
         _grids = new GameObject("Grids");
         _grids.transform.parent = transform;
         GetComponent<Grid>().Init(_widthSize, _heightSize);
+        _backgrounds = new GameObject("Backgrounds");
+        _backgrounds.transform.parent = transform;
+        GetComponent<BackgroundMap>().Init(_widthSize, _heightSize);
         for (int i = 0; i < _widthSize; i++)
         {
             for (int j = 0; j < _heightSize; j++)
             {
+                instantiateBackground = Instantiate(_background, _backgrounds.transform);
                 instantiateGrid = Instantiate(_grid, _grids.transform);
                 instantiateObject = Instantiate(_slot, transform);
+                instantiateBackground.name = "Background_" + i + "_" + j;
                 instantiateObject.name = "Slot_" + i + "_" + j;
                 instantiateGrid.name = "Grid_" + i + "_" + j;
+                instantiateBackground.transform.position = new Vector3(_margin * i, _margin * j, 0.09f);
                 instantiateObject.transform.position = new Vector3(_margin * i, _margin * j, 0);
                 instantiateGrid.transform.position = instantiateObject.transform.position;
+                instantiateBackground.GetComponent<SpriteRenderer>().sprite = GetComponent<BackgroundMap>().Sprite;
                 instantiateObject.GetComponent<Room>().Init();
                 instantiateGrid.GetComponent<SpriteRenderer>().sprite = GetComponent<Grid>().GetSprite(i, j);
                 _slots.Add(instantiateObject);
