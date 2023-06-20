@@ -378,6 +378,21 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                         }
                     }
                 }
+                if ((_heroesManager.GroupParent.transform.position.x - path[i].transform.position.x) >= 0.2f && i!=0)
+                {
+                    for (int k = 0; k < _heroesManager.GroupParent.transform.childCount; k++)
+                    {
+                        _heroesManager.GroupParent.transform.GetChild(k).transform.eulerAngles = new Vector3(0, 180, 0);
+                    }
+                    
+                }
+                if ((_heroesManager.GroupParent.transform.position.x - path[i].transform.position.x) <= -0.2f && i != 0)
+                {
+                    for (int k = 0; k < _heroesManager.GroupParent.transform.childCount; k++)
+                    {
+                        _heroesManager.GroupParent.transform.GetChild(k).transform.eulerAngles = new Vector3(0, 0, 0);
+                    }
+                }
                 _movementHeroesSequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
                 for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
                 {
