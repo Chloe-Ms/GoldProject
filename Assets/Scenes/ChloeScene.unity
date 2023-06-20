@@ -7302,6 +7302,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._listHeroesInLevel.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
@@ -7386,6 +7390,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[1]._prePlacedElements._preplacedBoss.y
       value: 5
       objectReference: {fileID: 0}
@@ -7454,6 +7462,34 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 765153960}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 765153960}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedObstacle.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7484,6 +7520,10 @@ PrefabInstance:
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[9]._prePlacedElements._preplacedObstacle.Array.size
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Play
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[2]._prePlacedElements._preplacedObstacle.Array.data[0].x
@@ -7700,6 +7740,30 @@ PrefabInstance:
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[9]._prePlacedElements._preplacedObstacle.Array.data[3].y
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AudioManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AudioManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Victory
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Lose
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onWinUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
+      propertyPath: _onLossUnityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438422, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: m_Name
@@ -16267,67 +16331,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sounds:
   - _name: PosePiege1
-    _clip: {fileID: 8300000, guid: 9439187e84c7bbf4bac3c43735140bf4, type: 3}
+    _clips: []
     _volume: 0.4
     _pitch: 1
   - _name: PosePiege2
-    _clip: {fileID: 8300000, guid: 0435a587d97a0494296f122b2894230a, type: 3}
+    _clips: []
     _volume: 0.4
     _pitch: 1
   - _name: Selection
-    _clip: {fileID: 8300000, guid: 30a2695a7efa0de4f824f659a7165df7, type: 3}
+    _clips: []
     _volume: 0.35
     _pitch: 1
   - _name: MenuPause
-    _clip: {fileID: 8300000, guid: d7adfe15f2f424943851bc471b4f74f3, type: 3}
+    _clips: []
     _volume: 0.4
     _pitch: 1
   - _name: Victory
-    _clip: {fileID: 8300000, guid: 84c68c0a7ecb55d4d9e360266893970d, type: 3}
+    _clips:
+    - {fileID: 8300000, guid: 45ca322be97ca1c42ab682f6309d6ee5, type: 3}
+    - {fileID: 8300000, guid: c1a6b29ad1a96a343a66ce804eb7b1ec, type: 3}
+    - {fileID: 8300000, guid: d0c7f369747e3124487f9095e5d325ed, type: 3}
     _volume: 0.5
     _pitch: 1
   - _name: Defeat
-    _clip: {fileID: 8300000, guid: d623e4096e1d4d44e8fcda11352ffb3c, type: 3}
+    _clips:
+    - {fileID: 8300000, guid: d0c7f369747e3124487f9095e5d325ed, type: 3}
     _volume: 0.35
     _pitch: 1
   - _name: WalkHeros1
-    _clip: {fileID: 8300000, guid: 8c4fdc18893018a4fa28141f65637d1e, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: WalkHeros2
-    _clip: {fileID: 8300000, guid: 630a41e7b41a383409faba872bed9658, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: WalkHeros3
-    _clip: {fileID: 8300000, guid: 960aaffd0552d754492be984b9315f24, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: PiegeElectric
-    _clip: {fileID: 8300000, guid: fd5d981f95665904fb79ec084fa551b5, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegeFeu
-    _clip: {fileID: 8300000, guid: 8354b959d58eb2240a4bf9fc0ab4227d, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegePoison
-    _clip: {fileID: 8300000, guid: ebde5b6e2665d3d4887fadea9b1b1428, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegePhysique
-    _clip: {fileID: 8300000, guid: 3027b2cdb43dce54ea6db8e105b00855, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegePlante
-    _clip: {fileID: 8300000, guid: cbff29a4d19bf7d4389a64bdb3199295, type: 3}
+    _clips: []
     _volume: 0.42
     _pitch: 1
   - _name: PiegeGlace
-    _clip: {fileID: 8300000, guid: e2c1acfecd94aed4e871c54d826684ad, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: PiegeMonstre
-    _clip: {fileID: 8300000, guid: 9439187e84c7bbf4bac3c43735140bf4, type: 3}
+    _clips: []
     _volume: 1
     _pitch: 1
   _bgSources:
