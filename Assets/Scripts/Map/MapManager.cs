@@ -14,6 +14,7 @@ public class MapManager : MonoBehaviour
     private EditorState _editorState = EditorState.Select;
     private int _buyableRoomCount = 5;
     private int _currentRoomCount = 0;
+    private bool _isUpgradable = false;
     private Coroutine _routineChangeRoom;
 
     #region Properties
@@ -30,6 +31,11 @@ public class MapManager : MonoBehaviour
     public int BuyableRoomCount
     {
         get { return _buyableRoomCount - _currentRoomCount; }
+    }
+
+    public bool IsUpgradable
+    {
+        get { return _isUpgradable; }
     }
 
     public Coroutine RoutineChangeRoom
@@ -58,6 +64,9 @@ public class MapManager : MonoBehaviour
     public Room BossRoom { 
         get => _boss;
     }
+    public float SlotSize { 
+        get => _slotSize; 
+    }
     #endregion
 
     #region Events
@@ -72,6 +81,7 @@ public class MapManager : MonoBehaviour
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
+    private float _slotSize;
 
     private Room _start = null;
     private Room _boss = null;
@@ -237,6 +247,10 @@ public class MapManager : MonoBehaviour
         }
         else
             _instance = this;
+        if (_slot != null)
+        {
+            _slotSize = _slot.GetComponent<SpriteRenderer>().size.x;
+        }
     }
 
     #region Init
@@ -249,6 +263,17 @@ public class MapManager : MonoBehaviour
     public void InitLevel(LevelData data)
     {
         Clear();
+        if (_routineChangeRoom != null)
+        {
+            StopCoroutine(_routineChangeRoom);
+            _routineChangeRoom = null;
+        }
+        if (_routineRoomMonster != null)
+        {
+            StopCoroutine( _routineRoomMonster);
+            _routineRoomMonster = null;
+        }
+        _isUpgradable = data.IsUpgradable;
         _editorState = EditorState.Select;
         _widthSize = data.MapWidth;
         _heightSize = data.MapHeight;
@@ -295,13 +320,15 @@ public class MapManager : MonoBehaviour
         MapAction mapAction;
         float camOffset = -1.8f;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _editorState != EditorState.Play && GameManager.Instance.NbMenuIn == 0 && !GameManager.Instance.IsInPlayMode) {
             if (_editorState == EditorState.Select || (cursorPos.y - cameraPos.y > camOffset && _editorState == EditorState.Edit)) // change the offset by phone size
                 room = FindRoom(cursorPos);
 
+            //UPGRADE BUTTON
             if (_selectedSlot != null &&
                 _selectedSlot.UpgradeIcon.gameObject.activeSelf && 
-                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0)
+                _selectedSlot.UpgradeIcon.HasTouchedUpgradeButton(cursorPos) && BuyableRoomCount > 0 &&
+                _isUpgradable)
             {
                 mapAction = new MapAction();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Upgrade);
@@ -318,22 +345,13 @@ public class MapManager : MonoBehaviour
                     SetUnBuyableAdjacent(_selectedSlot);
                 return;
             }
-            if (room != null && room == _boss)
+            //START PLAY MODE (tap boss room)
+            if (room != null && room == _boss && GameManager.Instance.IsPlayModeActive)
             {
-                _editorState = EditorState.Play;
-                SetUnBuyableAdjacent(room);
-                if (_selectedSlot != null)
-                {
-                    _selectedSlot.UnSelect();
-                }
-                _selectedSlot = null;
-                //Debug.Log($"Selected Slot = {_selectedSlot}");
-                _grids.SetActive(false);
-                GameManager.Instance.StartPlayMode();
-                _routineChangeRoom = StartCoroutine(ImprovePathFinding());
-                return;
+                StartPlayMode(room);
             }
-            if (room != null && room.IsClickable()) {
+            //NORMAL ROOM
+            if (room != null && room.IsClickable() && room != _boss) {
                 _selectedSlot = room != _selectedSlot ? room : null;
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
@@ -367,6 +385,15 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
+        //Create sprite on top (depending on color of effect chosen)
+        GameObject spriteGO = new GameObject();
+        spriteGO.name = "SpriteUpgrade";
+        SpriteRenderer spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = 2;
+        spriteRenderer.sprite = GameManager.Instance.GeneralData.SpriteMonsterUpgrade;
+        spriteRenderer.color = GameManager.Instance.GeneralData.TrapList.GetColorFromEffect(_effectRoomMonster);
+        spriteGO.transform.parent = _selectedSlot.gameObject.transform;
+        spriteGO.transform.localScale = new Vector2(_selectedSlot.IconScale,_selectedSlot.IconScale);
         _selectedSlot.UpgradeRoom();
         GameManager.Instance.NbMenuIn--;
     }
@@ -392,7 +419,9 @@ public class MapManager : MonoBehaviour
             if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
+                _selectedSlot.PlayParticles();
                 _selectedSlot.SetData(data);
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _currentRoomCount++;
             }
             if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
@@ -402,7 +431,10 @@ public class MapManager : MonoBehaviour
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
+                _selectedSlot.PlayParticles();
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, 1);
                 _selectedSlot.SetData(data);
+                ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
             if (BuyableRoomCount > 0) {
@@ -415,9 +447,9 @@ public class MapManager : MonoBehaviour
                 FindRoomPatern(_selectedSlot, _boss);
                 GameManager.Instance.SetPlayMode(true);
             }
-                
         }
-        _mapActions.Push(mapAction);
+        if (mapAction.ActionType != ActionType.None)
+            _mapActions.Push(mapAction);
     }
 
     private bool BossIsAbove()
@@ -492,6 +524,20 @@ public class MapManager : MonoBehaviour
                 return room;
         }
         return null;
+    }
+    public void StartPlayMode(Room room)
+    {
+        _editorState = EditorState.Play;
+        SetUnBuyableAdjacent(room);
+        if (_selectedSlot != null)
+        {
+            _selectedSlot.UnSelect();
+        }
+        _selectedSlot = null;
+        //Debug.Log($"Selected Slot = {_selectedSlot}");
+        _grids.SetActive(false);
+        GameManager.Instance.StartPlayMode();
+        _routineChangeRoom = StartCoroutine(ImprovePathFinding());
     }
 
     #region Pathfinding
@@ -647,6 +693,16 @@ public class MapManager : MonoBehaviour
                     //Debug.Log($"All Path avalaible :");
                     // foreach (List<Room> path in travelLists)
                     //     PrintListOfRoom(path);
+                    //Change l'affichage pour les salles de clé
+                    List<List<Room>> keyRooms = travelLists.FindAll(path => {
+                        Room lastRoom = path[path.Count - 1];
+                        return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;
+                    });
+                    foreach(List<Room> path in keyRooms)
+                    {
+                        path[path.Count - 1].StartLayerSelectionAnimation();
+                    }
+                    CameraManager.Instance.DezoomPlayMode();
                     yield return new WaitUntil(() => {
                         if (Input.GetKeyDown(KeyCode.Mouse0)) {
                             Room room = FindRoom(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -663,6 +719,13 @@ public class MapManager : MonoBehaviour
                         } else
                             return false;
                     });
+                    //Enleve l'affichage des salles de clés
+                    foreach (List<Room> path in keyRooms)
+                    {
+                        path[path.Count - 1].StopLayerSelectionAnimation();
+                    }
+                    CameraManager.Instance.Zoom();
+                    // ici pour désafficher l'ui
                     bestPath = travelLists.Find(path => path.Contains(lever));
                     //Debug.Log($"Selected Path :");
                     bestPath.Insert(0, actualRoom);
@@ -722,7 +785,22 @@ public class MapManager : MonoBehaviour
     }
 
     #endregion
-
+    public void UpdateMapIconPlayMode()
+    {
+        foreach (GameObject slot in _slots)
+        {
+            Room room = slot.GetComponent<Room>();
+            if (room != null)
+            {
+                if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS && room.TrapData.RoomType != RoomType.ENTRANCE)
+                    room.ClearIcon();
+                if (room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER)
+                {
+                    room.SetIconEffect();
+                }
+            }
+        }
+    }
     private bool HaveDirection(ref Direction direction , Direction directionToCheck)
     {
         Direction tmp = direction;
@@ -763,23 +841,19 @@ public class MapManager : MonoBehaviour
         Direction tmp = direction;
         Direction revertDirection = Direction.None;
 
-        if (tmp >= Direction.Down)
-        {
+        if (tmp >= Direction.Down) {
             tmp -= (int)Direction.Down;
             revertDirection = revertDirection | Direction.Up;
         }
-        if (tmp >= Direction.Up)
-        {
+        if (tmp >= Direction.Up) {
             tmp -= (int)Direction.Up;
             revertDirection = revertDirection | Direction.Down;
         }
-        if (tmp >= Direction.Left)
-        {
+        if (tmp >= Direction.Left) {
             tmp -= (int)Direction.Left;
             revertDirection = revertDirection | Direction.Right;
         }
-        if (tmp >= Direction.Right)
-        {
+        if (tmp >= Direction.Right) {
             tmp -= (int)Direction.Right;
             revertDirection = revertDirection | Direction.Left;
         }
@@ -838,7 +912,6 @@ public class MapManager : MonoBehaviour
 
         if (mapAction == null)
             return;
-        Debug.Log($"mapAction.Index {mapAction.Index}");
         room = FindRoom(mapAction.Index);
         if (mapAction.ActionType == ActionType.Add) {
             //Debug.Log($"Room {room} {BossIsAbove(room)} {room.RoomData.Directions}");
@@ -849,6 +922,7 @@ public class MapManager : MonoBehaviour
             }
             direction = GetRevertDirection(room.RoomData.Directions);
             RemoveDirection(FindRoom(room, room.RoomData.Directions), direction);
+            ElementList.Instance.ChangeUIElementValue(room.TrapData, 1);
             room.UndoData(null, null, RoomColor.NotBuyable);
             if (_selectedSlot != null) {
                 SetUnBuyableAdjacent(_selectedSlot);
@@ -867,7 +941,9 @@ public class MapManager : MonoBehaviour
                 room.UpgradeRoom();
                 _currentRoomCount++;
             }
+            ElementList.Instance.ChangeUIElementValue(room.TrapData, 1);
             room.UndoData(mapAction.TrapData);
+            ElementList.Instance.ChangeUIElementValue(room.TrapData, -1);
         } else if (mapAction.ActionType == ActionType.Upgrade) {
             room.UndoUpgrade();
             _currentRoomCount--;
@@ -886,6 +962,7 @@ public enum EditorState
     Edit = 1,
     Play = 2,
 }
+
 
 public class MapAction
 {

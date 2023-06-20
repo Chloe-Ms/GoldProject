@@ -10,6 +10,7 @@ public class InputRoom : MonoBehaviour
     private ElementList _elementList;
     private TrapData _trapdata;
     private UIMenu _uiMenu;
+    private UIElement _uiElement;
 
     private void Start()
     {
@@ -19,11 +20,12 @@ public class InputRoom : MonoBehaviour
         }
     }
 
-    public void Init(ElementList elementList,TrapData trap,UIMenu uiMenu)
+    public void Init(ElementList elementList,TrapData trap,UIMenu uiMenu, UIElement uiElement)
     {
         _elementList = elementList;
         _trapdata = trap;
         _uiMenu = uiMenu;
+        _uiElement = uiElement;
     }
     void Update()
     {
@@ -64,7 +66,7 @@ public class InputRoom : MonoBehaviour
 
     private void Tap()
     {
-        if (_elementList != null)
+        if (MapManager.Instance.SelectedSlot != null && _elementList != null && _uiElement.Nb > 0)
         {
             _elementList.SetDataOnSelectedTrap(_trapdata);
         }

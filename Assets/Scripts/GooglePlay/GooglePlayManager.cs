@@ -17,7 +17,7 @@ public class GooglePlayManager : MonoBehaviour
         {"It's a trap!", "CgkIvpfI760aEAIQBA"},
         {"How the hell?", "CgkIvpfI760aEAIQBg"},
         {"Enma no Danjon", "CgkIvpfI760aEAIQAQ"},
-        {"Glue you back together in hell", "CgkIvpfI760aEAIQAw"}
+        {"Glue you back together, IN HELL", "CgkIvpfI760aEAIQAw"}
     };
 
     private static GooglePlayManager _instance;
@@ -25,6 +25,13 @@ public class GooglePlayManager : MonoBehaviour
     public static GooglePlayManager Instance
     {
         get { return _instance; }
+    }
+
+    private bool _isAuthenticated = false;
+
+    public bool IsAuthenticated
+    {
+        get { return _isAuthenticated; }
     }
 
     private void Awake()
@@ -48,17 +55,21 @@ public class GooglePlayManager : MonoBehaviour
         if (status == SignInStatus.Success)
         {
             Debug.Log("GooglePlayManager: ProcessAuthentication: Signed in!");
+            _isAuthenticated = true;
         }
         else
         {
             Debug.Log("GooglePlayManager: ProcessAuthentication: Sign-in failed!");
+            _isAuthenticated = false;
         }
     }
 
-    private void HandleAchievement(string achievementName)
+    public void HandleAchievement(string achievementName)
     {
         string achievementID = _achievementID[achievementName];
 
+        if (!_isAuthenticated)
+            return;
         Social.ReportProgress(achievementID, 100.0f, (bool success) => {
             if (success)
             {

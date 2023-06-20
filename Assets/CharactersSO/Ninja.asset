@@ -15,9 +15,13 @@ MonoBehaviour:
   maxHealth: 5
   heroName: Kunoichi
   role: 3
-  description: "Every two rooms, she'll dodge the trap. If the trap was about to
-    heal her, \nshe won't receive the health point.\nThe healer keep healing her
-    even if she dodge the room."
+  description:
+    _strings:
+    - "Une salle sur deux, il esquive l'attaque (si la salle le soigne, il ne re\xE7oit
+      pas le soin), le soin du healer est conserv\xE9."
+    - Every two rooms, she'll dodge the trap. If the trap was about to heal her,
+      she won't receive the health point. The healer keep healing her even if she
+      dodge the room.
   animatorController: {fileID: 9100000, guid: 146ae8dbfc0cb7b4e89407849ca80c2c, type: 2}
   atlas: {fileID: -8653719598885068355, guid: 5d2e12e906db7494f8066230e6466f90, type: 3}
   sprite: {fileID: 21300000, guid: d91b313f5aac97f43ade04937e269ef7, type: 3}

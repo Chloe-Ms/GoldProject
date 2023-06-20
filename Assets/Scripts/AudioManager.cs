@@ -1,10 +1,14 @@
+using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] Sound[] _sounds;
-    [SerializeField] AudioSource[] _bgSources;
+    [SerializeField] BackgroundSound[] _bgSources;
+    BackgroundSound _currentBackgroundMusic = null;
 
     private static AudioManager instance;
 
@@ -28,7 +32,6 @@ public class AudioManager : MonoBehaviour
 
         foreach(Sound sound in _sounds) {
             sound.Source = gameObject.AddComponent<AudioSource>();
-            sound.Source.clip = sound.Clip;
             sound.Source.volume = sound.Volume;
             sound.Source.pitch = sound.Pitch;
         }
@@ -38,21 +41,48 @@ public class AudioManager : MonoBehaviour
     {
         if (!_isMuted){
             Sound s = Array.Find(_sounds, sound => sound.Name == name);
-            if (s.Source.isPlaying)
+            if (s.Clips.Count > 0) 
             {
-                s.Source.Stop();
+                if (s.Clips.Count == 1)
+                {
+                    s.Source.clip = s.Clips[0];
+                } else
+                {
+                    int index = UnityEngine.Random.Range(0, s.Clips.Count);
+                    s.Source.clip = s.Clips[index];
+                }
+                if (s.Source.isPlaying)
+                {
+                    s.Source.Stop();
+                }
+                s.Source.Play();
             }
-            s.Source.Play();
         }
     }
     public void Play(string name, AudioSource source)
     {
         if (!_isMuted){
             Sound s = Array.Find(_sounds, sound => sound.Name == name);
-            s.Source = source;
-            source.clip = s.Clip;
-            source.volume = s.Volume;
-            source.pitch = s.Pitch;
+            if (s.Clips.Count > 0)
+            {
+                s.Source = source;
+                if (s.Clips.Count == 1)
+                {
+                    s.Source.clip = s.Clips[0];
+                }
+                else
+                {
+                    int index = UnityEngine.Random.Range(0, s.Clips.Count);
+                    s.Source.clip = s.Clips[index];
+                }
+                source.volume = s.Volume;
+                source.pitch = s.Pitch;
+                if (s.Source.isPlaying)
+                {
+                    s.Source.Stop();
+                }
+                s.Source.Play();
+            }
         }
     }
 
@@ -63,18 +93,59 @@ public class AudioManager : MonoBehaviour
             sound.Source.Stop();
         }
 
-        foreach (AudioSource source in _bgSources)
+        /*foreach (KeyValuePair<string, AudioSource> source in _bgSources)
         {
-            source.mute = true;
+            source.Value.mute = true;
+        }*/
+        foreach (BackgroundSound source in _bgSources)
+        {
+            source.Source.mute = true;
         }
         _isMuted = true;
     }
+    [SerializeField] private string _name;
 
     public void DemuteAllSounds(){
-        foreach (AudioSource source in _bgSources)
+        /*foreach (KeyValuePair<string, AudioSource> source in _bgSources)
         {
-            source.mute = false;
+            source.Value.mute = false;
+        }*/
+        foreach (BackgroundSound source in _bgSources)
+        {
+            source.Source.mute = false;
         }
         _isMuted = false;
+    }
+    [Button]
+    public void PlayMusic()
+    {
+        PlayBackgroundMusic(_name);
+    }
+    [Button]
+    public void StopMusic()
+    {
+        StopBackgroundMusic(_name);
+    }
+
+    public void PlayBackgroundMusic(string name)
+    {
+        BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == name);
+        if (_currentBackgroundMusic != null)
+        {
+            _currentBackgroundMusic.Source.Stop();
+        }
+        _currentBackgroundMusic = s;
+        s.Source.Play();
+    }
+    public void StopBackgroundMusic(string name)
+    {
+        BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == name);
+        s.Source.Stop();
+    }
+    [Button]
+    public void StopCurrentBackgroundMusic()
+    {
+        _currentBackgroundMusic.Source.Stop();
+        _currentBackgroundMusic = null;
     }
 }

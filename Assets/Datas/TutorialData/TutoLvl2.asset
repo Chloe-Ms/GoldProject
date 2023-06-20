@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46110c574aa6dd4ab65fa88998cd238, type: 3}
+  m_Name: TutoLvl2
+  m_EditorClassIdentifier: 
+  _name:
+    _strings:
+    - Les sensibilites des heros
+    - Heroes sensibilities
+  _description:
+  - _strings:
+    - "Chaque aventurier a ses propres forces et faiblesses. Vous pouvez voir en
+      haut de l'\xE9cran quels types de pi\xE8ges vont etre efficaces ou inefficaces
+      contre lui."
+    - Each adventurer has his own strengths and weaknesses. Check on top of your
+      screen to see which type of trap will or won't be effective against him !
+  - _strings:
+    - "Les pi\xE8ges inflige tous \xE0 la base 1 point de d\xE9gat. Cependant, les
+      sensibilit\xE9s des h\xE9ros vont incluencer cette valeur. Un pi\xE8ge va peut
+      etre infliger 2 point de d\xE9gat \xE0 un aventurier mais 0 \xE0 un autre."
+    - Each trap has a basic power of 1 damage point.
+  - _strings:
+    - "Les tableaux de sensibilit\xE9 sont propre \xE0 chaque type de h\xE9ros. Ils
+      r\xE9pertorient dans la colonne rouge les pi\xE8ges qui feront 2 points de
+      d\xE9gat au lieu d'un, les pi\xE8ges qui seront inefficaces dans la colonne
+      grise, et les pi\xE8ge qui vont redonner un point de vie au h\xE9ro dans la
+      colonne verte."
+    - The sensibility sheets are unique to each type of adventurer. The red column
+      shows the traps that will deal 2 damages to the heroe instead of 1, the grey
+      one will show ineffective traps and the green one shows traps that will heal
+      1HP to the heroe.

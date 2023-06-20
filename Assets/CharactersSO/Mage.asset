@@ -15,10 +15,12 @@ MonoBehaviour:
   maxHealth: 5
   heroName: Mage
   role: 4
-  description: 'When he takes the damages from 3 traps of fire, ice, lightning,
-
-    all
-    aventurers are immune on the next trap of the same type.'
+  description:
+    _strings:
+    - "Lorsqu'il subit des d\xE9g\xE2ts de 3 salles de type feu, glace ou foudre,
+      il Immunise l'\xE9quipe contre la prochaine case de ces types."
+    - When he takes the damages from 3 traps of fire, ice, lightning, all aventurers
+      are immune on the next trap of the same type.
   animatorController: {fileID: 9100000, guid: db0394ce21bfcf4469ee40907a3d9419, type: 2}
   atlas: {fileID: -8653719598885068355, guid: 49db9f013f53d2440bb03d7dcc8ea537, type: 3}
   sprite: {fileID: 21300000, guid: dda0b56a48a186841ad4a24c6f73818e, type: 3}

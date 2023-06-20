@@ -1,10 +1,15 @@
+using DG.Tweening;
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Hero : MonoBehaviour 
 {
     [SerializeField] SpriteRenderer _renderer;
+    //[SerializeField] Canvas _canvas;
+    [SerializeField] GameObject _damageTextMesh;
+    [SerializeField] float _durationShakeDamage = 1f;
     Animator _animator;
     private HeroData _heroData;
     private int _health;
@@ -12,6 +17,8 @@ public class Hero : MonoBehaviour
     private bool _isinvulnerable = false;
     private int _nbDamageOnElementaryRoom = 0; //Pas de meilleur endroit ou le mettre :/
     private bool _hasDamageReduction = false;
+
+    private bool _canMove;
 
     public event Action<Hero> OnHeroDeath;
     public event Action<int> OnDamageTaken;
@@ -58,6 +65,7 @@ public class Hero : MonoBehaviour
         get => _hasDamageReduction;
         set => _hasDamageReduction = value;
     }
+    public bool CanMove { get => _canMove; set => _canMove = value; }
     #endregion
     public void TestDamage()
     {
@@ -73,7 +81,7 @@ public class Hero : MonoBehaviour
         int realPV = pv;
         if (pv < 0) //DAMAGE
         {
-            realPV = Mathf.Min(_health, realPV);
+            realPV = Mathf.Max(-_health, realPV);
             if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
             {
                 _nbDamageOnElementaryRoom++;
@@ -86,6 +94,7 @@ public class Hero : MonoBehaviour
         if (_health <= 0)
         {
             _isDead = true;
+            _canMove = false;
             if (_heroData._soundDeath != "")
             {
                 AudioManager.Instance.Play(_heroData._soundDeath);
@@ -95,6 +104,7 @@ public class Hero : MonoBehaviour
                 _animator.SetTrigger("IsDead");
             }
             OnHeroDeath?.Invoke(this);
+            this.transform.parent = null;
         } else
         {
             if (_heroData._soundDamage != "")
@@ -105,8 +115,10 @@ public class Hero : MonoBehaviour
             {
                 _animator.SetTrigger("IsHurt");
             }
+            transform.DOShakePosition(_durationShakeDamage,0.05f,10);
             OnDamageTaken?.Invoke(realPV);
         }
+        //InstantiateDamage(realPV);
         UIUpdatePlayMode.Instance.UpdateHero(this,realPV);
     }
 
@@ -119,10 +131,10 @@ public class Hero : MonoBehaviour
         if (_heroData.atlas != null)
         {
             atlas = Instantiate(_heroData.atlas, this.transform);
-            Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
-            if (atlasTronc != null)
+            //Transform atlasTronc = atlas.transform.Find(_heroData.atlasTroncName);
+            if (atlas != null)
             {
-                _animator = atlasTronc.AddComponent<Animator>();
+                _animator = atlas.AddComponent<Animator>();
                 _animator.runtimeAnimatorController = _heroData.animatorController;
             } else
             {
@@ -137,5 +149,20 @@ public class Hero : MonoBehaviour
         {
             _animator.SetBool("IsRunning", isRunning);
         }
+    }
+
+    public void InstantiateDamage(int realPV)
+    {
+        //if (_canvas != null)
+        //{
+            GameObject go = Instantiate(_damageTextMesh, transform);
+            go.transform.localPosition = Vector3.zero;
+            TextMeshProUGUI textMesh = go.GetComponent<TextMeshProUGUI>();
+            if (textMesh != null)
+            {
+                textMesh.text = realPV.ToString();
+                textMesh.transform.DOMoveY(transform.position.y+10,1f).OnComplete(() => Destroy(go));
+            }
+        //}
     }
 }

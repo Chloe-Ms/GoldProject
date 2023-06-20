@@ -29,8 +29,9 @@ public class AbilityManager
             Role.PALADIN,
             (Group group, Room room) =>
             {
-                if (room.Effects.Count > 0)
+                if (room.Effects.Count > 0 && room.IsActive && !group.HasDamageReductionBeenApplied)
                 {
+                    bool hasReductedDamage = false;
                     Effect roomEffect = room.Effects[0];
                     //Search hero with fatal attack
                     for (int i = 0; i < group.Heroes.Count; i++)
@@ -39,7 +40,12 @@ public class AbilityManager
                         if (group.Heroes[i].Health + damage <= 0 && group.Heroes[i].Role != Role.PALADIN)
                         {
                             group.Heroes[i].IsInvulnerable = true;
+                            hasReductedDamage = true;
                         }
+                    }
+                    if (hasReductedDamage) 
+                    {
+                        group.HasDamageReductionBeenApplied = true;
                     }
                 }
             }
@@ -49,7 +55,7 @@ public class AbilityManager
             (Group group, Room room) =>
             {
                 Hero hero = group.GetHeroWithRole(Role.MAGE);
-                if (hero.NbDamageOnElementaryRoom == 3 && room.IsElementary)
+                if (hero.NbDamageOnElementaryRoom == 3 && room.IsActive && room.IsElementary)
                 {
                     hero.NbDamageOnElementaryRoom = 0;
                     group.IsInvulnerable = true;
@@ -58,7 +64,25 @@ public class AbilityManager
         }
 
     };
-
+    private static Dictionary<Role, Action<Group, Room>> _activateAfterRoomAbilities = new Dictionary<Role, Action<Group, Room>>() 
+    {
+        {
+            Role.CHEVALIER,
+            (Group group, Room room) =>
+            {
+                if (room.Effects[0] == Effect.MONSTRE)
+                {
+                    for (int i = 0; i < group.Heroes.Count; i++)
+                    {
+                        if (!group.Heroes[i].IsDead)
+                        {
+                            group.Heroes[i].HasDamageReduction = true;
+                        }
+                    }
+                }
+            }
+        }
+    };
     private static Dictionary<Role, Action<Group>> _deactivateAbilities = new Dictionary<Role, Action<Group>>()
     {
         {
@@ -86,8 +110,20 @@ public class AbilityManager
             Role.MAGE,
             (Group group) =>
             {
-
                 group.IsInvulnerable = false;
+            }
+        },
+        {
+            Role.CHEVALIER,
+            (Group group) =>
+            {
+                for (int i = 0; i < group.Heroes.Count; i++)
+                {
+                    if (group.Heroes[i].HasDamageReduction)
+                    {
+                        group.Heroes[i].HasDamageReduction = false;
+                    }
+                }
             }
         }
 
@@ -98,5 +134,8 @@ public class AbilityManager
     }
     public static Dictionary<Role, Action<Group>> DeactivateAbilities { 
         get => _deactivateAbilities; 
+    }
+    public static Dictionary<Role, Action<Group, Room>> ActivateAfterRoomAbilities { 
+        get => _activateAfterRoomAbilities;
     }
 }
