@@ -15,6 +15,10 @@ public class TextLanguage
 
     public string GetStringInLanguage(Language language)
     {
+        if (_strings == null || _strings.Count <= (int)language)
+        {
+            return "";
+        }
         return _strings[(int)language];
     }
 }

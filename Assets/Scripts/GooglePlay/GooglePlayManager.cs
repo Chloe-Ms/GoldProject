@@ -27,6 +27,8 @@ public class GooglePlayManager : MonoBehaviour
         get { return _instance; }
     }
 
+    private bool _isAuthenticated = false;
+
     private void Awake()
     {
         if (_instance == null) {
@@ -48,10 +50,12 @@ public class GooglePlayManager : MonoBehaviour
         if (status == SignInStatus.Success)
         {
             Debug.Log("GooglePlayManager: ProcessAuthentication: Signed in!");
+            _isAuthenticated = true;
         }
         else
         {
             Debug.Log("GooglePlayManager: ProcessAuthentication: Sign-in failed!");
+            _isAuthenticated = false;
         }
     }
 
@@ -59,6 +63,8 @@ public class GooglePlayManager : MonoBehaviour
     {
         string achievementID = _achievementID[achievementName];
 
+        if (!_isAuthenticated)
+            return;
         Social.ReportProgress(achievementID, 100.0f, (bool success) => {
             if (success)
             {

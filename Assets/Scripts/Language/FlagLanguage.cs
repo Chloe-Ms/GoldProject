@@ -1,26 +1,27 @@
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FlagLanguage : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _languageText;
+    [SerializeField] Image _languageImage;
+    [SerializeField] List<Sprite> _sprites;
     Language _language = Language.FR;
     void Start()
     {
-        _languageText.text = "FR";
+        if (PlayerPrefs.HasKey("language"))
+        {
+            _language = (Language)PlayerPrefs.GetInt("language");
+            _languageImage.sprite = _sprites[(int)_language];
+        }
         PlayerPrefs.SetInt("language", (int)_language);
+        _languageImage.sprite = _sprites[(int)_language];
     }
 
     public void ChangeLanguage()
     {
         _language = (Language)(((int)_language + 1) % 2);
         PlayerPrefs.SetInt("language", (int)_language);
-        if ((int)_language == 0)
-        {
-            _languageText.text = "FR";
-        } else
-        {
-            _languageText.text = "EN";
-        }
+        _languageImage.sprite = _sprites[(int)_language];
     }
 }
