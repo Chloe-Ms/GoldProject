@@ -17,7 +17,7 @@ public class GooglePlayManager : MonoBehaviour
         {"It's a trap!", "CgkIvpfI760aEAIQBA"},
         {"How the hell?", "CgkIvpfI760aEAIQBg"},
         {"Enma no Danjon", "CgkIvpfI760aEAIQAQ"},
-        {"Glue you back together in hell", "CgkIvpfI760aEAIQAw"}
+        {"Glue you back together, IN HELL", "CgkIvpfI760aEAIQAw"}
     };
 
     private static GooglePlayManager _instance;
