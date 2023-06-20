@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
     [SerializeField] UIMenu _uiMenu; // peut etre nul
+    [SerializeField] bool _isInPlayMode = false;
 
     private bool _hasWon = false;
     private int _nbMoves = 0;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private static GameManager _instance;
     private int _nbMenuIn = 0;
     private Sequence _movementHeroesSequence;
-    [SerializeField] private Language _languageChosen = Language.EN;
+    [SerializeField] private Language _languageChosen = Language.FR;
 
     [SerializeField] private GeneralData _generalData;
     
@@ -99,6 +100,9 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         get => _languageChosen; 
         private set => _languageChosen = value; 
     }
+    public bool IsInPlayMode { 
+        get => _isInPlayMode;
+    }
     #endregion Properties
 
     #region Events
@@ -127,12 +131,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             Debug.LogError("Multiple instances of Game Manager in the scene.");
             Destroy(gameObject);
         }
-        GameManager.Instance.SetPlayMode(false);
         _languageChosen = (Language)PlayerPrefs.GetInt("language");
     }
 
     private void Start()
     {
+        GameManager.Instance.SetPlayMode(false);
         DOTween.Init();
         //StartEditMode();
     }
@@ -287,6 +291,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         Debug.Log("NIVEAU " + _level);
         _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
+        _isInPlayMode = false;
         SetPlayMode(false);
         if (_movementHeroesSequence != null)
         {
@@ -294,7 +299,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _movementHeroesSequence = null;
         }
         _nbMenuIn = 0;
-        _roomsInList.InitList();
+        _roomsInList.InitList(_levels[Level].TrapList);
         _winDisplayGO.SetActive(false);
         _lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
@@ -303,7 +308,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
         UIUpdateEditMode.Instance.Init(_levels[_level].NbMovesMax);
-        if (_levels[_level].Tutorial != null) { // peut etre nul
+        if (_uiMenu != null && _levels[_level].Tutorial != null) { // peut etre nul
             _uiMenu.DisplayTutorial();
             ChangeNbMenuIn(1);
         }
@@ -313,6 +318,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartPlayMode()
     {
         //Enter Play Mode
+        _isInPlayMode = true;
         _mapManager.UpdateMapIconPlayMode();
         _onStartPlayMode.Invoke();
         OnEnterPlayMode?.Invoke(Level);
