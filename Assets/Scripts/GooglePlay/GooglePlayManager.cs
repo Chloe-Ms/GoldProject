@@ -29,6 +29,11 @@ public class GooglePlayManager : MonoBehaviour
 
     private bool _isAuthenticated = false;
 
+    public bool IsAuthenticated
+    {
+        get { return _isAuthenticated; }
+    }
+
     private void Awake()
     {
         if (_instance == null) {
@@ -59,7 +64,7 @@ public class GooglePlayManager : MonoBehaviour
         }
     }
 
-    private void HandleAchievement(string achievementName)
+    public void HandleAchievement(string achievementName)
     {
         string achievementID = _achievementID[achievementName];
 
