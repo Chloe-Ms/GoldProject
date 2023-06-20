@@ -185,6 +185,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
     public void MoveHeroesToRoom(Room room)
     {
+        int heroesNotalive = _heroesManager.NbHeroesLeft;
+
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enleve l'effet de la room des plantes
         
         if (room != null)
@@ -238,6 +240,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         {
             _currentRoomEffect = Effect.NONE;
             _currentRoom = null;
+        }
+        heroesNotalive -= _heroesManager.NbHeroesLeft;
+        if (heoresNotAlive == 3 && GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
+        {
+            GooglePlayManager.Instance.HandleAchievement("Glue you back together, IN HELL");
         }
         _heroesManager.ChangeTurn();
     }
@@ -419,6 +426,15 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     #region VictoryConditions
     public IEnumerator PlayerWin()
     {
+        if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
+        {
+            if (Level == 0)
+                GooglePlayManager.Instance.HandleAchievement("Here comes a new challenger");
+            if (Level == _levels.Length - 1)
+                GooglePlayManager.Instance.HandleAchievement("Enma no Danjon");
+            if (MapManager.Instance.BuyableRoomCount == 0)
+                GooglePlayManager.Instance.HandleAchievement("I've got balls of steel");
+        }
         OnWin?.Invoke();
         _onWinUnityEvent.Invoke();
         if (MapManager.Instance.RoutineChangeRoom != null)
@@ -433,10 +449,29 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     }
     void PlayerLoss()
     {
+        if (AllHeroesAreFullLife() && GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
+        {
+            GooglePlayManager.Instance.HandleAchievement("How the hell?");
+        }
         ChangeNbMenuIn(1);
         OnLoss?.Invoke();
     }
     #endregion
+
+    private bool AllHeroesAreFullLife()
+    {
+        bool allHeroesAreFullLife = true;
+
+        for (int i = 0; i < _heroesManager.HeroesInCurrentLevel.Heroes.Count; i++)
+        {
+            if (_heroesManager.HeroesInCurrentLevel.Heroes[i].CurrentHealth < _heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth)
+            {
+                allHeroesAreFullLife = false;
+                break;
+            }
+        }
+        return allHeroesAreFullLife;
+    }
 
     public void SetPlayMode(bool state)
     {

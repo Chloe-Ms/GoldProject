@@ -4245,6 +4245,7 @@ GameObject:
   - component: {fileID: 146606651}
   - component: {fileID: 146606653}
   - component: {fileID: 146606652}
+  - component: {fileID: 146606654}
   m_Layer: 5
   m_Name: Enma
   m_TagString: Untagged
@@ -4261,7 +4262,7 @@ RectTransform:
   m_GameObject: {fileID: 146606650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 12, y: 12, z: 12}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1716173789}
@@ -4269,7 +4270,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -224, y: -341}
+  m_AnchoredPosition: {x: -182, y: -482}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &146606652
@@ -4292,7 +4293,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c2fc7801657620a488ff78c775b011b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e514bd43bbf2c904a94a8e3304a0f01d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4310,6 +4311,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146606650}
   m_CullTransparentMesh: 1
+--- !u!95 &146606654
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146606650}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b78013b864590904d8efddf80768a8a2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &169818853
 GameObject:
   m_ObjectHideFlags: 0
@@ -7303,7 +7325,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[1]._trapList.Array.data[2]
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[1]._trapList.Array.data[3]
@@ -7355,7 +7377,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[3]._trapList.Array.data[7]
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8644949061215438421, guid: 69496b9b2447ae746ac8f4f000045c7b, type: 3}
       propertyPath: _levels.Array.data[4]._trapList.Array.data[0]
@@ -16935,67 +16957,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sounds:
   - _name: PosePiege1
-    _clip: {fileID: 8300000, guid: 9439187e84c7bbf4bac3c43735140bf4, type: 3}
+    _clips: []
     _volume: 0.4
     _pitch: 1
   - _name: PosePiege2
-    _clip: {fileID: 8300000, guid: 0435a587d97a0494296f122b2894230a, type: 3}
+    _clips: []
     _volume: 0.4
     _pitch: 1
   - _name: Selection
-    _clip: {fileID: 8300000, guid: 30a2695a7efa0de4f824f659a7165df7, type: 3}
+    _clips: []
     _volume: 0.35
     _pitch: 1
   - _name: MenuPause
-    _clip: {fileID: 8300000, guid: d7adfe15f2f424943851bc471b4f74f3, type: 3}
+    _clips: []
     _volume: 0.4
     _pitch: 1
   - _name: Victory
-    _clip: {fileID: 8300000, guid: 84c68c0a7ecb55d4d9e360266893970d, type: 3}
+    _clips: []
     _volume: 0.5
     _pitch: 1
   - _name: Defeat
-    _clip: {fileID: 8300000, guid: d623e4096e1d4d44e8fcda11352ffb3c, type: 3}
+    _clips: []
     _volume: 0.35
     _pitch: 1
   - _name: WalkHeros1
-    _clip: {fileID: 8300000, guid: 8c4fdc18893018a4fa28141f65637d1e, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: WalkHeros2
-    _clip: {fileID: 8300000, guid: 630a41e7b41a383409faba872bed9658, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: WalkHeros3
-    _clip: {fileID: 8300000, guid: 960aaffd0552d754492be984b9315f24, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: PiegeElectric
-    _clip: {fileID: 8300000, guid: fd5d981f95665904fb79ec084fa551b5, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegeFeu
-    _clip: {fileID: 8300000, guid: 8354b959d58eb2240a4bf9fc0ab4227d, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegePoison
-    _clip: {fileID: 8300000, guid: ebde5b6e2665d3d4887fadea9b1b1428, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegePhysique
-    _clip: {fileID: 8300000, guid: 3027b2cdb43dce54ea6db8e105b00855, type: 3}
+    _clips: []
     _volume: 0.32
     _pitch: 1
   - _name: PiegePlante
-    _clip: {fileID: 8300000, guid: cbff29a4d19bf7d4389a64bdb3199295, type: 3}
+    _clips: []
     _volume: 0.42
     _pitch: 1
   - _name: PiegeGlace
-    _clip: {fileID: 8300000, guid: e2c1acfecd94aed4e871c54d826684ad, type: 3}
+    _clips: []
     _volume: 0.45
     _pitch: 1
   - _name: PiegeMonstre
-    _clip: {fileID: 8300000, guid: 9439187e84c7bbf4bac3c43735140bf4, type: 3}
+    _clips: []
     _volume: 1
     _pitch: 1
   _bgSources:

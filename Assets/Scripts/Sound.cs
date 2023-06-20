@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class Sound
 {
     [SerializeField] string _name;
-    [SerializeField] AudioClip _clip;
+    [SerializeField] List<AudioClip> _clips;
     [SerializeField, Range(0f, 1f)] float _volume = 1f;
     [SerializeField, Range(.1f, 3f)] float _pitch = 1f;
     AudioSource _source;
@@ -15,9 +16,9 @@ public class Sound
         set => _name = value; 
     }
 
-    public AudioClip Clip {
-        get => _clip; 
-        private set => _clip = value; 
+    public List<AudioClip> Clips {
+        get => _clips; 
+        private set => _clips = value; 
     }
 
     public float Volume { 
