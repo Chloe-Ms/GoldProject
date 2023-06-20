@@ -23,8 +23,22 @@ MonoBehaviour:
   _roomType: 2
   _color: {r: 0, g: 0, b: 0, a: 0}
   _description:
-    _strings: []
+    _strings:
+    - "Quand une cl\xE9 est pos\xE9e les aventuriers vont automatiquement la chercher
+      avant d'aller en direction de la salle du boss, quand il y a 2 cl\xE9s les
+      aventuriers vont aller chercher la plus proche en premi\xE9re."
+    - When a key is placed the adventurers will automatically pick it up before going
+      to the room of the boss, when there are 2 keys the adventurers will pick up
+      the nearest one first.
   _soundWhenApplied: 
   _bgEffectUIImage: {fileID: 0}
   _roomEffectImage: {fileID: 21300000, guid: 905198515fad2c94dafb55d32cf3638c, type: 3}
+  _roomMonsterUpgradeImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 0
