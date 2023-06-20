@@ -217,7 +217,7 @@ public class Room : MonoBehaviour
         if (_trapData != null)
         {
             _iconRenderer.color = new Color(255, 255, 255, 255);
-            if (_trapData.Effect != Effect.MONSTRE || _listEffects.Count == 1)
+            if (_trapData.Effect != Effect.MONSTRE || _nbOfUpgrades == 0)
             {
                 _iconRenderer.sprite = _trapData.RoomEffectImage;
             } else
