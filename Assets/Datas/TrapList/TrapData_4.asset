@@ -23,7 +23,11 @@ MonoBehaviour:
   _roomType: 0
   _color: {r: 0.68235296, g: 0.023529414, b: 0.6156863, a: 1}
   _description:
-    _strings: []
+    _strings:
+    - "Apr\xE8s \xEAtre tomb\xE9 sur une case poison si les aventuriers retombe sur
+      une case poison, ils prendront des d\xE9g\xE2ts doubl\xE9s."
+    - After falling on a poison box if the adventurers fall on a poison box, they
+      will take doubled damage.
   _soundWhenApplied: PiegePoison
   _bgEffectUIImage: {fileID: 21300000, guid: d07d21bff25f2934689fb3be7361c163, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: 08597a9782e96874aafa731b2f9df747, type: 3}
