@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
     public void MoveHeroesToRoom(Room room)
     {
-        int heroesNotalive = _heroesManager.NbHeroesLeft;
+        int heroesNotAlive = _heroesManager.NbHeroesLeft;
 
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enleve l'effet de la room des plantes
         
@@ -241,8 +241,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _currentRoomEffect = Effect.NONE;
             _currentRoom = null;
         }
-        heroesNotalive -= _heroesManager.NbHeroesLeft;
-        if (heoresNotAlive == 3 && GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
+        heroesNotAlive -= _heroesManager.NbHeroesLeft;
+        if (heroesNotAlive == 3 && GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
         {
             GooglePlayManager.Instance.HandleAchievement("Glue you back together, IN HELL");
         }
@@ -464,7 +464,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
         for (int i = 0; i < _heroesManager.HeroesInCurrentLevel.Heroes.Count; i++)
         {
-            if (_heroesManager.HeroesInCurrentLevel.Heroes[i].CurrentHealth < _heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth)
+            Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
+            if (_heroesManager.HeroesInCurrentLevel.Heroes[i].Health < _heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth)
             {
                 allHeroesAreFullLife = false;
                 break;
