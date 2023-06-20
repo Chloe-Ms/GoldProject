@@ -1195,50 +1195,47 @@ MonoBehaviour:
     _prePlacedElements:
       _preplacedObstacle: []
       _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 11400000, guid: 66de8ea7b1473e74dafad0cc656e1173, type: 2}
+    _trapList: 0000000000000000000000000000000000000000010000000000000000000000
   - name: Level 2
-    _nbMovesMax: 4
+    _nbMovesMax: 2
     _listHeroesInLevel:
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
-    _maxHealth: 0500000005000000
-    _mapWidth: 1
-    _mapHeight: 5
-    _prePlacedElements:
-      _preplacedObstacle: []
-      _preplacedBoss: {x: 1, y: 5}
-  - name: Level 3
-    _nbMovesMax: 6
-    _listHeroesInLevel:
-    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
     - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
-    _maxHealth: 0500000009000000
+    _maxHealth: 0200000003000000
     _mapWidth: 3
     _mapHeight: 3
     _prePlacedElements:
       _preplacedObstacle:
+      - {x: 1, y: 1}
       - {x: 3, y: 1}
+      - {x: 1, y: 3}
+      - {x: 2, y: 3}
       _preplacedBoss: {x: 3, y: 3}
-  - name: Level 4
-    _nbMovesMax: 6
+    _tutorial: {fileID: 11400000, guid: 57d77feadf7930749b71fac45c4ef717, type: 2}
+    _trapList: 0100000001000000010000000100000001000000010000000100000000000000
+  - name: Level 3
+    _nbMovesMax: 4
     _listHeroesInLevel:
-    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
     - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
-    _maxHealth: 040000000800000005000000
+    _maxHealth: 0400000004000000
     _mapWidth: 3
     _mapHeight: 3
     _prePlacedElements:
       _preplacedObstacle:
       - {x: 1, y: 1}
       - {x: 2, y: 3}
+      - {x: 3, y: 3}
       _preplacedBoss: {x: 1, y: 3}
-  - name: Level 5
-    _nbMovesMax: 7
+    _tutorial: {fileID: 11400000, guid: 3a6c19df74dfa7643affb1e6e638000e, type: 2}
+    _trapList: 0100000000000000000000000100000001000000000000000200000000000000
+  - name: Level 4
+    _nbMovesMax: 6
     _listHeroesInLevel:
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
-    _maxHealth: 050000000600000005000000
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 0500000006000000
     _mapWidth: 3
     _mapHeight: 4
     _prePlacedElements:
@@ -1246,49 +1243,72 @@ MonoBehaviour:
       - {x: 1, y: 4}
       - {x: 3, y: 4}
       _preplacedBoss: {x: 2, y: 4}
-  - name: Level 6
-    _nbMovesMax: 9
-    _listHeroesInLevel:
-    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    _maxHealth: 080000000900000008000000
-    _mapWidth: 3
-    _mapHeight: 4
-    _prePlacedElements:
-      _preplacedObstacle: []
-      _preplacedBoss: {x: 0, y: 0}
-  - name: Level 7
-    _nbMovesMax: 9
-    _listHeroesInLevel:
-    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
-    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
-    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    _maxHealth: 050000000700000007000000
-    _mapWidth: 3
-    _mapHeight: 4
-    _prePlacedElements:
-      _preplacedObstacle:
-      - {x: 2, y: 2}
-      - {x: 1, y: 4}
-      - {x: 2, y: 4}
-      _preplacedBoss: {x: 3, y: 4}
-  - name: Level 8
-    _nbMovesMax: 10
+    _tutorial: {fileID: 0}
+    _trapList: 0100000000000000000000000200000000000000010000000200000000000000
+  - name: Level 5
+    _nbMovesMax: 7
     _listHeroesInLevel:
     - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
-    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
     - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
-    _maxHealth: 100000000300000007000000
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 080000000600000005000000
     _mapWidth: 3
-    _mapHeight: 4
+    _mapHeight: 5
     _prePlacedElements:
       _preplacedObstacle:
       - {x: 1, y: 1}
+      - {x: 1, y: 3}
+      - {x: 1, y: 5}
+      - {x: 3, y: 5}
+      _preplacedBoss: {x: 2, y: 5}
+    _tutorial: {fileID: 0}
+    _trapList: 0100000001000000000000000100000002000000010000000100000000000000
+  - name: Level 6
+    _nbMovesMax: 4
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    _maxHealth: 04000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
       - {x: 3, y: 1}
       - {x: 1, y: 2}
-      - {x: 2, y: 4}
-      _preplacedBoss: {x: 1, y: 4}
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 11400000, guid: 6d59a70aa7bfdc943b83bd8d5b0b482f, type: 2}
+    _trapList: 0000000002000000000000000000000000000000000000000200000000000000
+  - name: Level 7
+    _nbMovesMax: 4
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 0500000004000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 2, y: 3}
+      - {x: 3, y: 3}
+      _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 0}
+    _trapList: 0200000000000000000000000200000000000000010000000100000000000000
+  - name: Level 8
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 0500000006000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 3, y: 1}
+      _preplacedBoss: {x: 3, y: 3}
+    _tutorial: {fileID: 0}
+    _trapList: 0000000002000000010000000200000000000000000000000100000000000000
   - name: Level 9
     _nbMovesMax: 7
     _listHeroesInLevel:
@@ -1305,17 +1325,108 @@ MonoBehaviour:
       - {x: 1, y: 5}
       - {x: 3, y: 5}
       _preplacedBoss: {x: 2, y: 5}
-  _heroesManager: {fileID: 1497098839}
-  _mapManager: {fileID: 696818461}
-  _startButton: {fileID: 216036721}
-  _durationBetweenRoom: 10
+    _tutorial: {fileID: 0}
+    _trapList: 
+  - name: Level 10
+    _nbMovesMax: 7
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 04000000060000000a000000
+    _mapWidth: 3
+    _mapHeight: 5
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 3}
+      - {x: 2, y: 2}
+      - {x: 1, y: 5}
+      - {x: 3, y: 5}
+      _preplacedBoss: {x: 2, y: 5}
+    _tutorial: {fileID: 0}
+    _trapList: 
+  - name: Level 11
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 040000000500000008000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 2, y: 3}
+      _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 0}
+    _trapList: 0000000000000000010000000200000002000000000000000000000002000000
+  - name: Level 12
+    _nbMovesMax: 10
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 030000000700000010000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 2, y: 4}
+      - {x: 3, y: 1}
+      - {x: 1, y: 2}
+      _preplacedBoss: {x: 1, y: 4}
+    _tutorial: {fileID: 0}
+    _trapList: 0000000001000000020000000100000001000000000000000000000000000000
+  - name: Level 13
+    _nbMovesMax: 10
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 090000000600000005000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      - {x: 1, y: 3}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 0}
+    _trapList: 0000000000000000020000000000000000000000010000000200000000000000
+  - name: Level 14
+    _nbMovesMax: 7
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 060000000700000005000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      - {x: 1, y: 3}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 0}
+    _trapList: 0100000002000000000000000100000001000000000000000100000002000000
+  _heroesManager: {fileID: 0}
+  _mapManager: {fileID: 0}
+  _startButton: {fileID: 0}
+  _durationBetweenRoom: 1
+  _durationMergeHeroes: 2
   _durationWaitInRoom: 1
   _durationWaitBeforeDisplayLoss: 2
   _durationWaitBeforeDisplayWin: 2
-  _displayUI: {fileID: 1222718201}
-  _winDisplayGO: {fileID: 855526362}
-  _lossDisplayGO: {fileID: 1825076037}
-  _roomsInList: {fileID: 1088869273}
+  _displayUI: {fileID: 0}
+  _winDisplayGO: {fileID: 0}
+  _lossDisplayGO: {fileID: 0}
+  _roomsInList: {fileID: 0}
+  _uiMenu: {fileID: 0}
+  _isInPlayMode: 0
+  _languageChosen: 0
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _onWinUnityEvent:
     m_PersistentCalls:
@@ -1329,9 +1440,12 @@ MonoBehaviour:
   _onHeroesAttackUnityEvent:
     m_PersistentCalls:
       m_Calls: []
-  _updated: 0
-  _room: {fileID: 0}
-  _effect: 4
+  _onStartEditorMode:
+    m_PersistentCalls:
+      m_Calls: []
+  _onStartPlayMode:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &216722807
 Transform:
   m_ObjectHideFlags: 0
@@ -4153,6 +4267,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01fe9b941ce5634c905d1c9243534d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zoomSizeEditMode: 3
+  _zoomSizePlayMode: 3
+  _speedZoom: 3
+  _durationMove: 0.5
 --- !u!81 &765153957
 AudioListener:
   m_ObjectHideFlags: 0
@@ -6226,6 +6344,8 @@ MonoBehaviour:
   list: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
   _startPosition: {fileID: 15648569}
   _background: {fileID: 319981442883076113, guid: 6a8209a750511714fa3d6880ad0447a1, type: 3}
+  _text: {fileID: 0}
+  _textBackground: {fileID: 0}
   _parent: {fileID: 29897697}
   _margin: 1.07
   _scale: {x: 0.55, y: 0.55, z: 1}
@@ -7098,6 +7218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _menuCharacter: {fileID: 1160062846}
   _menuRoom: {fileID: 534227774}
+  _menuTuto: {fileID: 0}
 --- !u!114 &1222718201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8467,7 +8588,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbf315f10c63314db16b4308592968a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomWidth: 0
   _heroPrefab: {fileID: 2783475497506347363, guid: 474fd352c7b6a7b42a13b23d75380756, type: 3}
   _groupGO: {fileID: 282415899}
   _heroesSensibilities: {fileID: 11400000, guid: 45548c6c67b1a95469b95f103389b25f, type: 2}
@@ -8632,6 +8752,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nbActionsLeft: {fileID: 926708089}
   _nbActionsTotal: {fileID: 1100851581}
+  _noActionsLeftTextColor: {r: 0, g: 0, b: 0, a: 0}
+  _ActionsLeftTextBaseColor: {r: 0, g: 0, b: 0, a: 0}
   _heroesUIEditMode:
   - {fileID: 527806082}
   - {fileID: 28325615}
