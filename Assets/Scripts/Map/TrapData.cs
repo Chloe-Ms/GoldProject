@@ -15,7 +15,13 @@ public class TrapData : ScriptableObject
     [SerializeField] private string _soundWhenApplied;
     [SerializeField] private Sprite _bgEffectUIImage;
     [SerializeField] private Sprite _roomEffectImage;
+    [ShowIf("IsMonsterRoom")]
+    [SerializeField] private Sprite[] _roomMonsterUpgradeImages = new Sprite[7];
     [SerializeField] private bool _isRoomEffectImageBehindHeroes;
+    private bool IsMonsterRoom()
+    {
+        return _effect == Effect.MONSTRE;
+    }
     public TextLanguage Name
     {
         get { return _name; }
@@ -61,6 +67,9 @@ public class TrapData : ScriptableObject
     }
     public bool IsRoomEffectImageBehindHeroes {
         get => _isRoomEffectImageBehindHeroes;
+    }
+    public Sprite[] RoomMonsterImages { 
+        get => _roomMonsterUpgradeImages; 
     }
 }
 
