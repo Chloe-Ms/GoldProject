@@ -422,6 +422,7 @@ public class Room : MonoBehaviour
         if (_layerSelectionTween != null)
         {
             _layerSelectionTween.Kill();
+            _layerSelection.SetActive(false);
             _layerSelectionTween = null;
         }
     }
