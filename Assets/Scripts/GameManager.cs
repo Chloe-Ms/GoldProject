@@ -485,7 +485,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
         for (int i = 0; i < _heroesManager.HeroesInCurrentLevel.Heroes.Count; i++)
         {
-            Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
+            //Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
             if (_heroesManager.HeroesInCurrentLevel.Heroes[i].Health < _heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth)
             {
                 allHeroesAreFullLife = false;
