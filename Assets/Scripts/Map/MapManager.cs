@@ -398,16 +398,8 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
-        //Create sprite on top (depending on color of effect chosen)
-        GameObject spriteGO = new GameObject();
-        spriteGO.name = "SpriteUpgrade";
-        SpriteRenderer spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
-        spriteRenderer.sortingOrder = 2;
-        spriteRenderer.sprite = GameManager.Instance.GeneralData.SpriteMonsterUpgrade;
-        spriteRenderer.color = GameManager.Instance.GeneralData.TrapList.GetColorFromEffect(_effectRoomMonster);
-        spriteGO.transform.parent = _selectedSlot.gameObject.transform;
-        spriteGO.transform.localScale = new Vector2(_selectedSlot.IconScale,_selectedSlot.IconScale);
-        _selectedSlot.UpgradeRoom();
+
+        _selectedSlot.UpgradeRoom(_effectRoomMonster);
         GameManager.Instance.NbMenuIn--;
     }
 
@@ -807,7 +799,10 @@ public class MapManager : MonoBehaviour
             if (room != null)
             {
                 if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS && room.TrapData.RoomType != RoomType.ENTRANCE)
+                {
                     room.ClearIcon();
+                }
+                    
                 if (room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER)
                 {
                     room.SetIconEffect();
