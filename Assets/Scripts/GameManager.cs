@@ -378,6 +378,21 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                         }
                     }
                 }
+                float direction = _heroesManager.GroupParent.transform.position.x - path[i].transform.position.x;
+                if (direction >= 0.2f || direction <= -0.2f)
+                {
+                    for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
+                    {
+                        if (direction <= -0.2f)
+                        {
+                            _heroesManager.HeroesInCurrentLevel.Heroes[j].RotateHero(1);
+                        } else
+                        {
+                            _heroesManager.HeroesInCurrentLevel.Heroes[j].RotateHero(-1);
+                        }
+                    }
+                }
+
                 _movementHeroesSequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
                 for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
                 {
@@ -470,7 +485,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
         for (int i = 0; i < _heroesManager.HeroesInCurrentLevel.Heroes.Count; i++)
         {
-            Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
+            //Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
             if (_heroesManager.HeroesInCurrentLevel.Heroes[i].Health < _heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth)
             {
                 allHeroesAreFullLife = false;

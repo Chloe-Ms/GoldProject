@@ -1,4 +1,5 @@
 using System.Data;
+using TMPro;
 using UnityEngine;
 
 public class HeroesManager : MonoBehaviour
@@ -64,6 +65,7 @@ public class HeroesManager : MonoBehaviour
         for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
             GameObject go = Instantiate(_heroPrefab);
+            go.name = "Hero" + i;
             float posOffset = ((i + 1) * (GameManager.Instance.SlotSize / (_heroesDataInCurrentLevel.Length + 1))) - 0.5f;
             //Debug.Log($"POS {i} {posOffset} {_heroesDataInCurrentLevel.Length} {i < _heroesDataInCurrentLevel.Length / 2} {i < (_heroesDataInCurrentLevel.Length / 2)}");
             go.transform.position = new Vector3(posOffset, 0, 0);
@@ -130,7 +132,7 @@ public class HeroesManager : MonoBehaviour
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
                     int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
-                    heroAttacked.UpdateHealth(damage);
+                    heroAttacked.UpdateHealth(damage,effect);
                 }
             }
         }
@@ -144,7 +146,9 @@ public class HeroesManager : MonoBehaviour
         {
             damage *= _poisonDamageMultiplier;
         }
-        if (effect == Effect.FOUDRE && GameManager.Instance.CurrentRoom.NbOfUpgrades > 0)
+        Room currentRoom = GameManager.Instance.CurrentRoom;
+        //Proc seulement si l'effet de base c'est la foudre
+        if (currentRoom.Effects.Count > 0 && currentRoom.Effects[0] == Effect.FOUDRE && currentRoom.NbOfUpgrades > 0)
         {
             damage += _heroesInCurrentLevel.NbKeysTaken;
         }
