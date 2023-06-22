@@ -57,7 +57,20 @@ public class TrapList : ScriptableObject
         }
         return bgImage;
     }
-
+    public RuntimeAnimatorController GetAnimationBgFromEffect(Effect effect)
+    {
+        int i = 0;
+        RuntimeAnimatorController bgAnimation = null;
+        while (i < _trapData.Count && bgAnimation == null)
+        {
+            if (_trapData[i].Effect == effect)
+            {
+                bgAnimation = _trapData[i].AnimatorBGEffectUI;
+            }
+            i++;
+        }
+        return bgAnimation;
+    }
     public Sprite GetSpriteMonsterFromEffect(Effect effect)
     {
         int i = 0;

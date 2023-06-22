@@ -18,6 +18,7 @@ public class TrapData : ScriptableObject
     [ShowIf("IsMonsterRoom")]
     [SerializeField] private Sprite[] _roomMonsterUpgradeImages = new Sprite[7];
     [SerializeField] private bool _isRoomEffectImageBehindHeroes;
+    [SerializeField] private RuntimeAnimatorController _animatorBGEffectUI;
     private bool IsMonsterRoom()
     {
         return _effect == Effect.MONSTRE;
@@ -70,6 +71,10 @@ public class TrapData : ScriptableObject
     }
     public Sprite[] RoomMonsterImages { 
         get => _roomMonsterUpgradeImages; 
+    }
+    public RuntimeAnimatorController AnimatorBGEffectUI { 
+        get => _animatorBGEffectUI;
+        set => _animatorBGEffectUI = value; 
     }
 }
 
