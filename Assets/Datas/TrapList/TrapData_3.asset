@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name:
     _strings:
-    - 
-    - 
+    - Plantes
+    - Plants
   _sprite: {fileID: 21300000, guid: ef2588dda8553394dbe0fabaf7d3c930, type: 3}
   _spriteUI: {fileID: 21300000, guid: ef2588dda8553394dbe0fabaf7d3c930, type: 3}
   _effect: 5
@@ -33,4 +33,12 @@ MonoBehaviour:
   _soundWhenApplied: PiegePlante
   _bgEffectUIImage: {fileID: 21300000, guid: 55ee4818a2d9dba418be7ff82b970d19, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: d40f593e34c7bac4bbf6e73e9016ee66, type: 3}
+  _roomMonsterUpgradeImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 1

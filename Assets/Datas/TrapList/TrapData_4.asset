@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name:
     _strings:
-    - 
-    - 
+    - Poison
+    - Poison
   _sprite: {fileID: 21300000, guid: 7cc34a190507cd0479cad951e05331f1, type: 3}
   _spriteUI: {fileID: 21300000, guid: 7cc34a190507cd0479cad951e05331f1, type: 3}
   _effect: 4
@@ -24,11 +24,19 @@ MonoBehaviour:
   _color: {r: 0.68235296, g: 0.023529414, b: 0.6156863, a: 1}
   _description:
     _strings:
-    - "Apr\xE8s \xEAtre tomb\xE9 sur une case poison si les aventuriers retombe sur
-      une case poison, ils prendront des d\xE9g\xE2ts doubl\xE9s."
-    - After falling on a poison box if the adventurers fall on a poison box, they
-      will take doubled damage.
+    - "Si les aventuriers passent par un pi\xE8ge poison am\xE9lior\xE9e, il se prendront
+      le double des degats sur chaque salle poison suivante. (Non cumulable)"
+    - If the adventurers walk in an upgraded poison trap, they will tae double damage
+      on every poison room after that.(Not cumulable)
   _soundWhenApplied: PiegePoison
   _bgEffectUIImage: {fileID: 21300000, guid: d07d21bff25f2934689fb3be7361c163, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: 08597a9782e96874aafa731b2f9df747, type: 3}
+  _roomMonsterUpgradeImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 1
