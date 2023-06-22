@@ -51,6 +51,7 @@ public class RoomEffectManager
             new UpdatedRoomEffect(
                 (Room trap,Group group) => {
                     _effectsEvent.Add(new EffectEvent(trap.TrapData.NbRoomsBeforeEffect,Effect.FEU,_effectsAppliedAfterRoom[Effect.FEU]));
+                    trap.IsActive = true;// Reactivate the trap if active
                 }
             )
         },

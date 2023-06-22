@@ -6,6 +6,7 @@ public class UIBGEffectImage : MonoBehaviour
 {
     [SerializeField] Image _spriteBgEffectUI;
     [SerializeField] RectTransform _rectTransform;
+    [SerializeField] Animator _animator;
     [SerializeField] GeneralData _generalData;
     [SerializeField] int _direction;
     Vector2 _scrollOffset;
@@ -19,14 +20,17 @@ public class UIBGEffectImage : MonoBehaviour
         _scrollOffset = new Vector2(Screen.width / 2,0);
     }
 
-    private void OnEffectApplied(Effect obj)
+    private void OnEffectApplied(Effect effect)
     {
-        _spriteBgEffectUI.sprite = _generalData.TrapList.GetImageBgFromEffect(obj);
+        _spriteBgEffectUI.sprite = _generalData.TrapList.GetImageBgFromEffect(effect);
         if (_spriteBgEffectUI.sprite == null)
         {
+            _animator.runtimeAnimatorController = null;
             _spriteBgEffectUI.color = new Color(1,1,1,0);
         } else
         {
+            _animator.runtimeAnimatorController = _generalData.TrapList.GetAnimationBgFromEffect(effect);
+            Debug.Log("ANIM" + _animator.runtimeAnimatorController);
             _spriteBgEffectUI.color = new Color(1, 1, 1, 1);
             _endPosition = _rectTransform.anchoredPosition;
             _rectTransform.anchoredPosition = _endPosition + (_direction * _scrollOffset);
