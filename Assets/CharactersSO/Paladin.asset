@@ -18,9 +18,10 @@ MonoBehaviour:
   description:
     _strings:
     - Encaisse l'attaque cense tuer un autre aventurier ( si 2 personnages meurent
-      sur la meme salle le sumo encaisse les 2 attaques )
-    - 'Take the damage of a trap will kill another adventurer (if more than one adventurer
-      is about to die on one room, the sumo will take the damage for all of them). '
+      sur la meme salle le sumo encaisse les 2 attaques).
+    - 'Take the damage of a trap that would kill another adventurer (if more than
+      one adventurer is about to die in a room, the sumo will take the damage for
+      all of them). '
   animatorController: {fileID: 9100000, guid: 8431636584451e74280ce42969d1b905, type: 2}
   atlas: {fileID: -8653719598885068355, guid: 9e99e94dd3b03bd49b7ea8f3b47d9b1a, type: 3}
   sprite: {fileID: 21300000, guid: 2b085ac74965bf24ca450a0f3b10fb88, type: 3}
