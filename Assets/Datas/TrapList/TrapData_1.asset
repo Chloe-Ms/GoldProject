@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name:
     _strings:
-    - 
-    - 
+    - Glace
+    - Ice
   _sprite: {fileID: 21300000, guid: c0d4b9ecaab20fa4d9adc1737072ff6d, type: 3}
   _spriteUI: {fileID: 21300000, guid: c0d4b9ecaab20fa4d9adc1737072ff6d, type: 3}
   _effect: 6
@@ -25,12 +25,19 @@ MonoBehaviour:
   _description:
     _strings:
     - Gele les aventuriers dans la salle deux cases plus loin, ils prendront deux
-      fois les effets de la salle. Si l'une des deux cases est une case feu, l'effet
-      s'annule.
-    - Freeze the adventurers in the room two boxes further, they will take twice
-      the effects of the room. If one of the two boxes is a light box, the effect
-      is canceled.
+      fois les effets de la salle. Si celle-ci est une case feu, les deux effets
+      s'annulent.
+    - Freeze the adventurers in the room two rooms further, they will take twice
+      the effects of the room. If one of those effects is fire, the effect is canceled.
   _soundWhenApplied: PiegeGlace
   _bgEffectUIImage: {fileID: 21300000, guid: 53dd1a3262611f04c83d74117a4b3156, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: 7ff955344f0980e49b3f38f21ee08282, type: 3}
+  _roomMonsterUpgradeImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 0
