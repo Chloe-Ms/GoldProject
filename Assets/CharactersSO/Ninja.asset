@@ -17,8 +17,9 @@ MonoBehaviour:
   role: 3
   description:
     _strings:
-    - "Esquive l'attaque une salle sur deux. Si la salle le soigne, il ne re\xE7oit
-      pas le soin Le soin du healer est conserve."
+    - "Esquive l'attaque une salle sur deux, en commen\xE7ant par esquiver la premiere.
+      Si la salle le soigne, il ne re\xE7oit pas le soin. En revanche, le soin du
+      healer est conserve."
     - Dodge the trap every two rooms. If the trap was about to heal her, she won't
       receive the health point. The heal of the healer is still active
   animatorController: {fileID: 9100000, guid: 146ae8dbfc0cb7b4e89407849ca80c2c, type: 2}
