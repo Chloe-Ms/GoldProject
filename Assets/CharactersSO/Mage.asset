@@ -17,8 +17,8 @@ MonoBehaviour:
   role: 4
   description:
     _strings:
-    - "Lorsqu'il subit des d\xE9g\xE2ts de 3 salles de type feu, glace ou foudre,
-      il Immunise l'\xE9quipe contre la prochaine case de ces types."
+    - Lorsqu'il subit des degats de 3 salles de type feu, glace ou foudre, il Immunise
+      l'equipe contre la prochaine case de ces types.
     - When he takes damages from 3 traps of type fire, ice or lightning, all aventurers
       are immune on the next trap of the same type.
   animatorController: {fileID: 9100000, guid: db0394ce21bfcf4469ee40907a3d9419, type: 2}
