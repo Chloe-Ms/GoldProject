@@ -28,7 +28,7 @@ MonoBehaviour:
       (glace, physique, plante, foudre, poison). Non cummulable avec un autre effet
       monstre.
     - Adds an additional effect chosen by the player in addition to the monster effect
-      (ice, physical, plant, lightning, poison). Can't add another monster effect.
+      (ice, physical, plant, thunder, poison). Can't add another monster effect.
   _soundWhenApplied: PiegeMonstre
   _bgEffectUIImage: {fileID: 21300000, guid: 13b25a684d12a3c4cb113bf5341360f7, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: 38536eeb560bb964da9c978d228d4322, type: 3}
