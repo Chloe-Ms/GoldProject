@@ -167,6 +167,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         return _levels[_level].ListHeroesInGroup;
     }
+
+    public bool AreInfosCharacterVisibleInLevel
+    {
+        get => _levels[_level].HasInfosCharacterVisible;
+    }
     public int GetHeroesSensibility(Effect effect, Role role)
     {
         return _heroesManager.GetSensibility(effect, role);
