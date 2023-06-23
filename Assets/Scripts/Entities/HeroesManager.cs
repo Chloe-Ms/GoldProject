@@ -83,6 +83,7 @@ public class HeroesManager : MonoBehaviour
 
     private void OnAnyHeroDeath(Hero hero)
     {
+        Debug.Log("DEATH "+ _heroesInCurrentLevel.AffectedByPlants);
         if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
         {
             AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
@@ -93,9 +94,11 @@ public class HeroesManager : MonoBehaviour
             StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
+            Debug.Log("PLANT ON DEATH nb usage"+ GameManager.Instance.CurrentRoom.NbOfUsage);
             if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
+                Debug.Log("PLANT ON DEATH");
                 ApplyDamageToEachHero(Effect.PLANTE);
                 if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
                 {
@@ -179,10 +182,9 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    Debug.Log($"BEFORE {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
+                    //Debug.Log($"BEFORE {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
-                    //Debug.Log("APPLY ABILITY : " + hero.Role);
-                    Debug.Log($" {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
+                    //Debug.Log($" {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                 }
             }
         }

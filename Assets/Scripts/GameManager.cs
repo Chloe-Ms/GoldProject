@@ -200,6 +200,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (room != null)
         {
             _currentRoom = room;
+            if (room.IsActive && room.NbOfUpgrades > 0 && room.Effects.Count > 0)
+            {
+                ApplyCurrentRoomEffect(room.Effects[0]);
+            }
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
@@ -215,10 +219,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                     OnEffectApplied?.Invoke(_currentRoomEffect);
-                    if (room.NbOfUpgrades > 0)
-                    {
-                        ApplyCurrentRoomEffect(_currentRoomEffect);
-                    }
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
                         _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
@@ -265,11 +265,13 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (effect == Effect.PLANTE)
         {
             _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
+            Debug.Log("PLANT EFFECT");
         }
     }
 
     public void DecreaseRoomForEffectsList(Room room, Group group)
     {
+        Debug.Log("Is effect " + _heroesManager.HeroesInCurrentLevel.AffectedByPlants);
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
             RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied--;
