@@ -86,6 +86,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         return _levels[_level].MaxHealth;
     }
+
+    public int[] GetListTrapsCurrentLevel()
+    {
+        return _levels[_level].TrapList;
+    }
     public int NbMenuIn { 
         get => _nbMenuIn; 
         set => _nbMenuIn = value; 

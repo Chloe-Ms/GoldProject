@@ -675,11 +675,8 @@ public class MapManager : MonoBehaviour
             travelLists = FindObjectif(leverList, actualRoom);
             if (travelLists != null || travelLists.Count > 0) {
                 lowestCount = GetLowestPathSize(travelLists);
-                //Debug.Log($"lowestCount = {lowestCount}");
                 for (int i = 0; i < travelLists.Count; i++) {
-                    //PrintListOfRoom(travelLists[i]);
                     if (travelLists[i].Count > lowestCount) {
-                        //Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
                         travelLists.RemoveAt(i);
                         i--;
                     }
@@ -696,10 +693,6 @@ public class MapManager : MonoBehaviour
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
-                    //Debug.Log($"All Path avalaible :");
-                    // foreach (List<Room> path in travelLists)
-                    //     PrintListOfRoom(path);
-                    //Change l'affichage pour les salles de clé
                     List<List<Room>> keyRooms = travelLists.FindAll(path => {
                         Room lastRoom = path[path.Count - 1];
                         return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;

@@ -30,7 +30,6 @@ public class UIBGEffectImage : MonoBehaviour
         } else
         {
             _animator.runtimeAnimatorController = _generalData.TrapList.GetAnimationBgFromEffect(effect);
-            Debug.Log("ANIM" + _animator.runtimeAnimatorController);
             _spriteBgEffectUI.color = new Color(1, 1, 1, 1);
             _endPosition = _rectTransform.anchoredPosition;
             _rectTransform.anchoredPosition = _endPosition + (_direction * _scrollOffset);
