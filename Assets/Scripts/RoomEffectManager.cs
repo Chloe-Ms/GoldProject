@@ -62,8 +62,8 @@ public class RoomEffectManager
         {
             Effect.GLACE,
             (Room trap,Group group,HeroesManager manager) => {
-                if (trap.IsActive)
-                {
+                /*if (trap.IsActive)
+                {*/
                     int j = 0;
                     while (j < trap.Effects.Count)
                     {
@@ -76,14 +76,14 @@ public class RoomEffectManager
                             trap.Effects.RemoveAt(j);
                         }
                     }
-                }
+                //}
             }
         },
         {
             Effect.FEU,
             (Room trap,Group group,HeroesManager manager) => {
-                if (trap.IsActive)
-                {
+                /*if (trap.IsActive)
+                {*/
                     //Enleve l'effet de glace
                     bool hasFireEffect = false;
                     for (int j = 0  ; j < trap.Effects.Count ; j++) 
@@ -104,7 +104,7 @@ public class RoomEffectManager
                     {
                         trap.Effects.Add(Effect.FEU);
                     }
-                }
+                //}
             }
         }
 

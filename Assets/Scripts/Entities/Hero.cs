@@ -179,9 +179,6 @@ public class Hero : MonoBehaviour
 
     public void RotateHero(float rotation)
     {
-        Debug.Log($"BEFORE CHANGE DIRECTION {Role} {_animator.gameObject.transform.eulerAngles}");
-        //_animator.gameObject.transform.localEulerAngles = new Vector3(0, rotation, 0);
         _animator.gameObject.transform.localScale = new Vector3(rotation,1,1);
-        Debug.Log($"CHANGE DIRECTION {Role} {_animator.gameObject.transform.eulerAngles}");
     }
 }
