@@ -14,22 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name:
     _strings:
-    - 
-    - 
-  _sprite: {fileID: 21300000, guid: 5265defcd36da0f44b51840e825b1ec0, type: 3}
-  _spriteUI: {fileID: 21300000, guid: 5265defcd36da0f44b51840e825b1ec0, type: 3}
+    - Monstre
+    - Monster
+  _sprite: {fileID: 21300000, guid: a5d3823fdf253044cbb1793dba4afc3a, type: 3}
+  _spriteUI: {fileID: 21300000, guid: a5d3823fdf253044cbb1793dba4afc3a, type: 3}
   _effect: 1
   _nbRoomsBeforeEffect: 0
   _roomType: 0
   _color: {r: 0, g: 0, b: 0, a: 1}
   _description:
     _strings:
-    - "Le pi\xE8ge gagne un effet suppl\xE9mentaire choisit par le joueur en plus
-      de l'effet monstre (glace, physique, plante, foudre, poison, feu). Non cummulable
-      avec  un autre effet monstre."
-    - The trap gains an additional effect chosen by the player in addition to the
-      monster effect (ice, physics, plant, lightning, poison, fire). Not combinable
-      with another monster effect.
+    - Ajoute un effet supplementaire choisi par le joueur en plus de l'effet monstre
+      (glace, physique, plante, foudre, poison). Non cummulable avec un autre effet
+      monstre.
+    - Adds an additional effect chosen by the player in addition to the monster effect
+      (ice, physical, plant, thunder, poison). Can't add another monster effect.
   _soundWhenApplied: PiegeMonstre
   _bgEffectUIImage: {fileID: 21300000, guid: 13b25a684d12a3c4cb113bf5341360f7, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: 38536eeb560bb964da9c978d228d4322, type: 3}
@@ -43,3 +42,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 95268d678396c4d429498859076b3d08, type: 3}
   - {fileID: 21300000, guid: 38536eeb560bb964da9c978d228d4322, type: 3}
   _isRoomEffectImageBehindHeroes: 1
+  _animatorBGEffectUI: {fileID: 9100000, guid: 5ff5c59ae5017154ba1c2eec8c8ae3a2, type: 2}

@@ -1,7 +1,5 @@
 using NaughtyAttributes;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -16,6 +14,7 @@ public class LevelData
     [SerializeField] PrePlacedElement _prePlacedElements;
     [SerializeField] TutorialData _tutorial; //peut etre nul attention
     [SerializeField] bool _isUpgradable;
+    [SerializeField] bool _hasInfosCharacterVisible;
     [SerializeField] int[] _trapList;
 
     public HeroData[] ListHeroesInGroup {
@@ -50,5 +49,8 @@ public class LevelData
 
     public int[] TrapList { 
         get => _trapList;
+    }
+    public bool HasInfosCharacterVisible { 
+        get => _hasInfosCharacterVisible; 
     }
 }

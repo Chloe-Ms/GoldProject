@@ -14,6 +14,7 @@ public class Room : MonoBehaviour
     [SerializeField] private SpriteRenderer _borderRenderer;
     [SerializeField] private ParticleSystem _particleSystemSpawn;
     private SpriteRenderer _iconRenderer;
+    [SerializeField] private SpriteRenderer _spriteTopMonster;
     private GameObject _icon;
     [SerializeField] float _iconScale = 1f;
     [HorizontalLine]
@@ -205,6 +206,7 @@ public class Room : MonoBehaviour
             _iconRenderer.color = new Color(255, 255, 255, 0);
             _iconRenderer.sprite = null;
             _icon.transform.localScale = Vector2.one;
+            _spriteTopMonster.gameObject.SetActive(false);
         }
     }
 
@@ -358,25 +360,34 @@ public class Room : MonoBehaviour
     {
         _nbOfUpgrades++;
         EnableUpgrade();
+        _borderRenderer.color = new Color(1f, 1f, 1f, 1f);
+        _borderRenderer.transform.DOScale(1.15f, 0.4f).SetLoops(2,LoopType.Yoyo);
     }
 
     public void UpgradeRoom(Effect effect)
     {
-        _nbOfUpgrades++;
-        _listEffects.Add(effect);
-        EnableUpgrade();
+        UpgradeRoom();
+        //Create sprite on top (depending on color of effect chosen)
+        _spriteTopMonster.color = _generalData.TrapList.GetColorFromEffect(effect);
+        _spriteTopMonster.gameObject.SetActive(true);
     }
 
     public void UndoUpgrade()
     {
         _nbOfUpgrades--;
+        _borderRenderer.color = new Color(1f, 1f, 1f, 0f);
         if (_trapData.Effect == Effect.MONSTRE && _listEffects.Count > 1)
         {
             _listEffects.RemoveAt(_listEffects.Count - 1);
-            GameObject childSpriteUpgrade = gameObject.transform.Find("SpriteUpgrade").gameObject;
-            Destroy(childSpriteUpgrade);
+            SetIcon(_trapData.Sprite);
+            _spriteTopMonster.gameObject.SetActive(false);
+
         }
         EnableUpgrade();
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.IsUpgradable)
+        {
+            _upgradeIcon.gameObject.SetActive(true);
+        }
     }
 
     public bool IsBuyable()
@@ -411,6 +422,7 @@ public class Room : MonoBehaviour
         if (_layerSelectionTween != null)
         {
             _layerSelectionTween.Kill();
+            _layerSelection.SetActive(false);
             _layerSelectionTween = null;
         }
     }

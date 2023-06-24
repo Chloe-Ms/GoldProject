@@ -55,6 +55,7 @@ public class CameraManager : MonoBehaviour
 
     private void SetCameraPlay(int obj)
     {
+        Debug.Log("CAMERA PLAY MODE");
         _isInPlayMode = true;
         _camera.orthographicSize = _zoomSizePlayMode;
         FollowGroupHeroes();

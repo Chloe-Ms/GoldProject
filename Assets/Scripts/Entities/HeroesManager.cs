@@ -1,4 +1,5 @@
 using System.Data;
+using TMPro;
 using UnityEngine;
 
 public class HeroesManager : MonoBehaviour
@@ -64,6 +65,7 @@ public class HeroesManager : MonoBehaviour
         for (int i = 0; i < _heroesDataInCurrentLevel.Length; i++)
         {
             GameObject go = Instantiate(_heroPrefab);
+            go.name = "Hero" + i;
             float posOffset = ((i + 1) * (GameManager.Instance.SlotSize / (_heroesDataInCurrentLevel.Length + 1))) - 0.5f;
             //Debug.Log($"POS {i} {posOffset} {_heroesDataInCurrentLevel.Length} {i < _heroesDataInCurrentLevel.Length / 2} {i < (_heroesDataInCurrentLevel.Length / 2)}");
             go.transform.position = new Vector3(posOffset, 0, 0);
@@ -81,6 +83,7 @@ public class HeroesManager : MonoBehaviour
 
     private void OnAnyHeroDeath(Hero hero)
     {
+        Debug.Log("DEATH "+ _heroesInCurrentLevel.AffectedByPlants);
         if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
         {
             AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
@@ -91,9 +94,11 @@ public class HeroesManager : MonoBehaviour
             StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
+            Debug.Log("PLANT ON DEATH nb usage"+ GameManager.Instance.CurrentRoom.NbOfUsage);
             if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
+                Debug.Log("PLANT ON DEATH");
                 ApplyDamageToEachHero(Effect.PLANTE);
                 if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
                 {
@@ -130,8 +135,7 @@ public class HeroesManager : MonoBehaviour
                         heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                     }
                     int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
-                    Debug.Log($"Damage {effect} {heroAttacked.Role} {damage}");
-                    heroAttacked.UpdateHealth(damage);
+                    heroAttacked.UpdateHealth(damage,effect);
                 }
             }
         }
@@ -145,13 +149,14 @@ public class HeroesManager : MonoBehaviour
         {
             damage *= _poisonDamageMultiplier;
         }
-        if (effect == Effect.FOUDRE && GameManager.Instance.CurrentRoom.NbOfUpgrades > 0)
+        Room currentRoom = GameManager.Instance.CurrentRoom;
+        //Proc seulement si l'effet de base c'est la foudre
+        if (currentRoom.Effects.Count > 0 && currentRoom.Effects[0] == Effect.FOUDRE && currentRoom.NbOfUpgrades > 0)
         {
             damage += _heroesInCurrentLevel.NbKeysTaken;
         }
         if (hero.HasDamageReduction)
         {
-            Debug.Log("DAMAGE REDUCTION");
             if (damage < 0)
             {
                 damage += 1;
@@ -177,10 +182,9 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
+                    //Debug.Log($"BEFORE {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
-                    //Debug.Log("APPLY ABILITY : " + hero.Role);
-                    Debug.Log($"{hero.Role} {_heroesInCurrentLevel.HasDamageReductionBeenApplied}");
+                    //Debug.Log($" {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                 }
             }
         }

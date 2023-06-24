@@ -74,14 +74,16 @@ public class MapManager : MonoBehaviour
     #endregion
 
     [SerializeField, Required("RoomData required")] private RoomList _roomData;
+    [SerializeField, Required("Background required GameObject")] private GameObject _background;
     [SerializeField, Required("Slot required GameObject")] private GameObject _slot;
     [SerializeField, Required("Grid required GameObject")] private GameObject _grid;
     [SerializeField] private List<GameObject> _slots = new List<GameObject>();
-    [SerializeField] private GameObject _grids;
     [SerializeField, MinValue(2)] private int _heightSize = 8;
     [SerializeField, MinValue(2)] private int _widthSize = 15;
     [SerializeField, Range(1.1f, 1.5f)] private float _margin = 1.1f;
     private float _slotSize;
+    private GameObject _grids;
+    private GameObject _backgrounds;
 
     private Room _start = null;
     private Room _boss = null;
@@ -96,6 +98,8 @@ public class MapManager : MonoBehaviour
     {
         if (_slots.Count > 0)
         {
+            DestroyImmediate(_backgrounds);
+            DestroyImmediate(_grids);
             foreach (var slot in _slots)
             {
                 DestroyImmediate(slot);
@@ -107,11 +111,13 @@ public class MapManager : MonoBehaviour
     [Button("Generate Map")]
     private void Generate()
     {
+        GameObject instantiateBackground = null;
         GameObject instantiateObject = null;
         GameObject instantiateGrid = null;
 
         if (_slots.Count > 0)
         {
+            DestroyImmediate(_backgrounds);
             DestroyImmediate(_grids);
             foreach (var slot in _slots)
             {
@@ -123,16 +129,23 @@ public class MapManager : MonoBehaviour
         _grids = new GameObject("Grids");
         _grids.transform.parent = transform;
         GetComponent<Grid>().Init(_widthSize, _heightSize);
+        _backgrounds = new GameObject("Backgrounds");
+        _backgrounds.transform.parent = transform;
+        GetComponent<BackgroundMap>().Init(_widthSize, _heightSize);
         for (int i = 0; i < _widthSize; i++)
         {
             for (int j = 0; j < _heightSize; j++)
             {
+                instantiateBackground = Instantiate(_background, _backgrounds.transform);
                 instantiateGrid = Instantiate(_grid, _grids.transform);
                 instantiateObject = Instantiate(_slot, transform);
+                instantiateBackground.name = "Background_" + i + "_" + j;
                 instantiateObject.name = "Slot_" + i + "_" + j;
                 instantiateGrid.name = "Grid_" + i + "_" + j;
+                instantiateBackground.transform.position = new Vector3(_margin * i, _margin * j, 0.09f);
                 instantiateObject.transform.position = new Vector3(_margin * i, _margin * j, 0);
                 instantiateGrid.transform.position = instantiateObject.transform.position;
+                instantiateBackground.GetComponent<SpriteRenderer>().sprite = GetComponent<BackgroundMap>().Sprite;
                 instantiateObject.GetComponent<Room>().Init();
                 instantiateGrid.GetComponent<SpriteRenderer>().sprite = GetComponent<Grid>().GetSprite(i, j);
                 _slots.Add(instantiateObject);
@@ -385,16 +398,8 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
-        //Create sprite on top (depending on color of effect chosen)
-        GameObject spriteGO = new GameObject();
-        spriteGO.name = "SpriteUpgrade";
-        SpriteRenderer spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
-        spriteRenderer.sortingOrder = 2;
-        spriteRenderer.sprite = GameManager.Instance.GeneralData.SpriteMonsterUpgrade;
-        spriteRenderer.color = GameManager.Instance.GeneralData.TrapList.GetColorFromEffect(_effectRoomMonster);
-        spriteGO.transform.parent = _selectedSlot.gameObject.transform;
-        spriteGO.transform.localScale = new Vector2(_selectedSlot.IconScale,_selectedSlot.IconScale);
-        _selectedSlot.UpgradeRoom();
+
+        _selectedSlot.UpgradeRoom(_effectRoomMonster);
         GameManager.Instance.NbMenuIn--;
     }
 
@@ -531,6 +536,7 @@ public class MapManager : MonoBehaviour
         SetUnBuyableAdjacent(room);
         if (_selectedSlot != null)
         {
+            SetUnBuyableAdjacent(_selectedSlot);
             _selectedSlot.UnSelect();
         }
         _selectedSlot = null;
@@ -669,11 +675,8 @@ public class MapManager : MonoBehaviour
             travelLists = FindObjectif(leverList, actualRoom);
             if (travelLists != null || travelLists.Count > 0) {
                 lowestCount = GetLowestPathSize(travelLists);
-                //Debug.Log($"lowestCount = {lowestCount}");
                 for (int i = 0; i < travelLists.Count; i++) {
-                    //PrintListOfRoom(travelLists[i]);
                     if (travelLists[i].Count > lowestCount) {
-                        //Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
                         travelLists.RemoveAt(i);
                         i--;
                     }
@@ -690,10 +693,6 @@ public class MapManager : MonoBehaviour
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
-                    //Debug.Log($"All Path avalaible :");
-                    // foreach (List<Room> path in travelLists)
-                    //     PrintListOfRoom(path);
-                    //Change l'affichage pour les salles de clé
                     List<List<Room>> keyRooms = travelLists.FindAll(path => {
                         Room lastRoom = path[path.Count - 1];
                         return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;
@@ -793,7 +792,10 @@ public class MapManager : MonoBehaviour
             if (room != null)
             {
                 if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS && room.TrapData.RoomType != RoomType.ENTRANCE)
+                {
                     room.ClearIcon();
+                }
+                    
                 if (room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER)
                 {
                     room.SetIconEffect();

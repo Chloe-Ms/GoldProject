@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,26 +29,29 @@ public class LevelManager : MonoBehaviour, IDataPersistence
     }
 
     public void UpdateDoors(){
-        int currentLevel = _currentLevelMax;
-        LevelSelect currentLevelSelect = _levelContainer.transform.GetChild(currentLevel).GetComponent<LevelSelect>();
+        if (_currentLevelMax < _levelContainer.transform.childCount)
+        {
+            int currentLevel = _currentLevelMax;
+            LevelSelect currentLevelSelect = _levelContainer.transform.GetChild(currentLevel).GetComponent<LevelSelect>();
 
-        LevelSelect roomLevelSelect = null;
-        for (int i = 0; i <= currentLevel; i++)
-        {
-            roomLevelSelect = _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>();
-            roomLevelSelect.HideClosedDoor();
-            if (i < currentLevel && roomLevelSelect.IsOpen)
+            LevelSelect roomLevelSelect = null;
+            for (int i = 0; i <= currentLevel; i++)
             {
-                roomLevelSelect.CloseDoorAndRemoveSmoke();
-                roomLevelSelect.IsOpen = false;
+                roomLevelSelect = _levelContainer.transform.GetChild(i).GetComponent<LevelSelect>();
+                roomLevelSelect.HideClosedDoor();
+                if (i < currentLevel && roomLevelSelect.IsOpen)
+                {
+                    roomLevelSelect.CloseDoorAndRemoveSmoke();
+                    roomLevelSelect.IsOpen = false;
+                }
             }
+            if (!currentLevelSelect.IsOpen)
+            {
+                currentLevelSelect.OpenDoorAndAddSmoke();
+                currentLevelSelect.IsOpen = true;
+            }
+            _previousLevel = GameManager.Instance.Level;
         }
-        if (!currentLevelSelect.IsOpen)
-        {
-            currentLevelSelect.OpenDoorAndAddSmoke();
-            currentLevelSelect.IsOpen = true;
-        }
-        _previousLevel = GameManager.Instance.Level;
     }
 
     public void LevelSelectSetActive(bool state){
@@ -65,5 +69,12 @@ public class LevelManager : MonoBehaviour, IDataPersistence
     {
         data.level = GameManager.Instance.Level;
         data.levelMax = _currentLevelMax;
+    }
+
+    [Button]
+    public void MaxLevel()
+    {
+        _currentLevelMax = 14;
+        UpdateDoors();
     }
 }

@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -8,6 +9,7 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] Sound[] _sounds;
     [SerializeField] BackgroundSound[] _bgSources;
+    [SerializeField] string _startBackgroundMusic;
     BackgroundSound _currentBackgroundMusic = null;
 
     private static AudioManager instance;
@@ -37,11 +39,21 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == _startBackgroundMusic);
+        if (s != null && s.Source != null)
+        {
+            s.Source.Play();
+        }
+        _currentBackgroundMusic = s;
+    }
+
     public void Play(string name)
     {
         if (!_isMuted){
             Sound s = Array.Find(_sounds, sound => sound.Name == name);
-            if (s.Clips.Count > 0) 
+            if (s != null && s.Clips.Count > 0) 
             {
                 if (s.Clips.Count == 1)
                 {
@@ -56,6 +68,9 @@ public class AudioManager : MonoBehaviour
                     s.Source.Stop();
                 }
                 s.Source.Play();
+            } else
+            {
+                Debug.LogWarning("Sound not found");
             }
         }
     }
@@ -130,10 +145,7 @@ public class AudioManager : MonoBehaviour
     public void PlayBackgroundMusic(string name)
     {
         BackgroundSound s = Array.Find(_bgSources, sound => sound.Name == name);
-        if (_currentBackgroundMusic != null)
-        {
-            _currentBackgroundMusic.Source.Stop();
-        }
+        _currentBackgroundMusic?.Source.Stop();
         _currentBackgroundMusic = s;
         s.Source.Play();
     }
