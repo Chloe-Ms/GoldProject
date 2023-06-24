@@ -361,7 +361,7 @@ public class Room : MonoBehaviour
         _nbOfUpgrades++;
         EnableUpgrade();
         _borderRenderer.color = new Color(1f, 1f, 1f, 1f);
-        _borderRenderer.transform.DOScale(1.2f, 0.4f).SetLoops(2,LoopType.Yoyo);
+        _borderRenderer.transform.DOScale(1.15f, 0.4f).SetLoops(2,LoopType.Yoyo);
     }
 
     public void UpgradeRoom(Effect effect)

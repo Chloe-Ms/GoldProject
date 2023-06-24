@@ -34,7 +34,6 @@ public class Hero : MonoBehaviour
         get => _heroData.maxHealth;
         set => _heroData.maxHealth = value;
     }
-
     public Sprite HeadSprite
     {
         get => _heroData.headSprite;
@@ -159,22 +158,6 @@ public class Hero : MonoBehaviour
         {
             _animator.SetBool("IsRunning", isRunning);
         }
-    }
-
-    public void InstantiateDamage(int realPV)
-    {
-        
-        //if (_canvas != null)
-        //{
-            /*GameObject go = Instantiate(_damageTextMesh, transform);
-            go.transform.localPosition = Vector3.zero;
-            TextMeshProUGUI textMesh = go.GetComponent<TextMeshProUGUI>();
-            if (textMesh != null)
-            {
-                textMesh.text = realPV.ToString();
-                textMesh.transform.DOMoveY(transform.position.y+10,1f).OnComplete(() => Destroy(go));
-            }*/
-        //}
     }
 
     public void RotateHero(float rotation)
