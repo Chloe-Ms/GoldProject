@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private void Start()
     {
         GameManager.Instance.SetPlayMode(false);
-        DOTween.Init();
+        DOTween.Init().SetCapacity(500, 100);
         //StartEditMode();
     }
 
