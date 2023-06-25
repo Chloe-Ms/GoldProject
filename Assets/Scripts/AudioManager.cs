@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -52,7 +53,7 @@ public class AudioManager : MonoBehaviour
     {
         if (!_isMuted){
             Sound s = Array.Find(_sounds, sound => sound.Name == name);
-            if (s.Clips.Count > 0) 
+            if (s != null && s.Clips.Count > 0) 
             {
                 if (s.Clips.Count == 1)
                 {
@@ -67,6 +68,9 @@ public class AudioManager : MonoBehaviour
                     s.Source.Stop();
                 }
                 s.Source.Play();
+            } else
+            {
+                Debug.LogWarning("Sound not found");
             }
         }
     }

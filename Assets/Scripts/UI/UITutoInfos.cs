@@ -30,5 +30,6 @@ public class UITutoInfos : MonoBehaviour
     {
         _page++;
         _description.text = _tutoData.Description[_page].GetStringInLanguage(GameManager.Instance.LanguageChosen);
+        //son
     }
 }

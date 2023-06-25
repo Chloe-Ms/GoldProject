@@ -398,16 +398,8 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => _effectRoomMonster != Effect.NONE);
         _menuEffectRoomMonster.SetActive(false);
         _selectedSlot.Effects.Add(_effectRoomMonster);
-        //Create sprite on top (depending on color of effect chosen)
-        GameObject spriteGO = new GameObject();
-        spriteGO.name = "SpriteUpgrade";
-        SpriteRenderer spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
-        spriteRenderer.sortingOrder = 2;
-        spriteRenderer.sprite = GameManager.Instance.GeneralData.SpriteMonsterUpgrade;
-        spriteRenderer.color = GameManager.Instance.GeneralData.TrapList.GetColorFromEffect(_effectRoomMonster);
-        spriteGO.transform.parent = _selectedSlot.gameObject.transform;
-        spriteGO.transform.localScale = new Vector2(_selectedSlot.IconScale,_selectedSlot.IconScale);
-        _selectedSlot.UpgradeRoom();
+
+        _selectedSlot.UpgradeRoom(_effectRoomMonster);
         GameManager.Instance.NbMenuIn--;
     }
 
@@ -544,6 +536,7 @@ public class MapManager : MonoBehaviour
         SetUnBuyableAdjacent(room);
         if (_selectedSlot != null)
         {
+            SetUnBuyableAdjacent(_selectedSlot);
             _selectedSlot.UnSelect();
         }
         _selectedSlot = null;
@@ -682,11 +675,8 @@ public class MapManager : MonoBehaviour
             travelLists = FindObjectif(leverList, actualRoom);
             if (travelLists != null || travelLists.Count > 0) {
                 lowestCount = GetLowestPathSize(travelLists);
-                //Debug.Log($"lowestCount = {lowestCount}");
                 for (int i = 0; i < travelLists.Count; i++) {
-                    //PrintListOfRoom(travelLists[i]);
                     if (travelLists[i].Count > lowestCount) {
-                        //Debug.Log($"Remove {travelLists[i][0].name} because count = {travelLists[i].Count} > {lowestCount}");
                         travelLists.RemoveAt(i);
                         i--;
                     }
@@ -703,10 +693,6 @@ public class MapManager : MonoBehaviour
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
-                    //Debug.Log($"All Path avalaible :");
-                    // foreach (List<Room> path in travelLists)
-                    //     PrintListOfRoom(path);
-                    //Change l'affichage pour les salles de clé
                     List<List<Room>> keyRooms = travelLists.FindAll(path => {
                         Room lastRoom = path[path.Count - 1];
                         return lastRoom.TrapData != null && lastRoom.TrapData.RoomType == RoomType.LEVER;
@@ -806,7 +792,10 @@ public class MapManager : MonoBehaviour
             if (room != null)
             {
                 if (room.TrapData != null && room.TrapData.RoomType != RoomType.BOSS && room.TrapData.RoomType != RoomType.ENTRANCE)
+                {
                     room.ClearIcon();
+                }
+                    
                 if (room.TrapData != null && room.TrapData.RoomType == RoomType.LEVER)
                 {
                     room.SetIconEffect();

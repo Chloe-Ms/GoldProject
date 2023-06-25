@@ -8,6 +8,7 @@ public class UIHeroes : MonoBehaviour
     [SerializeField] TextMeshProUGUI _text;
     HeroData[] _heroesData;
     [SerializeField] UIHeroSensibilities _heroesSensibilities;
+    [SerializeField] GameObject _heroInfosButton;
 
     public void ChangeData(int i)
     {
@@ -17,6 +18,7 @@ public class UIHeroes : MonoBehaviour
 
     private void ChangeDataForHero(int index)
     {
+        _heroInfosButton.SetActive(GameManager.Instance.AreInfosCharacterVisibleInLevel);
         if (_heroesData[index].headSprite != null)
         {
             _image.sprite = _heroesData[index].headSprite;

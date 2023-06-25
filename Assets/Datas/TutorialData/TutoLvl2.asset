@@ -18,16 +18,15 @@ MonoBehaviour:
     - Heroes sensibilities
   _description:
   - _strings:
-    - "Chaque aventurier a ses propres forces et faiblesses. Tu peux voir en haut
-      de l'\xE9cran quels types de pi\xE8ges vont etre efficaces ou inefficaces contre
-      lui."
+    - Chaque aventurier a ses propres forces et faiblesses. Tu peux voir en haut
+      de l'ecran quels types de pieges vont etre efficaces ou inefficaces contre
+      lui.
     - Each adventurer has his own strengths and weaknesses. Check on top of your
       screen to see which type of trap will or won't be effective against him.
   - _strings:
-    - "Les pi\xE8ges infligent tous \xE0 la base 1 point de d\xE9gat. Cependant,
-      les sensibilit\xE9s des h\xE9ros vont incluencer cette valeur. Un m\xEAme pi\xE8ge
-      va peut etre infliger 2 point de d\xE9gat \xE0 un aventurier mais 0 \xE0 un
-      autre."
+    - "Les pieges infligent tous a la base 1 point de degat. Cependant, les sensibilites
+      des heros vont incluencer cette valeur. Un meme piege va peut etre infliger
+      2 point de degat \xE0 un aventurier mais 0 a un autre."
     - Each trap has a basic power of 1 damage point.  However, the heroe sensibility
       are going to influence this value. A same trap could deal 2 damage to a heroe
       and not affect another.
@@ -40,6 +39,6 @@ MonoBehaviour:
   - _strings:
     - "Attention ! La colonne grise montre les pi\xE8ges qui seront inefficaces,
       et la colonne verte correspond aux pi\xE8ges qui vont redonner un point de
-      vie au h\xE9ros !"
+      vie au h\xE9ros s'il en a perdu!"
     - But be careful ! The grey one shows ineffective traps and the green one shows
       traps that will heal 1HP to the heroe!

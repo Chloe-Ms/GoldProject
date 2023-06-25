@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46110c574aa6dd4ab65fa88998cd238, type: 3}
+  m_Name: TutoLvl3
+  m_EditorClassIdentifier: 
+  _name:
+    _strings:
+    - Definir le parcours
+    - Define the path
+  _description:
+  - _strings:
+    - "Quand tu pose un pi\xE8ge, \xE7a ne creera un chemin qu'entre le piege pose
+      et celle que tu as clique precedement."
+    - When you place a trap, it will only create a way between this trap and the
+      one you clicked before
+  - _strings:
+    - De cette maniere, tu peux creer des detours dans ton donjon.
+    - This way you can create tortuous paths in your dungeon.

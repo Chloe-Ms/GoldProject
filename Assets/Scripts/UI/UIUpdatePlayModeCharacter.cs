@@ -36,7 +36,7 @@ public class UIUpdatePlayModeCharacter : MonoBehaviour
     public void UpdateHealth(int health,int damageTaken)
     {
         _health.text = health.ToString();
-        StartFeedBack(damageTaken);
+        //StartFeedBack(damageTaken);
     }
 
     public void StartFeedBack(int damageTaken)

@@ -86,6 +86,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         return _levels[_level].MaxHealth;
     }
+
+    public int[] GetListTrapsCurrentLevel()
+    {
+        return _levels[_level].TrapList;
+    }
     public int NbMenuIn { 
         get => _nbMenuIn; 
         set => _nbMenuIn = value; 
@@ -140,7 +145,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private void Start()
     {
         GameManager.Instance.SetPlayMode(false);
-        DOTween.Init();
+        DOTween.Init().SetCapacity(500, 100);
         //StartEditMode();
     }
 
@@ -161,6 +166,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public HeroData[] GetHeroesCurrentLevel()
     {
         return _levels[_level].ListHeroesInGroup;
+    }
+
+    public bool AreInfosCharacterVisibleInLevel
+    {
+        get => _levels[_level].HasInfosCharacterVisible;
     }
     public int GetHeroesSensibility(Effect effect, Role role)
     {
@@ -195,6 +205,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (room != null)
         {
             _currentRoom = room;
+            if (room.IsActive && room.NbOfUpgrades > 0 && room.Effects.Count > 0)
+            {
+                ApplyCurrentRoomEffect(room.Effects[0]);
+            }
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
             if (room.IsActive)
@@ -210,10 +224,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                     OnEffectApplied?.Invoke(_currentRoomEffect);
-                    if (room.NbOfUpgrades > 0)
-                    {
-                        ApplyCurrentRoomEffect(_currentRoomEffect);
-                    }
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
                         _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
@@ -260,11 +270,13 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (effect == Effect.PLANTE)
         {
             _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
+            Debug.Log("PLANT EFFECT");
         }
     }
 
     public void DecreaseRoomForEffectsList(Room room, Group group)
     {
+        Debug.Log("Is effect " + _heroesManager.HeroesInCurrentLevel.AffectedByPlants);
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
             RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied--;
@@ -378,6 +390,21 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                         }
                     }
                 }
+                float direction = _heroesManager.GroupParent.transform.position.x - path[i].transform.position.x;
+                if (direction >= 0.2f || direction <= -0.2f)
+                {
+                    for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
+                    {
+                        if (direction <= -0.2f)
+                        {
+                            _heroesManager.HeroesInCurrentLevel.Heroes[j].RotateHero(1);
+                        } else
+                        {
+                            _heroesManager.HeroesInCurrentLevel.Heroes[j].RotateHero(-1);
+                        }
+                    }
+                }
+
                 _movementHeroesSequence.Append(_heroesManager.GroupParent.transform.DOMove(path[i].transform.position, _durationBetweenRoom));
                 for (int j = 0; j < _heroesManager.HeroesInCurrentLevel.Heroes.Count; j++)
                 {
@@ -470,7 +497,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
 
         for (int i = 0; i < _heroesManager.HeroesInCurrentLevel.Heroes.Count; i++)
         {
-            Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
+            //Debug.Log($"Hero {_heroesManager.HeroesInCurrentLevel.Heroes[i].Health} {_heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth}");
             if (_heroesManager.HeroesInCurrentLevel.Heroes[i].Health < _heroesManager.HeroesInCurrentLevel.Heroes[i].MaxHealth)
             {
                 allHeroesAreFullLife = false;

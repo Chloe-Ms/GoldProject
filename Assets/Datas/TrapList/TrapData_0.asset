@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name:
     _strings:
-    - 
-    - 
+    - Feu
+    - Flames
   _sprite: {fileID: 21300000, guid: da2ba1337d75865458d52bf970900f26, type: 3}
   _spriteUI: {fileID: 21300000, guid: da2ba1337d75865458d52bf970900f26, type: 3}
   _effect: 0
@@ -24,11 +24,20 @@ MonoBehaviour:
   _color: {r: 0.6745098, g: 0.13725491, b: 0.019607844, a: 1}
   _description:
     _strings:
-    - "Inflige des d\xE9gats de feu deux cases plus loin, si celle-ci est une salle
-      de glace l'effet s'annule."
-    - Deals fire damages in the room two boxes further, if it's an ice trap the effect
-      is canceled.
+    - "Ajoute des degats de feu au pi\xE8ge qui se trouve deux cases plus loin. Si
+      celle-ci est une salle de glace les deux effets s'annulent."
+    - Adds fire damages to the trap two rooms further. If it's an ice trap both effects
+      are nullified.
   _soundWhenApplied: PiegeFeu
   _bgEffectUIImage: {fileID: 21300000, guid: c47c8fa4b0456de47951b81076c06c0e, type: 3}
   _roomEffectImage: {fileID: 21300000, guid: ac38a8c0e0dc7c640af71ee3e46cbc2d, type: 3}
+  _roomMonsterUpgradeImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 0
+  _animatorBGEffectUI: {fileID: 9100000, guid: 104add5163e1ac6409256641be5cb749, type: 2}
