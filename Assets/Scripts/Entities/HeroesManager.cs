@@ -83,7 +83,6 @@ public class HeroesManager : MonoBehaviour
 
     private void OnAnyHeroDeath(Hero hero)
     {
-        Debug.Log("DEATH "+ _heroesInCurrentLevel.AffectedByPlants);
         if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
         {
             AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
@@ -94,11 +93,9 @@ public class HeroesManager : MonoBehaviour
             StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
-            Debug.Log("PLANT ON DEATH nb usage"+ GameManager.Instance.CurrentRoom.NbOfUsage);
             if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
-                Debug.Log("PLANT ON DEATH");
                 ApplyDamageToEachHero(Effect.PLANTE);
                 if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
                 {
@@ -153,7 +150,7 @@ public class HeroesManager : MonoBehaviour
         //Proc seulement si l'effet de base c'est la foudre
         if (currentRoom.Effects.Count > 0 && currentRoom.Effects[0] == Effect.FOUDRE && currentRoom.NbOfUpgrades > 0)
         {
-            damage += _heroesInCurrentLevel.NbKeysTaken;
+            damage -= _heroesInCurrentLevel.NbKeysTaken;
         }
         if (hero.HasDamageReduction)
         {

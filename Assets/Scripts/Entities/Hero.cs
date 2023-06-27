@@ -77,8 +77,9 @@ public class Hero : MonoBehaviour
             return;
         }
 
-        if (Role == Role.MAGE && GameManager.Instance.IsCurrentRoomElementary)
+        if (Role == Role.MAGE && GameManager.Instance.CurrentRoom.IsElementary && GameManager.Instance.CurrentRoom.IsActive)
         {
+            Debug.Log("++ mage");
             _nbDamageOnElementaryRoom++;
 
         }
@@ -91,6 +92,7 @@ public class Hero : MonoBehaviour
         {
             realPV = Mathf.Max(-_health, realPV);
         } else { //HEAL
+            Debug.Log("hEAL " + realPV+" "+GameManager.Instance.CurrentRoom.TrapData.RoomType);
             realPV = Mathf.Min(MaxHealth - _health, realPV);
         }
         _health = Mathf.Clamp(_health + realPV, 0,MaxHealth);
@@ -126,6 +128,7 @@ public class Hero : MonoBehaviour
             OnDamageTaken?.Invoke(realPV);
         }
         //InstantiateDamage(realPV);
+        Debug.Log("DAMAGE " + Role + " damage " + realPV);
         _damages.AddDamage(realPV,effect);
         UIUpdatePlayMode.Instance.UpdateHero(this,realPV);// Update UI
     }

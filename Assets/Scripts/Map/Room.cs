@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using DG.Tweening;
+using UnityEditor;
 
 [System.Serializable]
 public class Room : MonoBehaviour
@@ -23,6 +24,7 @@ public class Room : MonoBehaviour
     [SerializeField] private float _offsetMovementLayerSelection = 5f;
     [SerializeField] private float _timeMovementLayerSelection = 0.5f;
     [SerializeField] private GeneralData _generalData;
+    private Tween _tweenSelection;
     public RoomData RoomData
     {
         get { return _roomData; }
@@ -334,6 +336,7 @@ public class Room : MonoBehaviour
     {
         RoomColor = _oldState;
         _upgradeIcon.gameObject.SetActive(false);
+        StopSelectionAnimation();
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
                 RoomColor = RoomColor.NotBuyable;
@@ -426,6 +429,29 @@ public class Room : MonoBehaviour
             _layerSelectionTween = null;
         }
     }
+
+    public void StartSelectionAnimation()
+    {
+        /*if (_tweenSelection == null)
+        {
+            Debug.Log("SELECTION Start " + name);
+            _tweenSelection = transform.DOScale(new Vector3(1.2f, 1.2f, 1f), 1f).SetLoops(-1, LoopType.Yoyo);
+        }
+        else
+        {
+            _tweenSelection.Restart();
+        }*/
+    }
+
+    public void StopSelectionAnimation()
+    {
+        /*if (_tweenSelection != null)
+        {
+            _tweenSelection.Rewind();
+            Debug.Log("SELECTION Stop " + name);
+        }*/
+    }
+
 }
 
 public enum RoomColor

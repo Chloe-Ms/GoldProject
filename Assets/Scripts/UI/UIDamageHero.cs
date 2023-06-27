@@ -26,7 +26,7 @@ public class UIDamageHero : MonoBehaviour
     public void AddDamage(int damage,Effect effect)
     {
         int index = GetTextDamageAvailable();
-        if (index == _textsDamage.Length)
+        if (index >= _textsDamage.Length)
         {
             Debug.LogWarning("Not enough slot damage available");
         } else
@@ -47,7 +47,7 @@ public class UIDamageHero : MonoBehaviour
     int GetTextDamageAvailable()
     {
         int index = 0;
-        while (_textsDamage[index].gameObject.activeSelf && index < _textsDamage.Length)
+        while (index < _textsDamage.Length && _textsDamage[index].gameObject.activeSelf)
         {
             index++;
         }
