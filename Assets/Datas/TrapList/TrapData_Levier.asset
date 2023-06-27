@@ -21,7 +21,7 @@ MonoBehaviour:
   _effect: 7
   _nbRoomsBeforeEffect: 0
   _roomType: 2
-  _color: {r: 0, g: 0, b: 0, a: 0}
+  _color: {r: 0, g: 0, b: 0, a: 1}
   _description:
     _strings:
     - "Quand une cl\xE9 est pos\xE9e les aventuriers vont devoir aller la chercher
@@ -42,3 +42,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 0
+  _animatorBGEffectUI: {fileID: 0}

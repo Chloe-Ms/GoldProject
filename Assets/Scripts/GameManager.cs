@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
                 }
-                if (room.Effects.Count > 0)
+                if (room.Effects.Count > 0 && room.Effects[0] != Effect.NONE)
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
                     OnEffectApplied?.Invoke(_currentRoomEffect);
@@ -244,6 +244,9 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     _heroesManager.HeroesInCurrentLevel.NbKeysTaken++;
                 }
+            } else
+            {
+                Debug.Log("INACTIVE");
             }
             _heroesManager.RemoveAbilities(room);
             _heroesManager.ApplyAfterRoomAbilities(room);
@@ -270,13 +273,13 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (effect == Effect.PLANTE)
         {
             _heroesManager.HeroesInCurrentLevel.AffectedByPlants = true;
-            Debug.Log("PLANT EFFECT");
+            //Debug.Log("PLANT EFFECT");
         }
     }
 
     public void DecreaseRoomForEffectsList(Room room, Group group)
     {
-        Debug.Log("Is effect " + _heroesManager.HeroesInCurrentLevel.AffectedByPlants);
+        //Debug.Log("Is effect " + _heroesManager.HeroesInCurrentLevel.AffectedByPlants);
         for (int i = RoomEffectManager.EffectsEvent.Count - 1; i >= 0; i--)
         {
             RoomEffectManager.EffectsEvent[i].NbRoomBeforeApplied--;

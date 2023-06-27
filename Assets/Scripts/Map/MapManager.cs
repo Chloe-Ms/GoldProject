@@ -365,7 +365,9 @@ public class MapManager : MonoBehaviour
             }
             //NORMAL ROOM
             if (room != null && room.IsClickable() && room != _boss) {
+                Debug.Log("SELECT");
                 _selectedSlot = room != _selectedSlot ? room : null;
+                _selectedSlot?.StartSelectionAnimation();
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
                     EditorManager.Instance.OpenEditorMenu();
@@ -422,6 +424,7 @@ public class MapManager : MonoBehaviour
 
         if (_selectedSlot != null) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
             if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
+                _selectedSlot.StopSelectionAnimation();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
                 _selectedSlot.PlayParticles();

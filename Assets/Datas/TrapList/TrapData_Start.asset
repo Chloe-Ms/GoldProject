@@ -21,10 +21,19 @@ MonoBehaviour:
   _effect: 7
   _nbRoomsBeforeEffect: 0
   _roomType: 3
-  _color: {r: 0, g: 0, b: 0, a: 0}
+  _color: {r: 0, g: 0, b: 0, a: 1}
   _description:
     _strings: []
   _soundWhenApplied: 
   _bgEffectUIImage: {fileID: 0}
   _roomEffectImage: {fileID: 0}
+  _roomMonsterUpgradeImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isRoomEffectImageBehindHeroes: 0
+  _animatorBGEffectUI: {fileID: 0}
