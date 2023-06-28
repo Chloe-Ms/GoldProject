@@ -83,6 +83,7 @@ public class CameraManager : MonoBehaviour
 
     public void Zoom()
     {
+        //Debug.Log("Zoom");
         _isInPlayMode = true;
         _isZooming = true;
         this._startZoomSize = _camera.orthographicSize;
@@ -90,6 +91,7 @@ public class CameraManager : MonoBehaviour
 
     public void DezoomPlayMode()
     {
+        //Debug.Log("Dezoom");
         _isInPlayMode = true;
         _isDezooming = true;
         this._startZoomSize = _camera.orthographicSize;
@@ -130,6 +132,7 @@ public class CameraManager : MonoBehaviour
         
         if (_isZooming || _isDezooming)
         {
+            //Debug.Log($"IS ZOOMING {_isZooming} OR DEZOOMING {_isDezooming} {_isDezoomed} {_isZoomed}");
             _timer += Time.deltaTime;
             if (_isZooming) //De l'init au normal
             {
@@ -145,6 +148,7 @@ public class CameraManager : MonoBehaviour
                 _camera.orthographicSize = Mathf.Lerp(this._startZoomSize, endSize, 
                     (_timer * _speedZoom) / Mathf.Abs(this._startZoomSize - endSize));
 
+                Debug.Log($"{Mathf.Abs(this._startZoomSize - endSize) / _speedZoom}");
                 if (_timer >= Mathf.Abs(this._startZoomSize - endSize) / _speedZoom)
                 {
                     _camera.orthographicSize = endSize;

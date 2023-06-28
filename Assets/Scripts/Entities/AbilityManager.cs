@@ -70,7 +70,7 @@ public class AbilityManager
             Role.CHEVALIER,
             (Group group, Room room) =>
             {
-                if (room.Effects[0] == Effect.MONSTRE)
+                if (room.Effects.Count > 0 && room.Effects[0] == Effect.MONSTRE)
                 {
                     for (int i = 0; i < group.Heroes.Count; i++)
                     {

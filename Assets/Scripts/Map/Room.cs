@@ -104,7 +104,8 @@ public class Room : MonoBehaviour
 
     public bool IsElementary
     {
-        get => _listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE;
+        get { return _listEffects.Count > 0 && 
+                (_listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE); }
     }
     public UIUpgradeButton UpgradeIcon { 
         get => _upgradeIcon;
@@ -203,8 +204,9 @@ public class Room : MonoBehaviour
         {
             _iconRenderer = _icon.GetComponent<SpriteRenderer>();
         }
-        if (_trapData != null && (_trapData.RoomType != RoomType.ENTRANCE))
+        if (_trapData != null && _trapData.RoomType != RoomType.ENTRANCE)
         {
+            Debug.Log("CLEAR");
             _iconRenderer.color = new Color(255, 255, 255, 0);
             _iconRenderer.sprite = null;
             _icon.transform.localScale = Vector2.one;

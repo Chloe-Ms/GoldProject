@@ -244,9 +244,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     _heroesManager.HeroesInCurrentLevel.NbKeysTaken++;
                 }
-            } else
-            {
-                Debug.Log("INACTIVE");
             }
             _heroesManager.RemoveAbilities(room);
             _heroesManager.ApplyAfterRoomAbilities(room);

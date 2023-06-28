@@ -365,7 +365,7 @@ public class MapManager : MonoBehaviour
             }
             //NORMAL ROOM
             if (room != null && room.IsClickable() && room != _boss) {
-                Debug.Log("SELECT");
+                //Debug.Log("SELECT");
                 _selectedSlot = room != _selectedSlot ? room : null;
                 _selectedSlot?.StartSelectionAnimation();
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
@@ -431,6 +431,7 @@ public class MapManager : MonoBehaviour
                 _selectedSlot.SetData(data);
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _currentRoomCount++;
+                _onSetEffectOnRoomUnityEvent.Invoke();
             }
             if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
                 if (mapAction.ActionType == ActionType.None)
