@@ -48,6 +48,10 @@ public class GooglePlayManager : MonoBehaviour
     private void Start()
     {
         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        if (!_isAuthenticated)
+        {
+            PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+        }
     }
 
     internal void ProcessAuthentication(SignInStatus status)
@@ -87,6 +91,9 @@ public class GooglePlayManager : MonoBehaviour
         if (_isAuthenticated)
         {
             Social.ShowAchievementsUI();
+        } else
+        {
+            PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
         }
     }
 }
