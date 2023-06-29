@@ -76,10 +76,8 @@ public class Hero : MonoBehaviour
         {
             return;
         }
-
         if (Role == Role.MAGE && GameManager.Instance.CurrentRoom.IsElementary && GameManager.Instance.CurrentRoom.IsActive)
         {
-            Debug.Log("++ mage");
             _nbDamageOnElementaryRoom++;
 
         }

@@ -104,7 +104,8 @@ public class Room : MonoBehaviour
 
     public bool IsElementary
     {
-        get => _listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE;
+        get { return _listEffects.Count > 0 && 
+                (_listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE); }
     }
     public UIUpgradeButton UpgradeIcon { 
         get => _upgradeIcon;
@@ -154,7 +155,10 @@ public class Room : MonoBehaviour
         SetColor(RoomColor.Usable);
         _roomData = roomData;
         //Debug.Log($"RoomName = {transform.name} data = {roomData}");
-        SetSprite(_roomData.Sprite);
+        if (_trapData == null || _trapData.RoomType != RoomType.BOSS) //set sprite boss room
+        {
+            SetSprite(_roomData.Sprite);
+        }
     }
 
     public void SetData(TrapData trapData)
@@ -172,7 +176,13 @@ public class Room : MonoBehaviour
         _roomData = roomData;
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
-        SetSprite(_roomData.Sprite);
+        if (trapData.RoomType == RoomType.BOSS) //set sprite boss room
+        {
+            SetSprite(_generalData.SpriteBossRoom);
+        } else
+        {
+            SetSprite(_roomData.Sprite);
+        }
     }
 
     public void SetData(RoomData roomData, RoomColor roomColor = RoomColor.Unclickable)
@@ -203,8 +213,9 @@ public class Room : MonoBehaviour
         {
             _iconRenderer = _icon.GetComponent<SpriteRenderer>();
         }
-        if (_trapData != null && (_trapData.RoomType != RoomType.ENTRANCE))
+        if (_trapData != null && _trapData.RoomType != RoomType.ENTRANCE && _trapData.RoomType != RoomType.BOSS)
         {
+            Debug.Log("CLEAR "+ _trapData.RoomType);
             _iconRenderer.color = new Color(255, 255, 255, 0);
             _iconRenderer.sprite = null;
             _icon.transform.localScale = Vector2.one;

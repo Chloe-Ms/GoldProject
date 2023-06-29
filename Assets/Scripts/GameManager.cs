@@ -215,7 +215,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             {
                 room.IsActive = false;
                 room.NbOfUsage = 1;
-                room.SetIconEffect();
+                if (room.TrapData != null && room.TrapData.RoomType != RoomType.ENTRANCE)
+                {
+                    room.SetIconEffect();
+                }
                 if (room.TrapData.SoundWhenApplied != "")
                 {
                     AudioManager.Instance.Play(room.TrapData.SoundWhenApplied);
@@ -244,9 +247,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 {
                     _heroesManager.HeroesInCurrentLevel.NbKeysTaken++;
                 }
-            } else
-            {
-                Debug.Log("INACTIVE");
             }
             _heroesManager.RemoveAbilities(room);
             _heroesManager.ApplyAfterRoomAbilities(room);
@@ -524,6 +524,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void ChangeNbMenuIn(int offset)
     {
         _nbMenuIn += offset;
-        Debug.Log("Nombre Menu" + _nbMenuIn);
+        //Debug.Log("Nombre Menu" + _nbMenuIn);
     }
 }
