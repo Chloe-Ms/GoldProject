@@ -146,7 +146,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         GameManager.Instance.SetPlayMode(false);
         DOTween.Init().SetCapacity(500, 100);
-        //StartEditMode();
     }
 
     
@@ -340,6 +339,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             _uiMenu.DisplayTutorial();
             ChangeNbMenuIn(1);
         }
+        if (_mapManager.Start != null)
+        {
+            SpawnHeroesOnScreen(_mapManager.Start);
+        }
     }
 
     [Button("Enter play mode")]
@@ -365,7 +368,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             //Debug.Log($"{(i == 0 ? "Are at the room : " : "Move to ")} {path[i].name}");
             if (i == 0) //Waiting in entrance
             {
-                SpawnHeroesOnScreen(path[i]);
+                //SpawnHeroesOnScreen(path[i]);
                 yield return new WaitForSeconds(0.5f);
             } else
             {

@@ -67,6 +67,9 @@ public class MapManager : MonoBehaviour
     public float SlotSize { 
         get => _slotSize; 
     }
+    public Room Start { 
+        get => _start;
+    }
     #endregion
 
     #region Events

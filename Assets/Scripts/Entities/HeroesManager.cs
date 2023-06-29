@@ -30,10 +30,10 @@ public class HeroesManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.OnEnterPlayMode += StartPlayMode;
+        //GameManager.Instance.OnEnterPlayMode += StartPlayMode;
     }
 
-    private void StartPlayMode(int level)
+    private void LoadHeroesOnLevel(int level)
     {
         InstantiateHeroesInLevel(level);
     }
@@ -48,6 +48,7 @@ public class HeroesManager : MonoBehaviour
         }
 
         StartEditMode(level);
+        LoadHeroesOnLevel(level);
     }
 
     private void StartEditMode(int level)
