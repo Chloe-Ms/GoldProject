@@ -81,4 +81,12 @@ public class GooglePlayManager : MonoBehaviour
             }
         });
     }
+
+    public void DisplayAchievements()
+    {
+        if (_isAuthenticated)
+        {
+            Social.ShowAchievementsUI();
+        }
+    }
 }
