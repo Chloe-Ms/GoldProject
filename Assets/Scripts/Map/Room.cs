@@ -363,7 +363,6 @@ public class Room : MonoBehaviour
     {
         RoomColor = _oldState;
         _upgradeIcon.gameObject.SetActive(false);
-        Debug.Log("UNSELECT");
         StopSelectionAnimation();
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
@@ -392,7 +391,7 @@ public class Room : MonoBehaviour
         _nbOfUpgrades++;
         EnableUpgrade();
         _borderRenderer.color = new Color(1f, 1f, 1f, 1f);
-        _borderRenderer.transform.DOScale(1.15f, 0.4f).SetLoops(2,LoopType.Yoyo);
+        _borderRenderer.transform.DOScale(1.12f, 0.4f).SetLoops(2,LoopType.Yoyo);
     }
 
     public void UpgradeRoom(Effect effect)

@@ -435,28 +435,21 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 }
                 _movementHeroesSequence.OnComplete(() =>
                 {
-                    _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
-                    if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
-                    {
-                        MoveHeroesOnScreen(path[i]);
-                    }
-                    else
-                    { // Boss room
-                        PlayerLoss();
-                        _lossDisplayGO.SetActive(true);
-                        isBossRoomReached = true;
-                    }
                     movementComplete = true;
                     _movementHeroesSequence = null;
                 });
                 yield return new WaitUntil(() => movementComplete);
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                 {
+                    MoveHeroesOnScreen(path[i]);
                     yield return new WaitForSeconds(_durationWaitInRoom);
                     path[i].ClearIcon();
                 } else
                 {
+                    isBossRoomReached = true;
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
+                    PlayerLoss();
+                    _lossDisplayGO.SetActive(true);
                 }
             }
             i++;
