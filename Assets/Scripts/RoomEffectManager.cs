@@ -51,7 +51,6 @@ public class RoomEffectManager
             new UpdatedRoomEffect(
                 (Room trap,Group group) => {
                     _effectsEvent.Add(new EffectEvent(trap.TrapData.NbRoomsBeforeEffect,Effect.FEU,_effectsAppliedAfterRoom[Effect.FEU]));
-                    trap.IsActive = true;// Reactivate the trap if active
                 }
             )
         },
@@ -82,6 +81,7 @@ public class RoomEffectManager
         {
             Effect.FEU,
             (Room trap,Group group,HeroesManager manager) => {
+
                 /*if (trap.IsActive)
                 {*/
                     //Enleve l'effet de glace
@@ -102,7 +102,15 @@ public class RoomEffectManager
                     }
                     if (!hasFireEffect)
                     {
-                        trap.Effects.Add(Effect.FEU);
+                        if (trap.IsActive)
+                        {
+                            trap.Effects.Add(Effect.FEU);
+                        } else
+                        {
+                            trap.Effects.Clear();
+                            trap.Effects.Add(Effect.FEU);
+                            trap.IsActive = true;// Reactivate the trap if active
+                        }
                     }
                 //}
             }

@@ -146,7 +146,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         GameManager.Instance.SetPlayMode(false);
         DOTween.Init().SetCapacity(500, 100);
-        //StartEditMode();
     }
 
     
@@ -317,6 +316,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartEditMode()
     {
         Debug.Log("NIVEAU " + _level);
+        DOTween.KillAll();
         _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
         _isInPlayMode = false;
@@ -339,6 +339,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         if (_uiMenu != null && _levels[_level].Tutorial != null) { // peut etre nul
             _uiMenu.DisplayTutorial();
             ChangeNbMenuIn(1);
+        }
+        if (_mapManager.Start != null)
+        {
+            SpawnHeroesOnScreen(_mapManager.Start);
         }
     }
 
@@ -365,7 +369,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             //Debug.Log($"{(i == 0 ? "Are at the room : " : "Move to ")} {path[i].name}");
             if (i == 0) //Waiting in entrance
             {
-                SpawnHeroesOnScreen(path[i]);
+                //SpawnHeroesOnScreen(path[i]);
                 yield return new WaitForSeconds(0.5f);
             } else
             {
@@ -431,28 +435,21 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 }
                 _movementHeroesSequence.OnComplete(() =>
                 {
-                    _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
-                    if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
-                    {
-                        MoveHeroesOnScreen(path[i]);
-                    }
-                    else
-                    { // Boss room
-                        PlayerLoss();
-                        _lossDisplayGO.SetActive(true);
-                        isBossRoomReached = true;
-                    }
                     movementComplete = true;
                     _movementHeroesSequence = null;
                 });
                 yield return new WaitUntil(() => movementComplete);
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                 {
+                    MoveHeroesOnScreen(path[i]);
                     yield return new WaitForSeconds(_durationWaitInRoom);
                     path[i].ClearIcon();
                 } else
                 {
+                    isBossRoomReached = true;
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
+                    PlayerLoss();
+                    _lossDisplayGO.SetActive(true);
                 }
             }
             i++;

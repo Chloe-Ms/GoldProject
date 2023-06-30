@@ -876,6 +876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteBgEffectUI: {fileID: 27279160}
   _rectTransform: {fileID: 27279158}
+  _animator: {fileID: 0}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _direction: -1
   _durationAnim: 0.5
@@ -12417,6 +12418,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2415477435096530464, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3697097470364442712, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -12424,6 +12429,10 @@ PrefabInstance:
     - target: {fileID: 5494023443775002454, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494023444483312897, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5494023444630891904, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_Name
@@ -12512,6 +12521,10 @@ PrefabInstance:
     - target: {fileID: 5494023444630891935, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524469721228830637, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
@@ -16260,6 +16273,7 @@ GameObject:
   - component: {fileID: 765153956}
   - component: {fileID: 765153960}
   - component: {fileID: 765153961}
+  - component: {fileID: 765153962}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -16435,6 +16449,7 @@ MonoBehaviour:
     _source: {fileID: 765153961}
   - _name: Win
     _source: {fileID: 1992677674}
+  _startBackgroundMusic: 
   _name: 
 --- !u!82 &765153961
 AudioSource:
@@ -16532,6 +16547,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &765153962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765153955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12b8daa6a150cd4cb3debcca8c4aca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 0}
 --- !u!1 &765325906
 GameObject:
   m_ObjectHideFlags: 0
@@ -26256,6 +26284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteBgEffectUI: {fileID: 1317403629}
   _rectTransform: {fileID: 1317403627}
+  _animator: {fileID: 0}
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _direction: 1
   _durationAnim: 0.5
@@ -29981,6 +30010,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 2415477435096530464, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3697097470364442712, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -29988,6 +30021,10 @@ PrefabInstance:
     - target: {fileID: 5494023443775002454, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494023444483312897, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5494023444630891904, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_Name
@@ -30076,6 +30113,10 @@ PrefabInstance:
     - target: {fileID: 5494023444630891935, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6524469721228830637, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52f2a3dc63d4cef4f9b09c8c00bd4597, type: 3}
@@ -34515,10 +34556,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _roomData: {fileID: 11400000, guid: e42de509dde8d1b43910904e73da081e, type: 2}
+  _background: {fileID: 0}
   _slot: {fileID: 3101518563326511615, guid: 6e53051b525ca7a4586a734d8315c83b, type: 3}
   _grid: {fileID: 3021073565053402859, guid: 750b1fe1780e09948af23160f0ccfcf3, type: 3}
   _slots: []
-  _grids: {fileID: 0}
   _heightSize: 8
   _widthSize: 5
   _margin: 1.1
@@ -36149,7 +36190,7 @@ SpriteRenderer:
   m_Size: {x: 10.8, y: 19.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1894675023

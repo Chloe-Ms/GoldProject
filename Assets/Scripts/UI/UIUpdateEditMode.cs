@@ -65,8 +65,8 @@ public class UIUpdateEditMode : MonoBehaviour
             _initPos = _nbActionsLeft.gameObject.transform.position;
             _posHasBeenInitiated = true;
         }
-        DOTween.KillAll();
-        _nbActionsLeft.gameObject.transform.position = _initPos;
+        //DOTween.KillAll();
+        //_nbActionsLeft.gameObject.transform.position = _initPos;
         _nbActionsLeft.text = nbActions.ToString();
 
         if(nbActions == 0)
@@ -78,7 +78,8 @@ public class UIUpdateEditMode : MonoBehaviour
         }
         else
         {
-            DOTween.KillAll();
+            //DOTween.KillAll();
+            _nbActionsLeft.gameObject.transform.DOKill();
             _nbActionsLeft.gameObject.transform.DOShakePosition(0.2f, 10f, 10);
             _nbActionsLeft.color = _ActionsLeftTextBaseColor;
             _nbActionsLeft.fontSize = 100;
