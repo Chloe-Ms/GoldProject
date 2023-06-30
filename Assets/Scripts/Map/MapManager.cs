@@ -425,9 +425,11 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        if (_selectedSlot != null) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
-            if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
-                _selectedSlot.StopSelectionAnimation();
+        if (_selectedSlot != null)
+        { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
+            if (_selectedSlot.TrapData == null && BuyableRoomCount > 0)
+            {
+                //_selectedSlot.StopSelectionAnimation();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
                 _selectedSlot.PlayParticles();
@@ -436,10 +438,12 @@ public class MapManager : MonoBehaviour
                 _currentRoomCount++;
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
-            if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
+            if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null)
+            {
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, _selectedSlot.TrapData, _selectedSlot.RoomData, _selectedSlot.NbOfUpgrades);
-                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) { //si l'ancienne salle avait un upgrade on l'enlève
+                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0))
+                { //si l'ancienne salle avait un upgrade on l'enlève
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
@@ -449,7 +453,8 @@ public class MapManager : MonoBehaviour
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
-            if (BuyableRoomCount > 0) {
+            if (BuyableRoomCount > 0)
+            {
                 SetBuyableAdjacent(_selectedSlot);
                 _selectedSlot.EnableUpgrade();
             }

@@ -59,13 +59,13 @@ public class UIUpdateEditMode : MonoBehaviour
 
     public void UpdateNbActionsLeft(int nbActions)
     {
-        Debug.Log(_initPos);
+        //Debug.Log(_initPos);
         if (!_posHasBeenInitiated)
         {
             _initPos = _nbActionsLeft.gameObject.transform.position;
             _posHasBeenInitiated = true;
         }
-        DOTween.KillAll();
+        //DOTween.KillAll();
         _nbActionsLeft.gameObject.transform.position = _initPos;
         _nbActionsLeft.text = nbActions.ToString();
 
@@ -78,7 +78,8 @@ public class UIUpdateEditMode : MonoBehaviour
         }
         else
         {
-            DOTween.KillAll();
+            //DOTween.KillAll();
+            _nbActionsLeft.gameObject.transform.DOKill();
             _nbActionsLeft.gameObject.transform.DOShakePosition(0.2f, 10f, 10);
             _nbActionsLeft.color = _ActionsLeftTextBaseColor;
             _nbActionsLeft.fontSize = 100;

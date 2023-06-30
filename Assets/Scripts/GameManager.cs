@@ -316,6 +316,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void StartEditMode()
     {
         Debug.Log("NIVEAU " + _level);
+        DOTween.KillAll();
         _onStartEditorMode.Invoke();
         OnEffectApplied?.Invoke(Effect.NONE);
         _isInPlayMode = false;

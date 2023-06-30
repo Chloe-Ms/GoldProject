@@ -148,7 +148,7 @@ public class CameraManager : MonoBehaviour
                 _camera.orthographicSize = Mathf.Lerp(this._startZoomSize, endSize, 
                     (_timer * _speedZoom) / Mathf.Abs(this._startZoomSize - endSize));
 
-                Debug.Log($"{Mathf.Abs(this._startZoomSize - endSize) / _speedZoom}");
+                //Debug.Log($"{Mathf.Abs(this._startZoomSize - endSize) / _speedZoom}");
                 if (_timer >= Mathf.Abs(this._startZoomSize - endSize) / _speedZoom)
                 {
                     _camera.orthographicSize = endSize;

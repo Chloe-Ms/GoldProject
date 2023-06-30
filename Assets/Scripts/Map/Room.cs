@@ -24,7 +24,12 @@ public class Room : MonoBehaviour
     [SerializeField] private float _offsetMovementLayerSelection = 5f;
     [SerializeField] private float _timeMovementLayerSelection = 0.5f;
     [SerializeField] private GeneralData _generalData;
+    [SerializeField] private float _scaleSelection = 1.15f;
+    [SerializeField] private float _scaleFade = 0.5f;
+    [SerializeField] private float _timeAfterFade = 0.1f;
     private Tween _tweenSelection;
+    private Tween _tweenFade;
+    private Coroutine _routineFade;
     public RoomData RoomData
     {
         get { return _roomData; }
@@ -167,7 +172,18 @@ public class Room : MonoBehaviour
         _trapData = trapData;
         _listEffects.Clear();
         _listEffects.Add(trapData.Effect);
+        StopSelectionAnimation();
+        transform.localScale = Vector3.zero;
         SetIcon(trapData.Sprite);
+        _tweenFade = transform.DOScale(1f, _scaleFade).SetEase(Ease.OutBounce).
+            OnComplete(() => StartSelectionAnimation());
+    }
+
+    public void StartSelectionAnimationRoutine()
+    {
+        _tweenFade = null;
+        //yield return new WaitForSeconds(_timeAfterFade);
+        StartSelectionAnimation();
     }
 
     public void SetData(RoomData roomData, TrapData trapData)
@@ -215,7 +231,7 @@ public class Room : MonoBehaviour
         }
         if (_trapData != null && _trapData.RoomType != RoomType.ENTRANCE && _trapData.RoomType != RoomType.BOSS)
         {
-            Debug.Log("CLEAR "+ _trapData.RoomType);
+            //Debug.Log("CLEAR "+ _trapData.RoomType);
             _iconRenderer.color = new Color(255, 255, 255, 0);
             _iconRenderer.sprite = null;
             _icon.transform.localScale = Vector2.one;
@@ -347,6 +363,7 @@ public class Room : MonoBehaviour
     {
         RoomColor = _oldState;
         _upgradeIcon.gameObject.SetActive(false);
+        Debug.Log("UNSELECT");
         StopSelectionAnimation();
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
@@ -443,24 +460,27 @@ public class Room : MonoBehaviour
 
     public void StartSelectionAnimation()
     {
-        /*if (_tweenSelection == null)
+        if (_tweenSelection == null)
         {
-            Debug.Log("SELECTION Start " + name);
-            _tweenSelection = transform.DOScale(new Vector3(1.2f, 1.2f, 1f), 1f).SetLoops(-1, LoopType.Yoyo);
+            _tweenSelection = transform.DOScale(new Vector3(_scaleSelection, _scaleSelection, 1f), 1f).SetLoops(-1, LoopType.Yoyo);
         }
         else
         {
             _tweenSelection.Restart();
-        }*/
+        }
     }
 
     public void StopSelectionAnimation()
     {
-        /*if (_tweenSelection != null)
+        if (_tweenFade != null)
         {
+            _tweenFade.Complete();
+        }
+        if (_tweenSelection != null)
+        {
+            Debug.Log("REWIND " + name);
             _tweenSelection.Rewind();
-            Debug.Log("SELECTION Stop " + name);
-        }*/
+        }
     }
 
 }
