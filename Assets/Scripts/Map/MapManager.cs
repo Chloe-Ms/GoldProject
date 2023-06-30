@@ -950,6 +950,7 @@ public class MapManager : MonoBehaviour
                 _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
                 GameManager.Instance.SetPlayMode(false);
             }
+            EditorManager.Instance.CloseEditorMenu();
         } else if (mapAction.ActionType == ActionType.Change) {
             if (mapAction.Upgrade > 0) {
                 room.UpgradeRoom();

@@ -59,14 +59,14 @@ public class UIUpdateEditMode : MonoBehaviour
 
     public void UpdateNbActionsLeft(int nbActions)
     {
-        //Debug.Log(_initPos);
+        Debug.Log(_initPos);
         if (!_posHasBeenInitiated)
         {
             _initPos = _nbActionsLeft.gameObject.transform.position;
             _posHasBeenInitiated = true;
         }
         //DOTween.KillAll();
-        _nbActionsLeft.gameObject.transform.position = _initPos;
+        //_nbActionsLeft.gameObject.transform.position = _initPos;
         _nbActionsLeft.text = nbActions.ToString();
 
         if(nbActions == 0)
