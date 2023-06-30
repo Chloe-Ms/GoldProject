@@ -1,0 +1,281 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d58f46066636b49a67db6864ce6392, type: 3}
+  m_Name: LevelList
+  m_EditorClassIdentifier: 
+  _levels:
+  - name: Level 1
+    _nbMovesMax: 1
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 01000000
+    _mapWidth: 1
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle: []
+      _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 11400000, guid: 66de8ea7b1473e74dafad0cc656e1173, type: 2}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 0
+    _trapList: 0000000001000000000000000000000000000000000000000000000000000000
+  - name: Level 2
+    _nbMovesMax: 2
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    _maxHealth: 0200000003000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 3, y: 1}
+      - {x: 1, y: 3}
+      - {x: 2, y: 3}
+      _preplacedBoss: {x: 3, y: 3}
+    _tutorial: {fileID: 11400000, guid: 57d77feadf7930749b71fac45c4ef717, type: 2}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 0
+    _trapList: 0100000001000000000000000100000001000000010000000100000000000000
+  - name: Level 3
+    _nbMovesMax: 4
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    _maxHealth: 0400000004000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 2, y: 3}
+      - {x: 3, y: 3}
+      _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 0
+    _trapList: 0100000000000000000000000100000001000000000000000200000000000000
+  - name: Level 4
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 0500000006000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 0
+    _trapList: 0100000000000000000000000200000000000000010000000200000000000000
+  - name: Level 5
+    _nbMovesMax: 7
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 080000000600000005000000
+    _mapWidth: 3
+    _mapHeight: 5
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 1, y: 3}
+      - {x: 1, y: 5}
+      - {x: 3, y: 5}
+      _preplacedBoss: {x: 2, y: 5}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 0
+    _trapList: 0100000001000000000000000100000002000000010000000100000000000000
+  - name: Level 6
+    _nbMovesMax: 4
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    _maxHealth: 04000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 3, y: 1}
+      - {x: 1, y: 2}
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 11400000, guid: 6d59a70aa7bfdc943b83bd8d5b0b482f, type: 2}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 1
+    _trapList: 0000000002000000000000000000000000000000000000000200000000000000
+  - name: Level 7
+    _nbMovesMax: 4
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 0500000004000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 2, y: 3}
+      - {x: 3, y: 3}
+      _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 1
+    _trapList: 0200000000000000000000000200000000000000010000000100000000000000
+  - name: Level 8
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 0500000006000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 3, y: 1}
+      _preplacedBoss: {x: 3, y: 3}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 1
+    _trapList: 0000000002000000010000000200000000000000000000000100000000000000
+  - name: Level 9
+    _nbMovesMax: 4
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    _maxHealth: 04000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 3, y: 1}
+      - {x: 2, y: 3}
+      _preplacedBoss: {x: 3, y: 3}
+    _tutorial: {fileID: 11400000, guid: 807ec216dfb7e8c42aba5ce3868b8379, type: 2}
+    _isUpgradable: 0
+    _hasInfosCharacterVisible: 1
+    _trapList: 0100000001000000000000000000000000000000000000000100000001000000
+  - name: Level 10
+    _nbMovesMax: 6
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 040000000500000008000000
+    _mapWidth: 3
+    _mapHeight: 3
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      - {x: 2, y: 3}
+      _preplacedBoss: {x: 1, y: 3}
+    _tutorial: {fileID: 11400000, guid: 2238bb8e1022b764cb9da6aa8104eb9f, type: 2}
+    _isUpgradable: 1
+    _hasInfosCharacterVisible: 1
+    _trapList: 0000000000000000000000000200000002000000010000000000000002000000
+  - name: Level 11
+    _nbMovesMax: 7
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 050000000a000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 3, y: 4}
+      - {x: 3, y: 3}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 1
+    _hasInfosCharacterVisible: 1
+    _trapList: 0000000002000000010000000000000001000000020000000000000002000000
+  - name: Level 12
+    _nbMovesMax: 10
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 030000000700000010000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 2, y: 4}
+      - {x: 3, y: 1}
+      - {x: 1, y: 2}
+      _preplacedBoss: {x: 1, y: 4}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 1
+    _hasInfosCharacterVisible: 1
+    _trapList: 0000000001000000020000000100000001000000000000000000000000000000
+  - name: Level 13
+    _nbMovesMax: 10
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 090000000600000005000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      - {x: 1, y: 1}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 1
+    _hasInfosCharacterVisible: 1
+    _trapList: 0000000000000000020000000000000000000000010000000200000002000000
+  - name: Level 14
+    _nbMovesMax: 7
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 05063d0c1f90c7b4a8fe7bc4e2c3f795, type: 2}
+    - {fileID: 11400000, guid: 18d0504080293bf4eb56c90d09980d15, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    _maxHealth: 060000000700000005000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 4}
+      - {x: 3, y: 4}
+      - {x: 1, y: 3}
+      _preplacedBoss: {x: 2, y: 4}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 1
+    _hasInfosCharacterVisible: 1
+    _trapList: 0100000002000000000000000100000001000000000000000100000002000000
+  - name: Level 15
+    _nbMovesMax: 13
+    _listHeroesInLevel:
+    - {fileID: 11400000, guid: 566437218883adb4eb7b9afa4616f7a7, type: 2}
+    - {fileID: 11400000, guid: 3bc861e369513094b88ae059e3401665, type: 2}
+    - {fileID: 11400000, guid: a4c8eebd6083239409e3a2c8f847d3bf, type: 2}
+    _maxHealth: 1b0000000700000009000000
+    _mapWidth: 3
+    _mapHeight: 4
+    _prePlacedElements:
+      _preplacedObstacle:
+      - {x: 1, y: 1}
+      _preplacedBoss: {x: 1, y: 4}
+    _tutorial: {fileID: 0}
+    _isUpgradable: 1
+    _hasInfosCharacterVisible: 1
+    _trapList: 0200000001000000010000000100000000000000020000000100000002000000
