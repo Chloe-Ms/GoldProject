@@ -190,13 +190,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         _heroesManager.GroupParent.transform.position = new Vector2(room.transform.position.x, room.transform.position.y);
     }
-    public void MoveHeroesOnScreen(Room room)
-    {
-        MoveHeroesToRoom(room);
-    }
 
-    public void MoveHeroesToRoom(Room room)
+    public IEnumerator MoveHeroesToRoom(Room room)
     {
+        _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
         int heroesNotAlive = _heroesManager.NbHeroesLeft;
 
         _heroesManager.HeroesInCurrentLevel.AffectedByPlants = false; //Enleve l'effet de la room des plantes
@@ -228,7 +225,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     OnEffectApplied?.Invoke(_currentRoomEffect);
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
-                        _heroesManager.ApplyDamageToEachHero(room.Effects[j]);
+                        yield return StartCoroutine(_heroesManager.ApplyDamageToEachHero(room.Effects[j]));
+                    }
+                    if (_heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive)
+                    {
+                        yield return StartCoroutine(_heroesManager.ApplyDamageToEachHero(Effect.PLANTE));
+                        _heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive = false;
                     }
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
                     if (room.NbOfUpgrades > 0)
@@ -247,6 +249,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     _heroesManager.HeroesInCurrentLevel.NbKeysTaken++;
                 }
             }
+
             _heroesManager.RemoveAbilities(room);
             _heroesManager.ApplyAfterRoomAbilities(room);
 
@@ -366,10 +369,8 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         bool movementComplete = false;
         while (path.Count > i && !_hasWon && !isBossRoomReached)
         {
-            //Debug.Log($"{(i == 0 ? "Are at the room : " : "Move to ")} {path[i].name}");
             if (i == 0) //Waiting in entrance
             {
-                //SpawnHeroesOnScreen(path[i]);
                 yield return new WaitForSeconds(0.5f);
             } else
             {
@@ -441,12 +442,13 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 yield return new WaitUntil(() => movementComplete);
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                 {
-                    MoveHeroesOnScreen(path[i]);
-                    yield return new WaitForSeconds(_durationWaitInRoom);
+                    yield return StartCoroutine(MoveHeroesToRoom(path[i]));
+                    //yield return new WaitForSeconds(_durationWaitInRoom);
                     path[i].ClearIcon();
                 } else
                 {
                     isBossRoomReached = true;
+                    _heroesManager.HeroesInCurrentLevel.IsRunningInAnimator(false);
                     yield return new WaitForSeconds(_durationWaitBeforeDisplayLoss);
                     PlayerLoss();
                     _lossDisplayGO.SetActive(true);

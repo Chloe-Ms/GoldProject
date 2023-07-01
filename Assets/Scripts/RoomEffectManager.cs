@@ -61,21 +61,7 @@ public class RoomEffectManager
         {
             Effect.GLACE,
             (Room trap,Group group,HeroesManager manager) => {
-                /*if (trap.IsActive)
-                {*/
-                    int j = 0;
-                    while (j < trap.Effects.Count)
-                    {
-                        if (trap.Effects[j] != Effect.FEU)
-                        {
-                            manager.ApplyDamageToEachHero(trap.Effects[j]);
-                            j++;
-                        } else
-                        {
-                            trap.Effects.RemoveAt(j);
-                        }
-                    }
-                //}
+                manager.ApplyGlaceEffect(trap);
             }
         },
         {

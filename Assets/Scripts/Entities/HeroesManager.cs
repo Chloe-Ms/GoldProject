@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HeroesManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] GameObject _groupGO;
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
+    [SerializeField] float _delayBetweenHeroesDamage = 0.5f;
     int _nbHeroesLeft;
     int _roomTurn = 0;
     public Group HeroesInCurrentLevel
@@ -26,11 +29,6 @@ public class HeroesManager : MonoBehaviour
     public GameObject GroupParent
     {
         get => _groupGO;
-    }
-
-    private void Start()
-    {
-        //GameManager.Instance.OnEnterPlayMode += StartPlayMode;
     }
 
     private void LoadHeroesOnLevel(int level)
@@ -97,7 +95,8 @@ public class HeroesManager : MonoBehaviour
             if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
-                ApplyDamageToEachHero(Effect.PLANTE);
+                _heroesInCurrentLevel.IsPlantsEffectActive = true;
+                //ApplyDamageToEachHero(Effect.PLANTE);
                 if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
                 {
                     GooglePlayManager.Instance.HandleAchievement("Green Day");
@@ -119,7 +118,7 @@ public class HeroesManager : MonoBehaviour
         }
     }
 
-    public void ApplyDamageToEachHero(Effect effect)
+    public IEnumerator ApplyDamageToEachHero(Effect effect)
     {
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
@@ -135,6 +134,7 @@ public class HeroesManager : MonoBehaviour
                     int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
                     heroAttacked.UpdateHealth(damage,effect);
                 }
+                yield return new WaitForSeconds(_delayBetweenHeroesDamage);
             }
         }
     }
@@ -223,5 +223,27 @@ public class HeroesManager : MonoBehaviour
     public void ChangeTurn()
     {
         _roomTurn++;
+    }
+
+    public void ApplyGlaceEffect(Room trap)
+    {
+        StartCoroutine(ApplyGlaceEffectRoutine(trap));
+    }
+
+    public IEnumerator ApplyGlaceEffectRoutine(Room trap)
+    {
+        int j = 0;
+        while (j < trap.Effects.Count)
+        {
+            if (trap.Effects[j] != Effect.FEU)
+            {
+                yield return StartCoroutine(ApplyDamageToEachHero(trap.Effects[j]));
+                j++;
+            }
+            else
+            {
+                trap.Effects.RemoveAt(j);
+            }
+        }
     }
 }
