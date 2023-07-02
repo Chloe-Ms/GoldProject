@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] LevelData[] _levels;
     [SerializeField] HeroesManager _heroesManager;
     [SerializeField] MapManager _mapManager;
+    [SerializeField] CameraManager cameraManager;
     [SerializeField] GameObject _startButton;
     [SerializeField] float _durationBetweenRoom = 10f;
     [SerializeField] float _durationMergeHeroes = 2f;
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [SerializeField] GameObject _lossDisplayGO;
     [SerializeField] ElementList _roomsInList;
     [SerializeField] UIMenu _uiMenu; // peut etre nul
-    [SerializeField] bool _isInPlayMode = false;
+    bool _isInPlayMode = false;
 
     private bool _hasWon = false;
     private int _nbMoves = 0;
@@ -32,6 +33,9 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     private static GameManager _instance;
     private int _nbMenuIn = 0;
     private Sequence _movementHeroesSequence;
+    private Coroutine _movementHeroesCoroutine = null;
+    private Coroutine _damageHeroesCoroutine = null;
+    private Coroutine _healCoroutine = null;
     [SerializeField] private Language _languageChosen = Language.FR;
 
     [SerializeField] private GeneralData _generalData;
@@ -228,12 +232,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
                         _heroesManager.ApplyDuringRoomAbilities(room, room.Effects[j]);
-                        yield return StartCoroutine(_heroesManager.ApplyDamageToEachHero(room.Effects[j]));
+                        yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyDamageToEachHero(room.Effects[j]));
                     }
                     if (_heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive)
                     {
                         _heroesManager.ApplyDuringRoomAbilities(room, Effect.PLANTE);
-                        yield return StartCoroutine(_heroesManager.ApplyDamageToEachHero(Effect.PLANTE));
+                        yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyDamageToEachHero(Effect.PLANTE));
                         _heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive = false;
                     }
                     //Appliquer l'effet si la salle a au moins un upgrade et seulement pour l'effet de base
@@ -251,7 +255,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 }
                 if (_heroesManager.HeroesInCurrentLevel.IsGlaceEffectActive)
                 {
-                    yield return StartCoroutine(_heroesManager.ApplyGlaceEffectRoutine(room));
+                    yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyGlaceEffectRoutine(room));
                     _heroesManager.HeroesInCurrentLevel.IsGlaceEffectActive = false;
                 }
                 if (room.TrapData.RoomType == RoomType.LEVER)
@@ -345,6 +349,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
         _lossDisplayGO.SetActive(false);
         _displayUI.EnterEditMode();
         _hasWon = false;
+        cameraManager.SetCameraEdit(Level);
         OnEnterEditorMode?.Invoke(Level);
         _heroesManager.OnChangeLevel(Level);
         _mapManager.InitLevel(_levels[Level]);
@@ -364,9 +369,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         //Enter Play Mode
         _isInPlayMode = true;
+        cameraManager.SetCameraPlay(Level);
+        OnEnterPlayMode?.Invoke(Level);
         _mapManager.UpdateMapIconPlayMode();
         _onStartPlayMode.Invoke();
-        OnEnterPlayMode?.Invoke(Level);
         _displayUI.EnterPlayMode();
         _startButton.SetActive(false);
     }
@@ -452,7 +458,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 yield return new WaitUntil(() => movementComplete);
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                 {
-                    yield return StartCoroutine(MoveHeroesToRoom(path[i]));
+                    yield return _movementHeroesCoroutine = StartCoroutine(MoveHeroesToRoom(path[i]));
                     path[i].ClearIcon();
                 } else
                 {
@@ -538,6 +544,28 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     public void HealGroup()
     {
         _heroesManager.IsWaitingAbility = true;
-        StartCoroutine(_heroesManager.HealGroupRoutine());
+        _healCoroutine = StartCoroutine(_heroesManager.HealGroupRoutine());
+    }
+
+    public void StopRoutines()
+    {
+        /*if (_damageHeroesCoroutine != null)
+        {
+            StopCoroutine(_damageHeroesCoroutine);
+            _damageHeroesCoroutine = null;
+        }
+        if (_healCoroutine != null)
+        {
+            StopCoroutine(_healCoroutine);
+            _healCoroutine = null;
+        }
+        if (_movementHeroesCoroutine != null)
+        {
+            StopCoroutine(_movementHeroesCoroutine);
+            _movementHeroesCoroutine = null;
+        }*/
+        StopAllCoroutines();
+        _heroesManager.StopRoutines();
+        _mapManager.StopRoutines();
     }
 }

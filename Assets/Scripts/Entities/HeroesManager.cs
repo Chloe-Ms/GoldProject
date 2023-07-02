@@ -17,6 +17,8 @@ public class HeroesManager : MonoBehaviour
     bool _isWaitingAbility = false;
     int _nbHeroesLeft;
     int _roomTurn = 0;
+    Coroutine _damageHeroesCoroutine = null;
+    Coroutine _winCoroutine = null;
     public Group HeroesInCurrentLevel
     {
         get => _heroesInCurrentLevel;
@@ -94,7 +96,7 @@ public class HeroesManager : MonoBehaviour
         _nbHeroesLeft--;
         if (_nbHeroesLeft <= 0)
         {
-            StartCoroutine(GameManager.Instance.PlayerWin());
+            _winCoroutine = StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
             if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
@@ -273,7 +275,7 @@ public class HeroesManager : MonoBehaviour
             {
                 ApplyDuringRoomAbilities(trap, trap.Effects[j]);
                 
-                yield return StartCoroutine(ApplyDamageToEachHero(trap.Effects[j]));
+                yield return _damageHeroesCoroutine = StartCoroutine(ApplyDamageToEachHero(trap.Effects[j]));
             }
             j++;
         }
@@ -291,5 +293,20 @@ public class HeroesManager : MonoBehaviour
             }
         }
         _isWaitingAbility = false;
+    }
+
+    public void StopRoutines()
+    {
+        /*if (_damageHeroesCoroutine  != null)
+        {
+            StopCoroutine(_damageHeroesCoroutine);
+            _damageHeroesCoroutine = null;
+        }
+        if (_winCoroutine != null)
+        {
+            StopCoroutine( _winCoroutine);
+            _winCoroutine = null;
+        }*/
+        StopAllCoroutines();
     }
 }

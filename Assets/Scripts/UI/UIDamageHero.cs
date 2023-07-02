@@ -60,10 +60,15 @@ public class UIDamageHero : MonoBehaviour
     {
         _textEffect.text = state;
         _textEffect.gameObject.SetActive(true);
-        _textEffect.transform.DOShakeScale(_durationState).
+        _textEffect.transform.DOPunchScale(new Vector3(0.15f, 0.15f, 0.15f), _durationState).
             OnComplete(() =>
             {
                 _textEffect.gameObject.SetActive(false);
             });
+        /*_textEffect.transform.DOShakeScale(_durationState).
+            OnComplete(() =>
+            {
+                _textEffect.gameObject.SetActive(false);
+            });*/
     }
 }
