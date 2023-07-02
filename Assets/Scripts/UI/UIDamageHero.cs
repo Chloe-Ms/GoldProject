@@ -6,8 +6,10 @@ public class UIDamageHero : MonoBehaviour
 {
     [SerializeField] GeneralData _generalData;
     [SerializeField] TextMeshPro[] _textsDamage;
+    [SerializeField] TextMeshPro _textEffect;
     [SerializeField] float _offset = 10f;
     [SerializeField] float _duration = 1f;
+    [SerializeField] float _durationState = 1f;
     Vector3[] _initPositions;
     // Start is called before the first frame update
     void Start()
@@ -18,9 +20,9 @@ public class UIDamageHero : MonoBehaviour
             _textsDamage[i].gameObject.SetActive(false);
             _initPositions[i] = _textsDamage[i].rectTransform.localPosition;
             Renderer renderer = _textsDamage[i].gameObject.GetComponent<Renderer>();
-            //renderer.sortingLayerID = 85;
             renderer.sortingOrder = 85;
         }
+        _textEffect.gameObject.gameObject.GetComponent<Renderer>().sortingOrder = 85;
     }
 
     public void AddDamage(int damage,Effect effect)
@@ -52,5 +54,16 @@ public class UIDamageHero : MonoBehaviour
             index++;
         }
         return index;
+    }
+
+    public void AddState(string state)
+    {
+        _textEffect.text = state;
+        _textEffect.gameObject.SetActive(true);
+        _textEffect.transform.DOShakeScale(_durationState).
+            OnComplete(() =>
+            {
+                _textEffect.gameObject.SetActive(false);
+            });
     }
 }

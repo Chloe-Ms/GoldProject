@@ -121,7 +121,6 @@ public class Hero : MonoBehaviour
 
             OnDamageTaken?.Invoke(realPV);
         }
-        //InstantiateDamage(realPV);
         _damages.AddDamage(realPV,effect);
         UIUpdatePlayMode.Instance.UpdateHero(this,realPV);// Update UI
     }
@@ -159,5 +158,10 @@ public class Hero : MonoBehaviour
     public void RotateHero(float rotation)
     {
         _animator.gameObject.transform.localScale = new Vector3(rotation,1,1);
+    }
+
+    public void AddStateOnUI(string state)
+    {
+        _damages.AddState(state);
     }
 }

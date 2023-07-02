@@ -385,6 +385,8 @@ public class Room : MonoBehaviour
 
     public void PlayParticles()
     {
+        var module = _particleSystemSpawn.main;
+        module.startColor = Color.white;
         _particleSystemSpawn.Play();
     }
     public void UpgradeRoom()
@@ -392,7 +394,9 @@ public class Room : MonoBehaviour
         _nbOfUpgrades++;
         EnableUpgrade();
         _borderRenderer.color = new Color(1f, 1f, 1f, 1f);
-        _borderRenderer.transform.DOScale(1.12f, 0.4f).SetLoops(2,LoopType.Yoyo);
+        var module = _particleSystemSpawn.main;
+        module.startColor = Color.yellow;
+        _particleSystemSpawn.Play();
     }
 
     public void UpgradeRoom(Effect effect)

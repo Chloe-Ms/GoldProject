@@ -87,7 +87,7 @@ public class HeroesManager : MonoBehaviour
 
     private void OnAnyHeroDeath(Hero hero)
     {
-        if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+        if (AbilityManager.DeactivateAbilities.ContainsKey(hero.Role))
         {
             AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
         }
@@ -136,12 +136,29 @@ public class HeroesManager : MonoBehaviour
                         Hero heroAttacked = hero;
                         if (heroAttacked.IsInvulnerable)
                         {
+                            hero.AddStateOnUI("Protected");
                             heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                         }
                         int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
+                        if (hero.HasDamageReduction)
+                        {
+                            hero.AddStateOnUI("Dmg \\/");
+                        }
                         heroAttacked.UpdateHealth(damage, effect);
+                    } else
+                    {
+                        hero.AddStateOnUI("Dodge");
                     }
                     yield return new WaitForSeconds(_delayBetweenHeroesDamage);
+                }
+            }
+        } else
+        {
+            foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+            {
+                if (!hero.IsDead)
+                {
+                    hero.AddStateOnUI("Immune");
                 }
             }
         }
@@ -268,6 +285,7 @@ public class HeroesManager : MonoBehaviour
         {
             if (!hero.IsDead)
             {
+                hero.AddStateOnUI("Heal");
                 hero.UpdateHealth(1);
                 yield return new WaitForSeconds(_delayBetweenHeroesDamage);
             }

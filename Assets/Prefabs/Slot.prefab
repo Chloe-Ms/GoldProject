@@ -224,6 +224,7 @@ MonoBehaviour:
   _upgradeIcon: {fileID: 3727444143637915913}
   _borderRenderer: {fileID: 3949957791298343016}
   _particleSystemSpawn: {fileID: 5318322306839730095}
+  _particleSystemUpgrade: {fileID: 0}
   _spriteTopMonster: {fileID: 2334921332794065023}
   _iconScale: 0.7
   _layerSelection: {fileID: 3383478043266663896}
@@ -231,6 +232,8 @@ MonoBehaviour:
   _timeMovementLayerSelection: 1
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
   _scaleSelection: 1.1
+  _scaleFade: 0.5
+  _timeAfterFade: 0.1
 --- !u!198 &5318322306839730095
 ParticleSystem:
   m_ObjectHideFlags: 0
