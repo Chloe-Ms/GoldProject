@@ -61,44 +61,21 @@ public class RoomEffectManager
         {
             Effect.GLACE,
             (Room trap,Group group,HeroesManager manager) => {
-                manager.ApplyGlaceEffect(trap);
+                if (!trap.Effects.Contains(Effect.FEU) && trap.Effects.Count > 0 && trap.Effects[0] != Effect.NONE)
+                {
+                    group.IsGlaceEffectActive = true;
+                }
             }
         },
         {
             Effect.FEU,
             (Room trap,Group group,HeroesManager manager) => {
 
-                /*if (trap.IsActive)
-                {*/
-                    //Enleve l'effet de glace
-                    bool hasFireEffect = false;
-                    for (int j = 0  ; j < trap.Effects.Count ; j++) 
-                    {
-                        if (trap.Effects[j] != Effect.GLACE)
-                        {
-                            if (trap.Effects[j] == Effect.FEU)
-                            {
-                                hasFireEffect = true;
-                            }
-                            j++;
-                        } else
-                        {
-                            trap.Effects.RemoveAt(j);
-                        }
-                    }
-                    if (!hasFireEffect)
-                    {
-                        if (trap.IsActive)
-                        {
-                            trap.Effects.Add(Effect.FEU);
-                        } else
-                        {
-                            trap.Effects.Clear();
-                            trap.Effects.Add(Effect.FEU);
-                            trap.IsActive = true;// Reactivate the trap if active
-                        }
-                    }
-                //}
+                if (!trap.Effects.Contains(Effect.GLACE) && !trap.Effects.Contains(Effect.FEU) 
+                && trap.IsActive && trap.Effects.Count > 0 && trap.Effects[0] != Effect.NONE)
+                {
+                    trap.Effects.Add(Effect.FEU);
+                }
             }
         }
 

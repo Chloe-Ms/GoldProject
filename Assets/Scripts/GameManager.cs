@@ -205,8 +205,10 @@ public class GameManager : MonoBehaviour//, IDataPersistence
             {
                 ApplyCurrentRoomEffect(room.Effects[0]);
             }
+
             DecreaseRoomForEffectsList(room, _heroesManager.HeroesInCurrentLevel);
             _heroesManager.ApplyAbilities(room);
+            yield return new WaitUntil(() => !_heroesManager.IsWaitingAbility); //Wait for heal of healer
             if (room.IsActive)
             {
                 room.IsActive = false;
@@ -225,10 +227,12 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                     OnEffectApplied?.Invoke(_currentRoomEffect);
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
+                        _heroesManager.ApplyDuringRoomAbilities(room, room.Effects[j]);
                         yield return StartCoroutine(_heroesManager.ApplyDamageToEachHero(room.Effects[j]));
                     }
                     if (_heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive)
                     {
+                        _heroesManager.ApplyDuringRoomAbilities(room, Effect.PLANTE);
                         yield return StartCoroutine(_heroesManager.ApplyDamageToEachHero(Effect.PLANTE));
                         _heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive = false;
                     }
@@ -240,9 +244,15 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                             RoomEffectManager.EffectsOnRoom[_currentRoomEffect].OnRoomEnter.Invoke(room, _heroesManager.HeroesInCurrentLevel);
                         }
                     }
+
                 } else
                 {
                     _currentRoomEffect = Effect.NONE;
+                }
+                if (_heroesManager.HeroesInCurrentLevel.IsGlaceEffectActive)
+                {
+                    yield return StartCoroutine(_heroesManager.ApplyGlaceEffectRoutine(room));
+                    _heroesManager.HeroesInCurrentLevel.IsGlaceEffectActive = false;
                 }
                 if (room.TrapData.RoomType == RoomType.LEVER)
                 {
@@ -443,7 +453,6 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 if (path[i].TrapData.RoomType != RoomType.BOSS) //Normal room
                 {
                     yield return StartCoroutine(MoveHeroesToRoom(path[i]));
-                    //yield return new WaitForSeconds(_durationWaitInRoom);
                     path[i].ClearIcon();
                 } else
                 {
@@ -524,5 +533,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         _nbMenuIn += offset;
         //Debug.Log("Nombre Menu" + _nbMenuIn);
+    }
+
+    public void HealGroup()
+    {
+        _heroesManager.IsWaitingAbility = true;
+        StartCoroutine(_heroesManager.HealGroupRoutine());
     }
 }

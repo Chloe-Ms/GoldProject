@@ -9,6 +9,7 @@ public class Group
     private bool _isPoisoned = false;
     private bool _affectedByPlants = false;
     private bool _isPlantsEffectActive = false; //If the group is affected by plants + one death
+    private bool _isGlaceEffectActive = false; //If the "glace" (frost) effect active
     private bool _isInvulnerable = false;
     private bool _hasDamageReductionBeenApplied = false;
     public List<Hero> Heroes {
@@ -43,6 +44,10 @@ public class Group
         get => _isPlantsEffectActive; 
         set => _isPlantsEffectActive = value; 
     }
+    public bool IsGlaceEffectActive { 
+        get => _isGlaceEffectActive; 
+        set => _isGlaceEffectActive = value; 
+    }
 
     public void Init()
     {
@@ -52,6 +57,7 @@ public class Group
         _nbKeysTaken = 0;
         _hasDamageReductionBeenApplied = false;
         _isPlantsEffectActive = false;
+        _isGlaceEffectActive = false;
     }
 
     public Hero GetHeroWithRole(Role role)

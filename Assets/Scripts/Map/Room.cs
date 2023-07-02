@@ -373,7 +373,8 @@ public class Room : MonoBehaviour
 
     public void EnableUpgrade()
     {
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable)
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) 
+            && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable && MapManager.Instance.SelectedSlot == this)
         {
             _upgradeIcon.gameObject.SetActive(true);
         } else
@@ -414,10 +415,6 @@ public class Room : MonoBehaviour
 
         }
         EnableUpgrade();
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.IsUpgradable)
-        {
-            _upgradeIcon.gameObject.SetActive(true);
-        }
     }
 
     public bool IsBuyable()
@@ -477,7 +474,6 @@ public class Room : MonoBehaviour
         }
         if (_tweenSelection != null)
         {
-            Debug.Log("REWIND " + name);
             _tweenSelection.Rewind();
         }
     }

@@ -14,6 +14,7 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
     [SerializeField] float _delayBetweenHeroesDamage = 0.5f;
+    bool _isWaitingAbility = false;
     int _nbHeroesLeft;
     int _roomTurn = 0;
     public Group HeroesInCurrentLevel
@@ -29,6 +30,10 @@ public class HeroesManager : MonoBehaviour
     public GameObject GroupParent
     {
         get => _groupGO;
+    }
+    public bool IsWaitingAbility { 
+        get => _isWaitingAbility; 
+        set => _isWaitingAbility = value; 
     }
 
     private void LoadHeroesOnLevel(int level)
@@ -124,17 +129,20 @@ public class HeroesManager : MonoBehaviour
         {
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
-                if (!hero.IsDead && !IsDodging(hero.Role))
+                if (!hero.IsDead )
                 {
-                    Hero heroAttacked = hero;
-                    if (heroAttacked.IsInvulnerable)
+                    if (!IsDodging(hero.Role))
                     {
-                        heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
+                        Hero heroAttacked = hero;
+                        if (heroAttacked.IsInvulnerable)
+                        {
+                            heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
+                        }
+                        int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
+                        heroAttacked.UpdateHealth(damage, effect);
                     }
-                    int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
-                    heroAttacked.UpdateHealth(damage,effect);
+                    yield return new WaitForSeconds(_delayBetweenHeroesDamage);
                 }
-                yield return new WaitForSeconds(_delayBetweenHeroesDamage);
             }
         }
     }
@@ -180,9 +188,7 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    //Debug.Log($"BEFORE {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
-                    //Debug.Log($" {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                 }
             }
         }
@@ -215,6 +221,20 @@ public class HeroesManager : MonoBehaviour
             }
         }
     }
+    public void ApplyDuringRoomAbilities(Room room,Effect effect)
+    {
+        foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                if (AbilityManager.ActivateDuringRoomAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.ActivateDuringRoomAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room,effect);
+                }
+            }
+        }
+    }
+
     public int GetSensibility(Effect effect, Role role)
     {
         return _heroesSensibilities.GetSensibility(effect, role);
@@ -223,11 +243,8 @@ public class HeroesManager : MonoBehaviour
     public void ChangeTurn()
     {
         _roomTurn++;
-    }
-
-    public void ApplyGlaceEffect(Room trap)
-    {
-        StartCoroutine(ApplyGlaceEffectRoutine(trap));
+        HeroesInCurrentLevel.IsPlantsEffectActive = false;
+        HeroesInCurrentLevel.IsGlaceEffectActive = false;
     }
 
     public IEnumerator ApplyGlaceEffectRoutine(Room trap)
@@ -237,13 +254,24 @@ public class HeroesManager : MonoBehaviour
         {
             if (trap.Effects[j] != Effect.FEU)
             {
+                ApplyDuringRoomAbilities(trap, trap.Effects[j]);
+                
                 yield return StartCoroutine(ApplyDamageToEachHero(trap.Effects[j]));
-                j++;
             }
-            else
+            j++;
+        }
+    }
+
+    public IEnumerator HealGroupRoutine()
+    {
+        foreach(Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
             {
-                trap.Effects.RemoveAt(j);
+                hero.UpdateHealth(1);
+                yield return new WaitForSeconds(_delayBetweenHeroesDamage);
             }
         }
+        _isWaitingAbility = false;
     }
 }
