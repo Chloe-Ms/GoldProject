@@ -49,19 +49,18 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         _groupParentGO = GameManager.Instance.GetHeroesParentGameObject();
-        GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
-        GameManager.Instance.OnEnterPlayMode += SetCameraPlay;
+        /*GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
+        GameManager.Instance.OnEnterPlayMode += SetCameraPlay;*/
     }
 
-    private void SetCameraPlay(int obj)
+    public void SetCameraPlay(int obj)
     {
-        Debug.Log("CAMERA PLAY MODE");
+        FollowGroupHeroes();
         _isInPlayMode = true;
         _camera.orthographicSize = _zoomSizePlayMode;
-        FollowGroupHeroes();
     }
 
-    private void SetCameraEdit(int obj)
+    public void SetCameraEdit(int obj)
     {
         _isInPlayMode = false;
         _camera.orthographicSize = _initZoomSize;

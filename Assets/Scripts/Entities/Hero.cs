@@ -66,10 +66,6 @@ public class Hero : MonoBehaviour
     }
     public bool CanMove { get => _canMove; set => _canMove = value; }
     #endregion
-    public void TestDamage()
-    {
-        UpdateHealth(1);
-    }
     public void UpdateHealth(int pv,Effect effect = Effect.NONE)
     {
         if (IsDead)
@@ -125,8 +121,6 @@ public class Hero : MonoBehaviour
 
             OnDamageTaken?.Invoke(realPV);
         }
-        //InstantiateDamage(realPV);
-        Debug.Log("DAMAGE " + Role + " damage " + realPV);
         _damages.AddDamage(realPV,effect);
         UIUpdatePlayMode.Instance.UpdateHero(this,realPV);// Update UI
     }
@@ -164,5 +158,10 @@ public class Hero : MonoBehaviour
     public void RotateHero(float rotation)
     {
         _animator.gameObject.transform.localScale = new Vector3(rotation,1,1);
+    }
+
+    public void AddStateOnUI(State state)
+    {
+        _damages.AddState(state);
     }
 }

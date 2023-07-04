@@ -15,13 +15,7 @@ public class AbilityManager
                 room.TrapData.RoomType == RoomType.LEVER ||
                 room.TrapData.RoomType == RoomType.ENTRANCE)
                 {
-                    group.Heroes.ForEach(hero =>
-                    {
-                        if (!hero.IsDead)
-                        {
-                            hero.UpdateHealth(1);
-                        }
-                    });
+                    GameManager.Instance.HealGroup();
                 }
             }
         },
@@ -29,25 +23,7 @@ public class AbilityManager
             Role.PALADIN,
             (Group group, Room room) =>
             {
-                if (room.Effects.Count > 0 && room.IsActive && !group.HasDamageReductionBeenApplied)
-                {
-                    bool hasReductedDamage = false;
-                    Effect roomEffect = room.Effects[0];
-                    //Search hero with fatal attack
-                    for (int i = 0; i < group.Heroes.Count; i++)
-                    {
-                        int damage = GameManager.Instance.GetDamageOnHero(roomEffect,group.Heroes[i]);
-                        if (group.Heroes[i].Health + damage <= 0 && group.Heroes[i].Role != Role.PALADIN)
-                        {
-                            group.Heroes[i].IsInvulnerable = true;
-                            hasReductedDamage = true;
-                        }
-                    }
-                    if (hasReductedDamage) 
-                    {
-                        group.HasDamageReductionBeenApplied = true;
-                    }
-                }
+                
             }
         },
         {
@@ -78,6 +54,26 @@ public class AbilityManager
                         {
                             group.Heroes[i].HasDamageReduction = true;
                         }
+                    }
+                }
+            }
+        }
+    };
+    private static Dictionary<Role, Action<Group, Room,Effect>> _activateDuringRoomAbilities = new Dictionary<Role, Action<Group, Room,Effect>>()
+    {
+        {
+            Role.PALADIN,
+            (Group group, Room room,Effect roomEffect) =>
+            {
+                //Search hero with fatal attack
+
+                for (int i = 0; i < group.Heroes.Count; i++)
+                {
+                    group.Heroes[i].IsInvulnerable = false;
+                    int damage = GameManager.Instance.GetDamageOnHero(roomEffect,group.Heroes[i]);
+                    if (group.Heroes[i].Health + damage <= 0 && group.Heroes[i].Role != Role.PALADIN)
+                    {
+                        group.Heroes[i].IsInvulnerable = true;
                     }
                 }
             }
@@ -137,5 +133,8 @@ public class AbilityManager
     }
     public static Dictionary<Role, Action<Group, Room>> ActivateAfterRoomAbilities { 
         get => _activateAfterRoomAbilities;
+    }
+    public static Dictionary<Role, Action<Group, Room, Effect>> ActivateDuringRoomAbilities { 
+        get => _activateDuringRoomAbilities;
     }
 }

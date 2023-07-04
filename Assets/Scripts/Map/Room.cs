@@ -373,7 +373,8 @@ public class Room : MonoBehaviour
 
     public void EnableUpgrade()
     {
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable)
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) 
+            && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable && MapManager.Instance.SelectedSlot == this)
         {
             _upgradeIcon.gameObject.SetActive(true);
         } else
@@ -384,6 +385,8 @@ public class Room : MonoBehaviour
 
     public void PlayParticles()
     {
+        var module = _particleSystemSpawn.main;
+        module.startColor = Color.white;
         _particleSystemSpawn.Play();
     }
     public void UpgradeRoom()
@@ -391,7 +394,9 @@ public class Room : MonoBehaviour
         _nbOfUpgrades++;
         EnableUpgrade();
         _borderRenderer.color = new Color(1f, 1f, 1f, 1f);
-        _borderRenderer.transform.DOScale(1.12f, 0.4f).SetLoops(2,LoopType.Yoyo);
+        var module = _particleSystemSpawn.main;
+        module.startColor = Color.yellow;
+        _particleSystemSpawn.Play();
     }
 
     public void UpgradeRoom(Effect effect)
@@ -414,10 +419,6 @@ public class Room : MonoBehaviour
 
         }
         EnableUpgrade();
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.IsUpgradable)
-        {
-            _upgradeIcon.gameObject.SetActive(true);
-        }
     }
 
     public bool IsBuyable()
@@ -477,7 +478,6 @@ public class Room : MonoBehaviour
         }
         if (_tweenSelection != null)
         {
-            Debug.Log("REWIND " + name);
             _tweenSelection.Rewind();
         }
     }

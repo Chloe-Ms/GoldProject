@@ -28,7 +28,11 @@ public class SwitchingSceneTransition : MonoBehaviour
     {
         if (this.name == "LeftClouds")
         {
-            this.transform.DOLocalMove(new Vector2(0, _yPosition), _transitionTime, true).onComplete = LoadSelectionScene;
+            this.transform.DOLocalMove(new Vector2(0, _yPosition), _transitionTime, true).OnComplete(() => 
+            {
+                DOTween.KillAll();
+                LoadSelectionScene();
+            });
 
         }
         if (this.name == "RightClouds")

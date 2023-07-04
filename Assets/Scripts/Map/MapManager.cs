@@ -92,7 +92,8 @@ public class MapManager : MonoBehaviour
     private Room _boss = null;
     private Room _selectedSlot = null;
     private Room _lastestSelectedSlot = null;
-    private Coroutine _routineRoomMonster;
+    private Coroutine _routineRoomMonster = null;
+    private Coroutine _routineMoveHeroes = null;
     private Effect _effectRoomMonster = Effect.NONE;
     [SerializeField] private GameObject _menuEffectRoomMonster;
 
@@ -701,7 +702,7 @@ public class MapManager : MonoBehaviour
                 // PrintListOfRoom(bestPath);
                 //bestPath.Insert(0, actualRoom);
                 //bestPath.RemoveAt(0);
-                yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+                yield return StartCoroutine(GameManager.Instance.ChangeRoomFromPath(bestPath));
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
@@ -741,14 +742,14 @@ public class MapManager : MonoBehaviour
                     //Debug.Log($"Selected Path :");
                     bestPath.Insert(0, actualRoom);
                     //PrintListOfRoom(bestPath);
-                    yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+                    yield return StartCoroutine(GameManager.Instance.ChangeRoomFromPath(bestPath));
                 }
                 leverList.Remove(bestPath[bestPath.Count - 1]);
                 actualRoom = bestPath[bestPath.Count - 1];
             }
         }
         bestPath = FindObjectif(actualRoom, _boss);
-        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        yield return StartCoroutine(GameManager.Instance.ChangeRoomFromPath(bestPath));
     }
 
     private List<Room> MergeCommunSlot(List<List<Room>> path)
@@ -967,6 +968,27 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent();
         
         UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
+    }
+
+    public void StopRoutines()
+    {
+        /*if (_routineMoveHeroes != null)
+        {
+            StopCoroutine(_routineMoveHeroes);
+            _routineMoveHeroes = null;
+        }
+
+        if (_routineChangeRoom != null)
+        {
+            StopCoroutine( _routineChangeRoom);
+            _routineChangeRoom = null;
+        }
+        if(_routineRoomMonster != null)
+        {
+            StopCoroutine(_routineRoomMonster);
+            _routineRoomMonster = null;
+        }*/
+        StopAllCoroutines();
     }
 }
 
