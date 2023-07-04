@@ -1,5 +1,6 @@
 using DG.Tweening;
 using NaughtyAttributes;
+using System.Collections;
 using UnityEngine;
 
 public class TestDotween : MonoBehaviour
@@ -8,7 +9,7 @@ public class TestDotween : MonoBehaviour
     void Start()
     {
 
-        _target.transform.DOMove(Vector3.zero, 3).SetAutoKill(false);
+        StartCoroutine(Routine());
     }
 
     [Button]
@@ -21,5 +22,19 @@ public class TestDotween : MonoBehaviour
     public void StopAll()
     {
         DOTween.RestartAll();
+    }
+
+    public IEnumerator Routine()
+    {
+        Debug.Log("BEGIN ROUTINE");
+        yield return StartCoroutine(RoutineWaited());
+        Debug.Log("END ROUTINE");
+    }
+
+    public IEnumerator RoutineWaited()
+    {
+        Debug.Log("BEGIN ROUTINE WAITED");
+        yield return new WaitForSeconds(2f);
+        Debug.Log("END ROUTINE WAITED");
     }
 }

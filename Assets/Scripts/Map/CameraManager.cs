@@ -49,19 +49,18 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         _groupParentGO = GameManager.Instance.GetHeroesParentGameObject();
-        GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
-        GameManager.Instance.OnEnterPlayMode += SetCameraPlay;
+        /*GameManager.Instance.OnEnterEditorMode += SetCameraEdit;
+        GameManager.Instance.OnEnterPlayMode += SetCameraPlay;*/
     }
 
-    private void SetCameraPlay(int obj)
+    public void SetCameraPlay(int obj)
     {
-        Debug.Log("CAMERA PLAY MODE");
+        FollowGroupHeroes();
         _isInPlayMode = true;
         _camera.orthographicSize = _zoomSizePlayMode;
-        FollowGroupHeroes();
     }
 
-    private void SetCameraEdit(int obj)
+    public void SetCameraEdit(int obj)
     {
         _isInPlayMode = false;
         _camera.orthographicSize = _initZoomSize;
@@ -83,6 +82,7 @@ public class CameraManager : MonoBehaviour
 
     public void Zoom()
     {
+        //Debug.Log("Zoom");
         _isInPlayMode = true;
         _isZooming = true;
         this._startZoomSize = _camera.orthographicSize;
@@ -90,6 +90,7 @@ public class CameraManager : MonoBehaviour
 
     public void DezoomPlayMode()
     {
+        //Debug.Log("Dezoom");
         _isInPlayMode = true;
         _isDezooming = true;
         this._startZoomSize = _camera.orthographicSize;
@@ -130,6 +131,7 @@ public class CameraManager : MonoBehaviour
         
         if (_isZooming || _isDezooming)
         {
+            //Debug.Log($"IS ZOOMING {_isZooming} OR DEZOOMING {_isDezooming} {_isDezoomed} {_isZoomed}");
             _timer += Time.deltaTime;
             if (_isZooming) //De l'init au normal
             {

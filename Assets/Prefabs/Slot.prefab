@@ -224,12 +224,16 @@ MonoBehaviour:
   _upgradeIcon: {fileID: 3727444143637915913}
   _borderRenderer: {fileID: 3949957791298343016}
   _particleSystemSpawn: {fileID: 5318322306839730095}
+  _particleSystemUpgrade: {fileID: 0}
   _spriteTopMonster: {fileID: 2334921332794065023}
   _iconScale: 0.7
   _layerSelection: {fileID: 3383478043266663896}
   _offsetMovementLayerSelection: 0.3
   _timeMovementLayerSelection: 1
   _generalData: {fileID: 11400000, guid: e121fb083eaea9e42a1267bb31d88bc9, type: 2}
+  _scaleSelection: 1.1
+  _scaleFade: 0.5
+  _timeAfterFade: 0.1
 --- !u!198 &5318322306839730095
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5250,7 +5254,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 2b64d2c8d6f153b4f954d841fb3e9496, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85cf32316065a2d44b428a44a46005cd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0

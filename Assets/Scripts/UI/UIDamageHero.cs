@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -6,8 +7,11 @@ public class UIDamageHero : MonoBehaviour
 {
     [SerializeField] GeneralData _generalData;
     [SerializeField] TextMeshPro[] _textsDamage;
+    [SerializeField] TextMeshPro _textEffect;
+    [SerializeField] List<TextLanguage> _textLanguages;
     [SerializeField] float _offset = 10f;
     [SerializeField] float _duration = 1f;
+    [SerializeField] float _durationState = 1f;
     Vector3[] _initPositions;
     // Start is called before the first frame update
     void Start()
@@ -18,15 +22,15 @@ public class UIDamageHero : MonoBehaviour
             _textsDamage[i].gameObject.SetActive(false);
             _initPositions[i] = _textsDamage[i].rectTransform.localPosition;
             Renderer renderer = _textsDamage[i].gameObject.GetComponent<Renderer>();
-            //renderer.sortingLayerID = 85;
             renderer.sortingOrder = 85;
         }
+        _textEffect.gameObject.gameObject.GetComponent<Renderer>().sortingOrder = 85;
     }
 
     public void AddDamage(int damage,Effect effect)
     {
         int index = GetTextDamageAvailable();
-        if (index == _textsDamage.Length)
+        if (index >= _textsDamage.Length)
         {
             Debug.LogWarning("Not enough slot damage available");
         } else
@@ -47,10 +51,35 @@ public class UIDamageHero : MonoBehaviour
     int GetTextDamageAvailable()
     {
         int index = 0;
-        while (_textsDamage[index].gameObject.activeSelf && index < _textsDamage.Length)
+        while (index < _textsDamage.Length && _textsDamage[index].gameObject.activeSelf)
         {
             index++;
         }
         return index;
     }
+
+    public void AddState(State state)
+    {
+        _textEffect.text = _textLanguages[(int)state].GetStringInLanguage(GameManager.Instance.LanguageChosen);
+        _textEffect.gameObject.SetActive(true);
+        _textEffect.transform.DOPunchScale(new Vector3(0.15f, 0.15f, 0.15f), _durationState,5,1).
+            OnComplete(() =>
+            {
+                _textEffect.gameObject.SetActive(false);
+            });
+        /*_textEffect.transform.DOShakeScale(_durationState).
+            OnComplete(() =>
+            {
+                _textEffect.gameObject.SetActive(false);
+            });*/
+    }
+}
+
+public enum State
+{
+    DmgReduction = 0,
+    Dodge = 1,
+    Protected = 2,
+    Immune = 3,
+    Heal = 4
 }

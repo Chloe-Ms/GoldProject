@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using DG.Tweening;
+using UnityEditor;
 
 [System.Serializable]
 public class Room : MonoBehaviour
@@ -23,6 +24,12 @@ public class Room : MonoBehaviour
     [SerializeField] private float _offsetMovementLayerSelection = 5f;
     [SerializeField] private float _timeMovementLayerSelection = 0.5f;
     [SerializeField] private GeneralData _generalData;
+    [SerializeField] private float _scaleSelection = 1.15f;
+    [SerializeField] private float _scaleFade = 0.5f;
+    [SerializeField] private float _timeAfterFade = 0.1f;
+    private Tween _tweenSelection;
+    private Tween _tweenFade;
+    private Coroutine _routineFade;
     public RoomData RoomData
     {
         get { return _roomData; }
@@ -102,7 +109,8 @@ public class Room : MonoBehaviour
 
     public bool IsElementary
     {
-        get => _listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE;
+        get { return _listEffects.Count > 0 && 
+                (_listEffects[0] == Effect.FOUDRE || _listEffects[0] == Effect.FEU || _listEffects[0] == Effect.GLACE); }
     }
     public UIUpgradeButton UpgradeIcon { 
         get => _upgradeIcon;
@@ -152,7 +160,10 @@ public class Room : MonoBehaviour
         SetColor(RoomColor.Usable);
         _roomData = roomData;
         //Debug.Log($"RoomName = {transform.name} data = {roomData}");
-        SetSprite(_roomData.Sprite);
+        if (_trapData == null || _trapData.RoomType != RoomType.BOSS) //set sprite boss room
+        {
+            SetSprite(_roomData.Sprite);
+        }
     }
 
     public void SetData(TrapData trapData)
@@ -161,7 +172,18 @@ public class Room : MonoBehaviour
         _trapData = trapData;
         _listEffects.Clear();
         _listEffects.Add(trapData.Effect);
+        StopSelectionAnimation();
+        transform.localScale = Vector3.zero;
         SetIcon(trapData.Sprite);
+        _tweenFade = transform.DOScale(1f, _scaleFade).SetEase(Ease.OutBounce).
+            OnComplete(() => StartSelectionAnimation());
+    }
+
+    public void StartSelectionAnimationRoutine()
+    {
+        _tweenFade = null;
+        //yield return new WaitForSeconds(_timeAfterFade);
+        StartSelectionAnimation();
     }
 
     public void SetData(RoomData roomData, TrapData trapData)
@@ -170,7 +192,13 @@ public class Room : MonoBehaviour
         _roomData = roomData;
         _trapData = trapData;
         SetIcon(_trapData.Sprite);
-        SetSprite(_roomData.Sprite);
+        if (trapData.RoomType == RoomType.BOSS) //set sprite boss room
+        {
+            SetSprite(_generalData.SpriteBossRoom);
+        } else
+        {
+            SetSprite(_roomData.Sprite);
+        }
     }
 
     public void SetData(RoomData roomData, RoomColor roomColor = RoomColor.Unclickable)
@@ -201,8 +229,9 @@ public class Room : MonoBehaviour
         {
             _iconRenderer = _icon.GetComponent<SpriteRenderer>();
         }
-        if (_trapData != null && (_trapData.RoomType != RoomType.ENTRANCE))
+        if (_trapData != null && _trapData.RoomType != RoomType.ENTRANCE && _trapData.RoomType != RoomType.BOSS)
         {
+            //Debug.Log("CLEAR "+ _trapData.RoomType);
             _iconRenderer.color = new Color(255, 255, 255, 0);
             _iconRenderer.sprite = null;
             _icon.transform.localScale = Vector2.one;
@@ -334,6 +363,7 @@ public class Room : MonoBehaviour
     {
         RoomColor = _oldState;
         _upgradeIcon.gameObject.SetActive(false);
+        StopSelectionAnimation();
         if (_roomData == null) {
             if (MapManager.Instance.SelectedSlot == null)
                 RoomColor = RoomColor.NotBuyable;
@@ -343,7 +373,8 @@ public class Room : MonoBehaviour
 
     public void EnableUpgrade()
     {
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable)
+        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) 
+            && MapManager.Instance.BuyableRoomCount > 0 && MapManager.Instance.IsUpgradable && MapManager.Instance.SelectedSlot == this)
         {
             _upgradeIcon.gameObject.SetActive(true);
         } else
@@ -354,6 +385,8 @@ public class Room : MonoBehaviour
 
     public void PlayParticles()
     {
+        var module = _particleSystemSpawn.main;
+        module.startColor = Color.white;
         _particleSystemSpawn.Play();
     }
     public void UpgradeRoom()
@@ -361,7 +394,9 @@ public class Room : MonoBehaviour
         _nbOfUpgrades++;
         EnableUpgrade();
         _borderRenderer.color = new Color(1f, 1f, 1f, 1f);
-        _borderRenderer.transform.DOScale(1.15f, 0.4f).SetLoops(2,LoopType.Yoyo);
+        var module = _particleSystemSpawn.main;
+        module.startColor = Color.yellow;
+        _particleSystemSpawn.Play();
     }
 
     public void UpgradeRoom(Effect effect)
@@ -384,10 +419,6 @@ public class Room : MonoBehaviour
 
         }
         EnableUpgrade();
-        if (NbOfUpgrades == 0 && _trapData != null && MapManager.Instance.IsRoomATrap(this) && MapManager.Instance.IsUpgradable)
-        {
-            _upgradeIcon.gameObject.SetActive(true);
-        }
     }
 
     public bool IsBuyable()
@@ -426,6 +457,31 @@ public class Room : MonoBehaviour
             _layerSelectionTween = null;
         }
     }
+
+    public void StartSelectionAnimation()
+    {
+        if (_tweenSelection == null)
+        {
+            _tweenSelection = transform.DOScale(new Vector3(_scaleSelection, _scaleSelection, 1f), 1f).SetLoops(-1, LoopType.Yoyo);
+        }
+        else
+        {
+            _tweenSelection.Restart();
+        }
+    }
+
+    public void StopSelectionAnimation()
+    {
+        if (_tweenFade != null)
+        {
+            _tweenFade.Complete();
+        }
+        if (_tweenSelection != null)
+        {
+            _tweenSelection.Rewind();
+        }
+    }
+
 }
 
 public enum RoomColor

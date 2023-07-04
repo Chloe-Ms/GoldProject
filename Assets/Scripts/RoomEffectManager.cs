@@ -51,7 +51,6 @@ public class RoomEffectManager
             new UpdatedRoomEffect(
                 (Room trap,Group group) => {
                     _effectsEvent.Add(new EffectEvent(trap.TrapData.NbRoomsBeforeEffect,Effect.FEU,_effectsAppliedAfterRoom[Effect.FEU]));
-                    trap.IsActive = true;// Reactivate the trap if active
                 }
             )
         },
@@ -62,49 +61,21 @@ public class RoomEffectManager
         {
             Effect.GLACE,
             (Room trap,Group group,HeroesManager manager) => {
-                /*if (trap.IsActive)
-                {*/
-                    int j = 0;
-                    while (j < trap.Effects.Count)
-                    {
-                        if (trap.Effects[j] != Effect.FEU)
-                        {
-                            manager.ApplyDamageToEachHero(trap.Effects[j]);
-                            j++;
-                        } else
-                        {
-                            trap.Effects.RemoveAt(j);
-                        }
-                    }
-                //}
+                if (!trap.Effects.Contains(Effect.FEU) && trap.Effects.Count > 0 && trap.Effects[0] != Effect.NONE)
+                {
+                    group.IsGlaceEffectActive = true;
+                }
             }
         },
         {
             Effect.FEU,
             (Room trap,Group group,HeroesManager manager) => {
-                /*if (trap.IsActive)
-                {*/
-                    //Enleve l'effet de glace
-                    bool hasFireEffect = false;
-                    for (int j = 0  ; j < trap.Effects.Count ; j++) 
-                    {
-                        if (trap.Effects[j] != Effect.GLACE)
-                        {
-                            if (trap.Effects[j] == Effect.FEU)
-                            {
-                                hasFireEffect = true;
-                            }
-                            j++;
-                        } else
-                        {
-                            trap.Effects.RemoveAt(j);
-                        }
-                    }
-                    if (!hasFireEffect)
-                    {
-                        trap.Effects.Add(Effect.FEU);
-                    }
-                //}
+
+                if (!trap.Effects.Contains(Effect.GLACE) && !trap.Effects.Contains(Effect.FEU) 
+                && trap.IsActive && trap.Effects.Count > 0 && trap.Effects[0] != Effect.NONE)
+                {
+                    trap.Effects.Add(Effect.FEU);
+                }
             }
         }
 

@@ -10,6 +10,7 @@ public class GeneralData : ScriptableObject
     [SerializeField] private Sprite _square;
     [SerializeField] private Sprite _spriteMonsterUpgradeBottom;
     [SerializeField] private Sprite _spriteMonsterUpgradeTop;
+    [SerializeField] private Sprite _spriteBossRoom;
 
     public RoomList RoomList
     {
@@ -32,5 +33,8 @@ public class GeneralData : ScriptableObject
     public Sprite SpriteMonsterUpgradeTop
     {
         get => _spriteMonsterUpgradeTop;
+    }
+    public Sprite SpriteBossRoom { 
+        get => _spriteBossRoom;
     }
 }

@@ -67,6 +67,9 @@ public class MapManager : MonoBehaviour
     public float SlotSize { 
         get => _slotSize; 
     }
+    public Room Start { 
+        get => _start;
+    }
     #endregion
 
     #region Events
@@ -89,7 +92,8 @@ public class MapManager : MonoBehaviour
     private Room _boss = null;
     private Room _selectedSlot = null;
     private Room _lastestSelectedSlot = null;
-    private Coroutine _routineRoomMonster;
+    private Coroutine _routineRoomMonster = null;
+    private Coroutine _routineMoveHeroes = null;
     private Effect _effectRoomMonster = Effect.NONE;
     [SerializeField] private GameObject _menuEffectRoomMonster;
 
@@ -365,7 +369,9 @@ public class MapManager : MonoBehaviour
             }
             //NORMAL ROOM
             if (room != null && room.IsClickable() && room != _boss) {
+                //Debug.Log("SELECT");
                 _selectedSlot = room != _selectedSlot ? room : null;
+                _selectedSlot?.StartSelectionAnimation();
                 if (_selectedSlot != null && _selectedSlot.RoomColor != RoomColor.NotBuyable) {
                     _selectedSlot.SetColor(RoomColor.Selected);
                     EditorManager.Instance.OpenEditorMenu();
@@ -420,19 +426,25 @@ public class MapManager : MonoBehaviour
     {
         MapAction mapAction = new MapAction();
 
-        if (_selectedSlot != null) { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
-            if (_selectedSlot.TrapData == null && BuyableRoomCount > 0) {
+        if (_selectedSlot != null)
+        { // && _boss != null pour stopper l'edition quand on a placé la salle du boss
+            if (_selectedSlot.TrapData == null && BuyableRoomCount > 0)
+            {
+                //_selectedSlot.StopSelectionAnimation();
                 mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Add);
                 FindRoomPatern();
                 _selectedSlot.PlayParticles();
                 _selectedSlot.SetData(data);
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _currentRoomCount++;
+                _onSetEffectOnRoomUnityEvent.Invoke();
             }
-            if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null) {
+            if (_selectedSlot != _start && _selectedSlot.TrapData != data && _selectedSlot.TrapData != null)
+            {
                 if (mapAction.ActionType == ActionType.None)
                     mapAction.SetAction(GetIndexOfRoom(_selectedSlot), ActionType.Change, _selectedSlot.TrapData, _selectedSlot.RoomData, _selectedSlot.NbOfUpgrades);
-                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0)) { //si l'ancienne salle avait un upgrade on l'enlève
+                if (_selectedSlot.TrapData != null && (_selectedSlot.NbOfUpgrades > 0))
+                { //si l'ancienne salle avait un upgrade on l'enlève
                     _selectedSlot.UndoUpgrade();
                     _currentRoomCount--;
                 }
@@ -442,7 +454,8 @@ public class MapManager : MonoBehaviour
                 ElementList.Instance.ChangeUIElementValue(_selectedSlot.TrapData, -1);
                 _onSetEffectOnRoomUnityEvent.Invoke();
             }
-            if (BuyableRoomCount > 0) {
+            if (BuyableRoomCount > 0)
+            {
                 SetBuyableAdjacent(_selectedSlot);
                 _selectedSlot.EnableUpgrade();
             }
@@ -689,7 +702,7 @@ public class MapManager : MonoBehaviour
                 // PrintListOfRoom(bestPath);
                 //bestPath.Insert(0, actualRoom);
                 //bestPath.RemoveAt(0);
-                yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+                yield return StartCoroutine(GameManager.Instance.ChangeRoomFromPath(bestPath));
                 //Room lever = ask the player which path he want to take
                 actualRoom = bestPath[bestPath.Count - 1];
                 if (travelLists.Count > 1) {
@@ -729,14 +742,14 @@ public class MapManager : MonoBehaviour
                     //Debug.Log($"Selected Path :");
                     bestPath.Insert(0, actualRoom);
                     //PrintListOfRoom(bestPath);
-                    yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+                    yield return StartCoroutine(GameManager.Instance.ChangeRoomFromPath(bestPath));
                 }
                 leverList.Remove(bestPath[bestPath.Count - 1]);
                 actualRoom = bestPath[bestPath.Count - 1];
             }
         }
         bestPath = FindObjectif(actualRoom, _boss);
-        yield return GameManager.Instance.ChangeRoomFromPath(bestPath);
+        yield return StartCoroutine(GameManager.Instance.ChangeRoomFromPath(bestPath));
     }
 
     private List<Room> MergeCommunSlot(List<List<Room>> path)
@@ -938,6 +951,7 @@ public class MapManager : MonoBehaviour
                 _boss.SetData(GameManager.Instance.GeneralData.RoomList.RoomData[15], GameManager.Instance.GeneralData.TrapList.TrapData[9]);
                 GameManager.Instance.SetPlayMode(false);
             }
+            EditorManager.Instance.CloseEditorMenu();
         } else if (mapAction.ActionType == ActionType.Change) {
             if (mapAction.Upgrade > 0) {
                 room.UpgradeRoom();
@@ -954,6 +968,27 @@ public class MapManager : MonoBehaviour
             SetBuyableAdjacent();
         
         UIUpdateEditMode.Instance.UpdateNbActionsLeft(BuyableRoomCount);
+    }
+
+    public void StopRoutines()
+    {
+        /*if (_routineMoveHeroes != null)
+        {
+            StopCoroutine(_routineMoveHeroes);
+            _routineMoveHeroes = null;
+        }
+
+        if (_routineChangeRoom != null)
+        {
+            StopCoroutine( _routineChangeRoom);
+            _routineChangeRoom = null;
+        }
+        if(_routineRoomMonster != null)
+        {
+            StopCoroutine(_routineRoomMonster);
+            _routineRoomMonster = null;
+        }*/
+        StopAllCoroutines();
     }
 }
 

@@ -65,21 +65,21 @@ public class UIUpdateEditMode : MonoBehaviour
             _initPos = _nbActionsLeft.gameObject.transform.position;
             _posHasBeenInitiated = true;
         }
-        DOTween.KillAll();
-        _nbActionsLeft.gameObject.transform.position = _initPos;
+        //DOTween.KillAll();
+        //_nbActionsLeft.gameObject.transform.position = _initPos;
         _nbActionsLeft.text = nbActions.ToString();
-        DG.Tweening.Sequence _nbLeftSequence = DOTween.Sequence();
 
         if(nbActions == 0)
         {
             _nbActionsLeft.color = _noActionsLeftTextColor;
             _nbActionsLeft.fontSize = 125;
-            _nbLeftSequence.Append(_nbActionsLeft.gameObject.transform.DOShakePosition(0.5f, 25f, 20));
-            _nbLeftSequence.Append(_nbActionsLeft.gameObject.transform.DOLocalMoveY(10f, 0.5f, true).SetLoops(-1, LoopType.Yoyo));
+            _nbActionsLeft.gameObject.transform.DOShakePosition(0.5f, 25f, 20);
+            _nbActionsLeft.gameObject.transform.DOLocalMoveY(10f, 0.5f, true).SetLoops(-1, LoopType.Yoyo);
         }
         else
         {
-            DOTween.KillAll();
+            //DOTween.KillAll();
+            _nbActionsLeft.gameObject.transform.DOKill();
             _nbActionsLeft.gameObject.transform.DOShakePosition(0.2f, 10f, 10);
             _nbActionsLeft.color = _ActionsLeftTextBaseColor;
             _nbActionsLeft.fontSize = 100;

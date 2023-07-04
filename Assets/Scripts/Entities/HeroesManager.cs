@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HeroesManager : MonoBehaviour
 {
@@ -11,8 +13,13 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] GameObject _groupGO;
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
+    [SerializeField] float _delayBetweenHeroesDamage = 0.5f;
+    float _delayBetweenHeroesDamageAdded = 0f;
+    bool _isWaitingAbility = false;
     int _nbHeroesLeft;
     int _roomTurn = 0;
+    Coroutine _damageHeroesCoroutine = null;
+    Coroutine _winCoroutine = null;
     public Group HeroesInCurrentLevel
     {
         get => _heroesInCurrentLevel;
@@ -27,13 +34,12 @@ public class HeroesManager : MonoBehaviour
     {
         get => _groupGO;
     }
-
-    private void Start()
-    {
-        GameManager.Instance.OnEnterPlayMode += StartPlayMode;
+    public bool IsWaitingAbility { 
+        get => _isWaitingAbility; 
+        set => _isWaitingAbility = value; 
     }
 
-    private void StartPlayMode(int level)
+    private void LoadHeroesOnLevel(int level)
     {
         InstantiateHeroesInLevel(level);
     }
@@ -48,6 +54,7 @@ public class HeroesManager : MonoBehaviour
         }
 
         StartEditMode(level);
+        LoadHeroesOnLevel(level);
     }
 
     private void StartEditMode(int level)
@@ -83,23 +90,21 @@ public class HeroesManager : MonoBehaviour
 
     private void OnAnyHeroDeath(Hero hero)
     {
-        Debug.Log("DEATH "+ _heroesInCurrentLevel.AffectedByPlants);
-        if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
+        if (AbilityManager.DeactivateAbilities.ContainsKey(hero.Role))
         {
             AbilityManager.DeactivateAbilities[hero.Role].Invoke(_heroesInCurrentLevel);
         }
         _nbHeroesLeft--;
         if (_nbHeroesLeft <= 0)
         {
-            StartCoroutine(GameManager.Instance.PlayerWin());
+            _winCoroutine = StartCoroutine(GameManager.Instance.PlayerWin());
         } else if (_heroesInCurrentLevel.AffectedByPlants)
         {
-            Debug.Log("PLANT ON DEATH nb usage"+ GameManager.Instance.CurrentRoom.NbOfUsage);
             if (GameManager.Instance.CurrentRoom.NbOfUsage < 2)
             {
                 GameManager.Instance.CurrentRoom.NbOfUsage ++;
-                Debug.Log("PLANT ON DEATH");
-                ApplyDamageToEachHero(Effect.PLANTE);
+                _heroesInCurrentLevel.IsPlantsEffectActive = true;
+                //ApplyDamageToEachHero(Effect.PLANTE);
                 if (GooglePlayManager.Instance != null && GooglePlayManager.Instance.IsAuthenticated)
                 {
                     GooglePlayManager.Instance.HandleAchievement("Green Day");
@@ -121,24 +126,63 @@ public class HeroesManager : MonoBehaviour
         }
     }
 
-    public void ApplyDamageToEachHero(Effect effect)
+    public IEnumerator ApplyDamageToEachHero(Effect effect)
     {
         if (!_heroesInCurrentLevel.IsInvulnerable)
         {
             foreach (Hero hero in _heroesInCurrentLevel.Heroes)
             {
-                if (!hero.IsDead && !IsDodging(hero.Role))
+                if (!hero.IsDead )
                 {
-                    Hero heroAttacked = hero;
-                    if (heroAttacked.IsInvulnerable)
+                    if (!IsDodging(hero.Role))
                     {
-                        heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
+                        Hero heroAttacked = hero;
+                        if (heroAttacked.IsInvulnerable)
+                        {
+                            hero.AddStateOnUI(State.Protected);
+                            heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
+                        }
+                        int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
+                        if (hero.HasDamageReduction)
+                        {
+                            hero.AddStateOnUI(State.DmgReduction);
+                        }
+                        heroAttacked.UpdateHealth(damage, effect);
+                    } else
+                    {
+                        hero.AddStateOnUI(State.Dodge);
                     }
-                    int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
-                    heroAttacked.UpdateHealth(damage,effect);
+                    float waitingTime = _delayBetweenHeroesDamage;
+                    if (_nbHeroesLeft == 1)
+                    {
+                        waitingTime += _delayBetweenHeroesDamage;
+                    }
+                    yield return new WaitForSeconds(waitingTime);
+                }
+            }
+        } else
+        {
+            foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+            {
+                if (!hero.IsDead)
+                {
+                    hero.AddStateOnUI(State.Immune);
                 }
             }
         }
+    }
+
+    int GetNbHeroesAlive()
+    {
+        int nb = 0;
+        foreach(Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                nb++;
+            }
+        }
+        return nb;
     }
 
     public int GetDamageOfEffectOnHero(Effect effect,Hero hero)
@@ -153,7 +197,7 @@ public class HeroesManager : MonoBehaviour
         //Proc seulement si l'effet de base c'est la foudre
         if (currentRoom.Effects.Count > 0 && currentRoom.Effects[0] == Effect.FOUDRE && currentRoom.NbOfUpgrades > 0)
         {
-            damage += _heroesInCurrentLevel.NbKeysTaken;
+            damage -= _heroesInCurrentLevel.NbKeysTaken;
         }
         if (hero.HasDamageReduction)
         {
@@ -182,9 +226,7 @@ public class HeroesManager : MonoBehaviour
             {
                 if (AbilityManager.ActivateAbilities.ContainsKey(hero.Role))
                 {
-                    //Debug.Log($"BEFORE {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                     AbilityManager.ActivateAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room);
-                    //Debug.Log($" {hero.Role} {_heroesInCurrentLevel.IsInvulnerable} {room.IsElementary} {hero.NbDamageOnElementaryRoom} {hero.NbDamageOnElementaryRoom == 3}");
                 }
             }
         }
@@ -217,6 +259,20 @@ public class HeroesManager : MonoBehaviour
             }
         }
     }
+    public void ApplyDuringRoomAbilities(Room room,Effect effect)
+    {
+        foreach (Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                if (AbilityManager.ActivateDuringRoomAbilities.ContainsKey(hero.Role))
+                {
+                    AbilityManager.ActivateDuringRoomAbilities[hero.Role]?.Invoke(_heroesInCurrentLevel, room,effect);
+                }
+            }
+        }
+    }
+
     public int GetSensibility(Effect effect, Role role)
     {
         return _heroesSensibilities.GetSensibility(effect, role);
@@ -225,5 +281,36 @@ public class HeroesManager : MonoBehaviour
     public void ChangeTurn()
     {
         _roomTurn++;
+        HeroesInCurrentLevel.IsPlantsEffectActive = false;
+        HeroesInCurrentLevel.IsGlaceEffectActive = false;
+    }
+
+    public IEnumerator HealGroupRoutine()
+    {
+        foreach(Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                hero.AddStateOnUI(State.Heal);
+                hero.UpdateHealth(1);
+                yield return new WaitForSeconds(_delayBetweenHeroesDamage);
+            }
+        }
+        _isWaitingAbility = false;
+    }
+
+    public void StopRoutines()
+    {
+        /*if (_damageHeroesCoroutine  != null)
+        {
+            StopCoroutine(_damageHeroesCoroutine);
+            _damageHeroesCoroutine = null;
+        }
+        if (_winCoroutine != null)
+        {
+            StopCoroutine( _winCoroutine);
+            _winCoroutine = null;
+        }*/
+        StopAllCoroutines();
     }
 }
