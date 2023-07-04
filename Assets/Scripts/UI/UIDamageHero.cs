@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class UIDamageHero : MonoBehaviour
     [SerializeField] GeneralData _generalData;
     [SerializeField] TextMeshPro[] _textsDamage;
     [SerializeField] TextMeshPro _textEffect;
+    [SerializeField] List<TextLanguage> _textLanguages;
     [SerializeField] float _offset = 10f;
     [SerializeField] float _duration = 1f;
     [SerializeField] float _durationState = 1f;
@@ -56,11 +58,11 @@ public class UIDamageHero : MonoBehaviour
         return index;
     }
 
-    public void AddState(string state)
+    public void AddState(State state)
     {
-        _textEffect.text = state;
+        _textEffect.text = _textLanguages[(int)state].GetStringInLanguage(GameManager.Instance.LanguageChosen);
         _textEffect.gameObject.SetActive(true);
-        _textEffect.transform.DOPunchScale(new Vector3(0.15f, 0.15f, 0.15f), _durationState).
+        _textEffect.transform.DOPunchScale(new Vector3(0.15f, 0.15f, 0.15f), _durationState,5,1).
             OnComplete(() =>
             {
                 _textEffect.gameObject.SetActive(false);
@@ -71,4 +73,13 @@ public class UIDamageHero : MonoBehaviour
                 _textEffect.gameObject.SetActive(false);
             });*/
     }
+}
+
+public enum State
+{
+    DmgReduction = 0,
+    Dodge = 1,
+    Protected = 2,
+    Immune = 3,
+    Heal = 4
 }

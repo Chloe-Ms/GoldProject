@@ -228,14 +228,15 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 if (room.Effects.Count > 0 && room.Effects[0] != Effect.NONE)
                 {
                     _currentRoomEffect = room.Effects[0]; //On garde l'effet principal
-                    OnEffectApplied?.Invoke(_currentRoomEffect);
                     for (int j = 0; j < room.Effects.Count; j++)
                     {
+                        OnEffectApplied?.Invoke(room.Effects[j]);
                         _heroesManager.ApplyDuringRoomAbilities(room, room.Effects[j]);
                         yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyDamageToEachHero(room.Effects[j]));
                     }
                     if (_heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive)
                     {
+                        OnEffectApplied?.Invoke(Effect.PLANTE);
                         _heroesManager.ApplyDuringRoomAbilities(room, Effect.PLANTE);
                         yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyDamageToEachHero(Effect.PLANTE));
                         _heroesManager.HeroesInCurrentLevel.IsPlantsEffectActive = false;
@@ -255,7 +256,7 @@ public class GameManager : MonoBehaviour//, IDataPersistence
                 }
                 if (_heroesManager.HeroesInCurrentLevel.IsGlaceEffectActive)
                 {
-                    yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyGlaceEffectRoutine(room));
+                    yield return _damageHeroesCoroutine = StartCoroutine(ApplyGlaceEffectRoutine(room));
                     _heroesManager.HeroesInCurrentLevel.IsGlaceEffectActive = false;
                 }
                 if (room.TrapData.RoomType == RoomType.LEVER)
@@ -325,8 +326,11 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     [Button("Next level")]
     public void ChangeLevel()
     {
-        _level++;
-        StartEditMode();
+        if (_level < _levels.Length - 1)
+        {
+            _level++;
+            StartEditMode();
+        }
     }
 
     [Button("Enter edit mode")]
@@ -545,6 +549,22 @@ public class GameManager : MonoBehaviour//, IDataPersistence
     {
         _heroesManager.IsWaitingAbility = true;
         _healCoroutine = StartCoroutine(_heroesManager.HealGroupRoutine());
+    }
+
+    public IEnumerator ApplyGlaceEffectRoutine(Room trap)
+    {
+        int j = 0;
+        while (j < trap.Effects.Count)
+        {
+            if (trap.Effects[j] != Effect.FEU)
+            {
+                OnEffectApplied?.Invoke(trap.Effects[j]);
+                _heroesManager.ApplyDuringRoomAbilities(trap, trap.Effects[j]);
+
+                yield return _damageHeroesCoroutine = StartCoroutine(_heroesManager.ApplyDamageToEachHero(trap.Effects[j]));
+            }
+            j++;
+        }
     }
 
     public void StopRoutines()

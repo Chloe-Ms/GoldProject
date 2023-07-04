@@ -14,6 +14,7 @@ public class HeroesManager : MonoBehaviour
     [SerializeField] HeroesSensibility _heroesSensibilities;
     [SerializeField] int _poisonDamageMultiplier = 2;
     [SerializeField] float _delayBetweenHeroesDamage = 0.5f;
+    float _delayBetweenHeroesDamageAdded = 0f;
     bool _isWaitingAbility = false;
     int _nbHeroesLeft;
     int _roomTurn = 0;
@@ -138,20 +139,25 @@ public class HeroesManager : MonoBehaviour
                         Hero heroAttacked = hero;
                         if (heroAttacked.IsInvulnerable)
                         {
-                            hero.AddStateOnUI("Protected");
+                            hero.AddStateOnUI(State.Protected);
                             heroAttacked = _heroesInCurrentLevel.GetHeroWithRole(Role.PALADIN);
                         }
                         int damage = GetDamageOfEffectOnHero(effect, heroAttacked);
                         if (hero.HasDamageReduction)
                         {
-                            hero.AddStateOnUI("Dmg \\/");
+                            hero.AddStateOnUI(State.DmgReduction);
                         }
                         heroAttacked.UpdateHealth(damage, effect);
                     } else
                     {
-                        hero.AddStateOnUI("Dodge");
+                        hero.AddStateOnUI(State.Dodge);
                     }
-                    yield return new WaitForSeconds(_delayBetweenHeroesDamage);
+                    float waitingTime = _delayBetweenHeroesDamage;
+                    if (_nbHeroesLeft == 1)
+                    {
+                        waitingTime += _delayBetweenHeroesDamage;
+                    }
+                    yield return new WaitForSeconds(waitingTime);
                 }
             }
         } else
@@ -160,10 +166,23 @@ public class HeroesManager : MonoBehaviour
             {
                 if (!hero.IsDead)
                 {
-                    hero.AddStateOnUI("Immune");
+                    hero.AddStateOnUI(State.Immune);
                 }
             }
         }
+    }
+
+    int GetNbHeroesAlive()
+    {
+        int nb = 0;
+        foreach(Hero hero in _heroesInCurrentLevel.Heroes)
+        {
+            if (!hero.IsDead)
+            {
+                nb++;
+            }
+        }
+        return nb;
     }
 
     public int GetDamageOfEffectOnHero(Effect effect,Hero hero)
@@ -266,28 +285,13 @@ public class HeroesManager : MonoBehaviour
         HeroesInCurrentLevel.IsGlaceEffectActive = false;
     }
 
-    public IEnumerator ApplyGlaceEffectRoutine(Room trap)
-    {
-        int j = 0;
-        while (j < trap.Effects.Count)
-        {
-            if (trap.Effects[j] != Effect.FEU)
-            {
-                ApplyDuringRoomAbilities(trap, trap.Effects[j]);
-                
-                yield return _damageHeroesCoroutine = StartCoroutine(ApplyDamageToEachHero(trap.Effects[j]));
-            }
-            j++;
-        }
-    }
-
     public IEnumerator HealGroupRoutine()
     {
         foreach(Hero hero in _heroesInCurrentLevel.Heroes)
         {
             if (!hero.IsDead)
             {
-                hero.AddStateOnUI("Heal");
+                hero.AddStateOnUI(State.Heal);
                 hero.UpdateHealth(1);
                 yield return new WaitForSeconds(_delayBetweenHeroesDamage);
             }

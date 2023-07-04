@@ -160,7 +160,7 @@ public class Hero : MonoBehaviour
         _animator.gameObject.transform.localScale = new Vector3(rotation,1,1);
     }
 
-    public void AddStateOnUI(string state)
+    public void AddStateOnUI(State state)
     {
         _damages.AddState(state);
     }

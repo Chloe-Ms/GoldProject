@@ -10,7 +10,6 @@ public class SwitchingSceneTransition : MonoBehaviour
 
     private float _screenWidth = Screen.width;
     [SerializeField] CanvasScaler _canvaScaler;
-    [SerializeField] LevelManager _levelManager;
     [SerializeField] float _transitionTime = 1f;
     private float _yPosition;
     private float _yPositionChild0;
@@ -67,6 +66,7 @@ public class SwitchingSceneTransition : MonoBehaviour
 
     private void LoadSelectionScene()
     {
+        DOTween.KillAll();
         if (SceneManager.GetActiveScene().name == "MenuScene")
         {
             SceneManager.LoadScene("SampleScene");
@@ -80,14 +80,12 @@ public class SwitchingSceneTransition : MonoBehaviour
     private void LoadLevel(int level)
     {
         GameManager.Instance.LoadLevel(level);
-        _levelManager.LevelSelectSetActive(false);
         this.transform.GetChild(0).transform.DOLocalMoveX(_canvaScaler.referenceResolution.x * 1.5f, _transitionTime, true);
         this.transform.GetChild(1).transform.DOLocalMoveX(-_canvaScaler.referenceResolution.x * 1.5f, _transitionTime, true);
     }
 
     private void BackToSelection()
     {
-        _levelManager.LevelSelectSetActive(true);
         this.transform.GetChild(0).transform.DOLocalMoveX(_canvaScaler.referenceResolution.x * 1.5f, _transitionTime, true);
         this.transform.GetChild(1).transform.DOLocalMoveX(-_canvaScaler.referenceResolution.x * 1.5f, _transitionTime, true);
     }
